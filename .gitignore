@@ -1,2 +1,9 @@
-build/*
 .vscode
+# Ignore everyting in build
+build/*
+# Except sub dirs
+!build/*/
+# but ignore anything in those
+build/*/*
+# except .gitinclude files
+!*.gitinclude
