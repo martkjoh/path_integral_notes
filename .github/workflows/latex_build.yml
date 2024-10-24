@@ -1,0 +1,28 @@
+name: Publish PDF
+on: [push]
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'publish')
+    steps:
+      
+      - uses: actions/checkout@v4
+      
+      - uses: xu-cheng/texlive-action@v2
+        with:
+          run: |
+            sh build.sh
+      
+      - name: Release PDF
+        id: release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          name: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
+          files: |
+            build/main.pdf
