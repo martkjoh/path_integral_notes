@@ -1,0 +1,26 @@
+\documentclass[10pt, a4paper, oneside]{book}
+
+% Subfolders containing chapter
+\makeatletter\def\input@path{
+    {chapter/}
+}\makeatother
+
+\input{packages.tex}
+\input{newcommands.tex}
+
+\title{Lecture Notes: Path Integral Methods in Stochastic Processes and Field Theory}
+\author{Luca Cocconi, Gennaro Tucci, Martin Johnsrud}
+\date{October 2024}
+
+\begin{document}
+
+\maketitle
+
+\chapter{Introduction}
+\include{chapters/intro}
+
+\chapter{Onsager-Machlup path integral}
+\include{chapters/OM}
+
+
+\end{document}
