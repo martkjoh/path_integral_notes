@@ -1,5 +1,7 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\documentclass[10pt, a4paper, oneside]{book}
+
+\input{packages.tex}
+\input{newcommands.tex}
 
 \title{Lecture Notes: Path Integral Methods in Stochastic Processes and Field Theory}
 \author{Luca Cocconi, Gennaro Tucci, Martin Johnsrud}
@@ -9,6 +11,157 @@
 
 \maketitle
 
-\section{Introduction}
+\chapter{Introduction}
+\include{chapters/intro.tex}
+
+\chapter{Onsager-Machlup path integral}
+
+In this section, we will derive the Onsager-Machlup path integral.
+This is a formulation of Markovian stochastic processes which allows for describing the conditional probability of the resulting state physical process, given its initial conditions, as a sum over all possible ways, or ``paths'', that could result in that state.
+
+
+\section{Stochastic processes}
+
+A stochastic process is $x(t)$ is a function of $t \in \Te$, where the only requirement on $\Te$ is that it is \emph{total ordered}.
+This means that, for any two elements $t_1, t_2 \in \Te$ and $t_1 \neq t_2$, then $t_1 < t_2$ or $t_2 < t_1$.
+The most common example of $\Te$ is time, so $x(t)$ describes the evolution of $x$ thought time.
+However, $\Te$ might also be the links in a polymer, \dots \todo{examples}
+Furthermore, $\Te$ can be discrete or continuous.
+We will begin by considering discrete time steps with a length of $\Delta t$, so
+%
+\begin{align}
+    \Te = \Delta t \Z.
+\end{align}
+%
+
+A \emph{Markov process} is a stochastic process with ``no memory''.
+This means that, if we have $n$ steps of the process $x(t_1), x(t_2), \dots x(t_n)$, then the conditional probability of $x(t_n)$, given $x(t_1), \dots x(t_{n-1})$, only depends on the last step $x(t_{n-1})$.
+Using the common notation for conditional probabilities, where $P(A|B)$ means ``the probability of $A$ given $B$'', this can be stated as
+%
+\begin{align}
+    P(x_n |x_{n-1}, x_{n-2} \dots x_1) = P(x_n | x_{n-1}).
+\end{align}
+%
+Here, we use the shorthand $x_i = x(t_i)$.
+
+As far as we know, the underlying laws of physics are Markovic, so the question of 
+
+\note{I will fill in more text later}
+
+This does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_n)$
+
+
+A Markovian process has the property
+%
+\begin{align}
+    P(x_1, x_2, x_3) = P(x_3|x_2)P(x_2|x_1)P(x_1).
+\end{align}
+%
+From this, we may derive the Chapman-Kolmogorov equation,\todo{detail?}
+%
+\begin{align}
+    P(x_3|x_1) = \sum_{x_2} P(x_3|x_2) P(x_2|x_1).
+\end{align}
+%
+Here, the sum is over all possible values of $x_2$.
+\note{Something like: we consider $x$ discrete, $x \in \Delta x \Z $. }
+
+Repeatedly applying this gives the conditional probability of two steps $x_1$ and $x_{n+1}$ arbitrarily far removed, 
+%
+\begin{align}\label{eq: cond prob markov x0 given xn}
+    P(x_{n+1}|x_0) 
+    = \sum_{\{ x_1, \dots x_n \}}
+    P(x_{n+1}|x_n) P(x_n| x_{n-1})\dots P(x_2|x_1).
+\end{align}
+%
+We see that this already begins to resemble something like a sum over all possible paths.
+
+\note{more text}
+
+\note{Illustration}
+
+We will now take two different limits, which will yield the path integral.
+This means we will have to take the continuum limit.
+
+\note{Is this the right way to do it?}
+To do this, we must consider probability \emph{densities}, $\Pe(x) = P(x) / \Delta x $.
+The densities are ``probability of the value $x$ per $\Delta x$''.
+This allows us to go from sums to integrals,
+%
+\begin{align}
+    \sum_{x} P(x) = \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
+\end{align}
+%
+
+\note{Define $\D x(t)$}
+
+
+\section{Gaussian process and the Ornstein-Uhlenbeck process}
+
+The most important class of stochastic processes, as it is pretty much the only one we can solve, is Gaussian processes.
+These have the form
+%
+\begin{align}
+    P(x_{n_1}|x_n)
+    = 
+    \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
+    \exp \left\{ - (x_{n+1}  - \bar x_{n+1}) \Sigma^{-1} (x_{n+1}  - \bar x_{n+1}) \right\}.
+\end{align}
+%
+Here, $\bar x_{n+1}$ is the expected value of $x_n$.
+As we consider Markovian processes, this is a function of only the previous step, $x_n$
+$\Sigma$ is the covariance of the process.
+
+\todo{Why matrix notation?}
+
+A specific example is the Ornstein-Uhlenbeck process,
+%
+\begin{align}
+    \odv{ x(t) }{ t } = - \mu x(t) + \eta(t).
+\end{align}
+%
+
+\note{details \dots}
+
+This has the conditional probability
+%
+\begin{align}
+    P(x_{n + 1}| x_n) 
+    = \sqrt{ \frac{ \mu }{ 4 \pi D \Delta t } }
+    \exp \left\{ 
+    \frac{ \left(x_{n + 1} - x_n + \mu x_n \Delta t\right)^2 }{ 4 D \Delta t } 
+    \right\}
+    = \sqrt{ \frac{ \mu }{ 4 \pi D \Delta t } }
+    \exp \left\{ 
+    \frac{ \Delta t }{ 4 D }  \left(\dot x_{n + 1} + \mu x_n\right)^2
+    \right\},
+\end{align}
+%
+where we have introduced the discrete time-derivative, $\dot x_{n+1} = (x_{n + 1} - x_n) / \Delta t$.
+If we insert this into \autoref{eq: cond prob markov x0 given xn}, we get
+%
+\begin{align}
+    P(x_{n + 1} | x_1) 
+    = \int \D x(t) \,
+    \exp \left\{ 
+        - \frac{ 1 }{ 4D } 
+        \int\limits_{t_1}^{t_{n+1}} \dd t \left[\dot x(t) + \mu x(t)\right]^2
+        \right\}
+    \equiv
+    \int \D x(t) \, \Phi[x(t)].
+\end{align}
+%
+$\Phi$ is the Onsager-Machlup \emph{functional}.
+It is a functional, and not a function, as it takes in a function $x(t)$, and gives back a number.
+
+\section{Master equation}
+
+\note{Fill}
+
+\section{Gaussian integrals}
+
+\note{Fill}
+
+
 
 \end{document}

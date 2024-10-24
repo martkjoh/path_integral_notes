@@ -1,2 +1,4 @@
 # Lecture notes
-Lecture Notes from the course "Path integral methods in stochastic processes and field theory", held at Göttingen Universty and the Max Planck Insitute of Dynamics and Self-organization 
+ 
+Lecture notes from the course "Path integral methods in stochastic processes and field theory", held at Göttingen University and the Max Planck Institute of Dynamics and Self-organization.
+
