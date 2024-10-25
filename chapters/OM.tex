@@ -1,24 +1,51 @@
-In this section, we will derive the Onsager-Machlup path integral.
-This is a formulation of Markovian stochastic processes which allows for describing the conditional probability of the resulting state physical process, given its initial conditions, as a sum over all possible ways, or ``paths'', that could result in that state.
+In this section, we will derive and apply the Onsager-Machlup path integral.
+This is a formulation of Markovian stochastic processes that describe the conditional probabilities of a physical process as a sum of all possible paths the system can take
+The conditional probabilities are statements of the form ``Given this intital condition, what is the probability that the system ends up here'', and the in the path integral formulation this is calculated by summing over all possible ways, or ``paths'' the system could evolve from the initial to the final state.
+The physical systems that can be described by this formulation are \emph{stochastic processes.}
 
 
 \section{Stochastic processes}
 
-A stochastic process is $x(t)$ is a function of $t \in \Te$, where the only requirement on $\Te$ is that it is \emph{total ordered}.
+A stochastic process $x(t)$ is a function of $t \in \Te$, where the only requirement on $\Te$ is that it is \emph{total ordered}.
 This means that, for any two elements $t_1, t_2 \in \Te$ and $t_1 \neq t_2$, then $t_1 < t_2$ or $t_2 < t_1$.
 The most common example of $\Te$ is time, so $x(t)$ describes the evolution of $x$ thought time.
-However, $\Te$ might also be the links in a polymer, \dots \todo{examples}
-Furthermore, $\Te$ can be discrete or continuous.
+However, $\Te$ might also be the links in a polymer, \dots \todo{more examples?}
+Furthermore, $\Te$ can be discrete or continuous.more
 We will begin by considering discrete time steps with a length of $\Delta t$, so
 %
 \begin{align}
-    \Te = \Delta t \Z.
+    \Te = \{ \dots -2 \Delta t, - \Delta t, 0, \Delta t, 2 \Delta t, \dots\} = \Delta t \Z.
 \end{align}
 %
+The notation $\Delta t \Z$ means set of all integers $\Z$ multiplied by $\Delta t$.
+
+We consider a stochastic process $x(t)$ that take on discrete values, $x \in \Ex$, where
+%
+\begin{align}
+    \Ex \Delta x \Z.
+\end{align}
+%
+This process can be though of as a particle on a one-dimensional lattice with lattice points separated by $\Delta x$.
+The probability that, if the particle is at lattice point $x = n \Delta x$ at time $t$, it will jump to lattice point $x' = m \Delta x$ at the next time step $t + \Delta t$, is $P(x'(t + \Delta t) | x(t) )$.
+We use there the common notation for conditional probabilities, where $P(A|B)$ means ``the probability of $A$ given $B$''.
+It is defined as 
+%
+\begin{align}\label{eq: cond prob}
+    P(A|B) P(B) = P(A\cap B),
+\end{align}
+%
+where $P(A\cap B)$ is the probability that \emph{both} $A$ and $B$ occur.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=.5\textwidth]{fig/fig1.jpg}
+    \caption{Illustration of a stochastic process}
+    \label{fig: stochastic process}
+\end{figure}
 
 A \emph{Markov process} is a stochastic process with ``no memory''.
 This means that, if we have $n$ steps of the process $x(t_1), x(t_2), \dots x(t_n)$, then the conditional probability of $x(t_n)$, given $x(t_1), \dots x(t_{n-1})$, only depends on the last step $x(t_{n-1})$.
-Using the common notation for conditional probabilities, where $P(A|B)$ means ``the probability of $A$ given $B$'', this can be stated as
+This can be stated as
 %
 \begin{align}
     P(x_n |x_{n-1}, x_{n-2} \dots x_1) = P(x_n | x_{n-1}).
@@ -26,41 +53,49 @@ Using the common notation for conditional probabilities, where $P(A|B)$ means ``
 %
 Here, we use the shorthand $x_i = x(t_i)$.
 
-As far as we know, the underlying laws of physics are Markovic, so the question of 
+As far as we know, the underlying laws of physics are fully described at each time-step, so the question of whether we can model a process as Markovian depends on our description.
+For example, if try to describe the flight of a football through the air with only its position, the description is not Markovian, as we need the current velocity to know where it will be at the next time-step.
+But, if we include the velocity in our description, the model is Markovian.
+A non-Markovian description thus indicate that we have excluded degrees of freedom that contain information about the system.
+Be ware that a system being Markovian does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_n)$
 
-\note{More details on what markovian means}
 
-This does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_n)$
-
-
-A Markovian process has the property
+From the definition of conditional probability, \autoref{eq: cond prob}, we can derive that the probability of three events, $x_1$, $x_2$ and $x_3$ are given by
+%
+\begin{align}
+    P(x_1, x_2, x_3) = P(x_3|x_2,x_1)P(x_2|x_1)P(x_1).
+\end{align}
+%
+A Markovian process thus has the property
 %
 \begin{align}
     P(x_1, x_2, x_3) = P(x_3|x_2)P(x_2|x_1)P(x_1).
 \end{align}
 %
-From this, we may derive the Chapman-Kolmogorov equation,\todo{detail?}
+We can furthermore write $P(x_3, x_1) = \sum_{x_2 \in \Ex} P(x_3, x_2, x_1)$.
+From this, we derive the Chapman-Kolmogorov equation,
 %
 \begin{align}\label{eq: chapman kolmogorov}
     P(x_3|x_1) = \sum_{x_2} P(x_3|x_2) P(x_2|x_1).
 \end{align}
 %
-Here, the sum is over all possible values of $x_2$.
-\note{What is x? Something like: we consider $x$ discrete, $x \in \Delta x \Z $. }
-
-Repeatedly applying this gives the conditional probability of two steps $x_1$ and $x_{n+1}$ arbitrarily far removed, 
+By repeatedly applying this process, we can get conditional probability between two steps $x_1$ and $x_{n+1}$ arbitrarily far removed,
 %
 \begin{align}\label{eq: cond prob markov x0 given xn}
-    P(x_{n+1}|x_0) 
-    = \sum_{\{ x_1, \dots x_n \}}
+    P(x_{n+1}|x_1) 
+    = \sum_{ x_2, \dots x_n}
     P(x_{n+1}|x_n) P(x_n| x_{n-1})\dots P(x_2|x_1).
 \end{align}
 %
-We see that this already begins to resemble something like a sum over all possible paths.
+We see that this already begins to resemble something like a sum over all possible ``paths'' that the proces $x(t)$ can take to transition from $x_1$ at $t_1$ to $x_{n+1}$ at $x(t_{n+1})$.
 
-\note{more text}
 
-\note{Illustration}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=.4\textwidth]{fig/fig2.jpg}
+    \caption{Some of the paths between the initial and final state.}
+    \label{fig: paths}
+\end{figure}
 
 
 
@@ -71,38 +106,38 @@ The most important class of stochastic processes, as it is pretty much the only 
 These have the form
 %
 \begin{align}
-    P(x_{n_1}|x_n)
-    = 
-    \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
-    \exp \left\{ - (x_{n+1}  - \bar x_{n+1}) \Sigma^{-1} (x_{n+1}  - \bar x_{n+1}) \right\}.
+    P(x_{n+1}|x_n)
+    =
+    \frac{ 1 }{ \sqrt{ 2 \pi \sigma } }
+    \exp \left\{ {-\frac{(x_{n+1} - \bar x_{n + 1})^2}{\sigma }} \right\}
 \end{align}
 %
-Here, $\bar x_{n+1}$ is the expected value of $x_n$.
-As we consider Markovian processes, this is a function of only the previous step, $x_n$
-$\Sigma$ is the covariance of the process.
+Here, $\bar x_{n+1}$ is the expected value of $x_{n+1}$. \todo{Should there be som factors of $2$ here?}
+As we consider Markovian processes, this is a function of only the previous step, $x_n$, and $\sigma$ is the variance of the process.
 
-\todo{Why matrix notation?}
 
-A specific example is the Ornstein-Uhlenbeck process,
+A specific example is the Ornstein-Uhlenbeck (OU) process,
 %
 \begin{align}
     \odv{ x(t) }{ t } = - \mu x(t) + \eta(t).
 \end{align}
 %
-
-\note{More about this process \dots}
-
-This has the conditional probability\todo{where does $\Delta x$ come in here?}
+This models, for example, a particle on a spring in a fluid with thermal noise where friction dominates.
+The $-\mu x(t)$ term is from Hooks law, and $\eta(t)$ is a random force modeling the forces of the fluid particles bumping into the particle.
+You can read more about this process in~\footnote{\url{https://iopscience.iop.org/article/10.1088/1367-2630/ad7ef1/meta}}.
+The expectation value of the OU-process at time $t_{n+1}$ is $x_n - \mu x_n \Delta t$---the where it was the step before minus the correction due to the spring-force.
+The variance is $\sigma = \frac{2D}{\mu}(1  - e^{- 2 \mu \Delta t})$, where $D$ is the diffusion constant, which is the variance of the noise $\eta$.
+With this, OU-process has the conditional probability distribution
 %
 \begin{align}
     P(x_{n + 1}| x_n) 
     = \sqrt{ \frac{ \mu }{ 4 \pi D \Delta t } }
-    \exp \left\{ 
+    \exp \left\{ -
     \frac{ \left(x_{n + 1} - x_n + \mu x_n \Delta t\right)^2 }{ 4 D \Delta t } 
     \right\}
     = \sqrt{ \frac{ \mu }{ 4 \pi D \Delta t } }
     \exp \left\{ 
-    \frac{ \Delta t }{ 4 D }  \left(\dot x_{n + 1} + \mu x_n\right)^2
+    - \frac{ \Delta t }{ 4 D }  \left(\dot x_{n + 1} + \mu x_n\right)^2
     \right\},
 \end{align}
 %
@@ -110,24 +145,26 @@ where we have introduced the discrete time-derivative, $\dot x_{n+1} = (x_{n + 1
 
 We will now take two different limits, which will yield the path integral.
 This means we will have to take the continuum limit.
-
-\note{Is this the right way to do it?}
-To do this, we must consider probability \emph{densities}, $\Pe(x) = P(x) / \Delta x $.
-The densities are ``probability of the value $x$ per $\Delta x$''.
+If we consider the particles to live on a line instead of a lattice, then the position is given by a probability density $\Pe(x)$.
+The probability of finding the particle between the points $x_i$ and $x_i + \Delta x$ is, for small $\Delta x$, $P(x) = P(x \in [x_i, x_i + \Delta x]) = \Pe(x) \Delta x$.
 This allows us to go from sums to integrals,
 %
 \begin{align}
     \sum_{x} P(x) = \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
 \end{align}
 %
-
-\note{Define $\D x(t)$}
-
-If we insert this into \autoref{eq: cond prob markov x0 given xn}, we get
+Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and taking the continuous limit, we get
 %
 \begin{align}
-    P(x_{n + 1} | x_1) 
-    = \int \D x(t) \,
+    P(x_{n+1}|x_{1})
+    & =
+    \sum_{x_2\cdots x_{n+1}}
+    \Delta x \Pe \left( x_{n+1}| x_{n} \right) \cdots \Delta x \Pe \left( x_{2}| x_{1} \right)\\
+    &
+    = \sum_{x_2\cdots x_{n+1}} \Delta x^n \exp \left\{ - \frac{\Delta t}{4 D} \sum_n \left[\dot x_{n + 1} - \mu x_n \right]^2 \right\}\\
+    & 
+    \underset{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} }{ \sim }
+    \int \D x(t) \,
     \exp \left\{ 
         - \frac{ 1 }{ 4D } 
         \int\limits_{t_1}^{t_{n+1}} \dd t \left[\dot x(t) + \mu x(t)\right]^2
@@ -138,11 +175,33 @@ If we insert this into \autoref{eq: cond prob markov x0 given xn}, we get
 %
 $\Phi$ is the Onsager-Machlup \emph{functional}.
 It is a functional, and not a function, as it takes in a function $x(t)$, and gives back a number.
+We have defined the functional integration measure,
+%
+\begin{align}
+    \D x(t) \equiv \lim_{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} } \prod_{n} \Delta x \sqrt{ \frac{\mu}{ 4 \pi D \Delta t }}
+\end{align}
+%
+This measure is not necessarily well-defined. 
+To performed calculations, we will have re-descritize the path integral, so this can be considered as a notational trick rather than a true limit.
+
+
+If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is
+%
+\begin{align}
+    P(x_{n_1}|x_n)
+    = 
+    \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
+    \exp \left\{ - \sum_{ab} (x_a(t_{n+1}) - \bar x_a(t_{n+1})) \Sigma_{ab}^{-1} (x_b(t_{n+1}) - \bar x_b(t_{n+1})) \right\}.
+\end{align}
+%
+Here, $\Sigma$ is the covariance matrix of $x$.
+An example of this may be a particle moving in three dimensions, so $\bm x$ is a three-dimensional vector, or a set of $N$ particles with position and velocity in three dimensions, so $\bm x$ is a $6 N$ component vector.
+
 
 \section{Master equation}
 
 We will here consider stochastic processes using a different formalism, the master equation.
-If we consider a random process $N(t)$,\todo{Why not $x$?} and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
+If we consider a random process $N(t)$, and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
 %
 \begin{align}\label{eq: expansion cond prob}
     P(N'(t + \Delta t)| N(t)) = 
@@ -174,11 +233,12 @@ If we consider $N' = N$, then we can, by the principle of total probability (the
 or
 %
 \begin{align}\label{eq: rate cons condition}
-    W_t(N|N) = - \sum_{N'\neq N}W_t(N'|N)
+    W_t(N|N) = - \sum_{N'\neq N}W_t(N'|N).
 \end{align}
 %
 This insures the conservation of probability.
 If we consider the matrix form of the rates, this means the diagonals of $W_t(N'|N)$ are given by minus the sum of each column,
+\todo{is this right?}
 %
 \begin{align}
     W_t(N'|N) = 
@@ -189,7 +249,6 @@ If we consider the matrix form of the rates, this means the diagonals of $W_t(N'
     \end{pmatrix},
 \end{align}
 %
-\todo{is this right?}
 If we expand the Chapman-Kolmogorov, \autoref{eq: chapman kolmogorov},
 %
 \begin{align}
@@ -212,7 +271,7 @@ If we expand the Chapman-Kolmogorov, \autoref{eq: chapman kolmogorov},
 If we apply \autoref{eq: rate cons condition}, and define $\Delta t = t_3 - t_2$, we can rearrange this to read
 %
 \begin{align}
-    &\frac{P(N(t_3)|N(t_1)) - P(N(t_2)=N(t_3)|N(t_1))}{\Delta t}\\
+    &\frac{P\left(N(t_3)|N(t_1)\right) - P(N(t_2)=N(t_3)|N(t_1))}{\Delta t}\\
     &=
     \sum_{N(t_2) \neq N(t_3)}
     \left[
@@ -226,7 +285,7 @@ On the bottom, we have the diffenrence between the \emph{gain} rate and the \emp
 We take the limit, which gives the \emph{master equation},
 %
 \begin{align}
-    \partial_t P(N(t)|N_0) =
+    \odv{}{t} P(N(t)|N_0) =
     \sum_{N'\neq N} \left[
         W_t(N(t)|N'(t))P(N'(t)|N_0)
         - 
@@ -234,10 +293,37 @@ We take the limit, which gives the \emph{master equation},
     \right].
 \end{align}
 %
+The master equation is equivalent to the Ornstein-Uhlenbeck path-integral---both are directly derived from the conditional probability distribution only by assuming the process is Markovian.
+Although the two formulations are equivalent, they may be better or worse suited for different problems.
 
-The correspondence between the master-equation and the Onsager-Machlup functional is analogous to the relationship between the Schrödinger equation and the Feynamn path integral in QM.
+\begin{framed}
+    \noindent
+    \textbf{The quantum-stochastic analogy}\\
+    The master-equation is first-order a linear ODE giving the time-evolution of a probability distribution.
+    If this reminds you of the Schrödinger equation, the similarities does not stop here.
+    In fact, the correspondence between the master-equation and the Onsager-Machlup functional is analogous to the relationship between the Schrödinger and the Feynman path integral in QM.
+    The action of a process is a functional
+    %
+    \begin{align}
+        S[x] = \int\limits_{t_a}^{t_b} \dd t \, L(x, \dot x, t), 
+    \end{align}
+    %
+    where $L = V - T$ is the Lagrangian.
+    In classical mechanics, the motion is determined by the Euler-Lagrange equations, $\fdv{ S }{ x(t) } = 0$, while in quantum-mechaics, the amplitude for a process is, according to the Feynman path integral,
+    %
+    \begin{align}
+        K(x_a, x_b) &= \sum_{\mathrm{paths}\, x} \Phi[x], & \Phi[x] \propto e^{iS[x] / \hbar}.
+    \end{align}
+    %
+    The Schrödinger equation gives the evolution of the wave-function,
+    %
+    \begin{align}
+        i \hbar \odv{  }{ t } \Psi(x(t)) = \hat H \Psi(x(t)),
+    \end{align}
+    %
+    where $\hat H$ is the Hamiltonian operator, and the amplitude is the overlap between the initial and finite wave-functions, $K(x_a, x_b) = \braket{ \Psi(x(t_b)) | \Psi(x(t_a)) } $.
+\end{framed}
 
-\note{more text on this}
 
 
 
@@ -247,12 +333,12 @@ The most important integrals we will meet are \emph{Gaussian integrals}.
 The simplest Gaussian integral, which will be the basis for this chapter, is
 %
 \begin{align}\label{eq: gaussian integral}
-    \int\limits_{-\infty}^\infty \dd x \, e^{-\frac{1}{2} x^2} = \sqrt{ 2 \pi }.
+    \int\limits_{-\infty}^\infty \dd x \, e^{-\frac{1}{2} a x^2} = \sqrt{ \frac{ 2 \pi  }{ a }}.
 \end{align}
 %
 The reason we can solve Gaussian processes, as we mentioned earlier, is that we can solve Gaussian integrals.
 With this simple result, we can solve path integrals over spaces of functions.
-Consider\todo{what }
+Consider
 %
 \begin{align}
     Z = \int \D \phi
@@ -273,13 +359,14 @@ However, we can deal with this by ``unpacking'' the two-dimensional structure of
 \begin{align}
     \phi_\alpha = 
     \left[\phi_1, ... \phi_N\right]
+    =
     \left[
         \phi_{1, 1}, \phi_{2, 1}\dots\phi_{d,1}, \phi_{1, 2}\dots\phi_{d, n}
     \right],
 \end{align}
 %
 where $N = d \times n$.
-This is analogous to ``flattening'' and array in computer programming.
+This is analogous to ``flattening'' an array in computer programming.
 We also apply this to $A$.
 The discretized dirac-delta is $\delta(t_1 - t_2) \sim \frac{1}{\Delta t} \delta_{t_1, t_2}$, so factoring out this $\Delta t$ we get 
 %

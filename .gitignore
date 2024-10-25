@@ -1,5 +1,5 @@
 .vscode
-scans/
+scans/*
 # Ignore everyting in build
 build/*
 # Except sub dirs
