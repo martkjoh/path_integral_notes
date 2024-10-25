@@ -28,7 +28,7 @@ Here, we use the shorthand $x_i = x(t_i)$.
 
 As far as we know, the underlying laws of physics are Markovic, so the question of 
 
-\note{I will fill in more text later}
+\note{More details on what markovian means}
 
 This does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_n)$
 
@@ -41,12 +41,12 @@ A Markovian process has the property
 %
 From this, we may derive the Chapman-Kolmogorov equation,\todo{detail?}
 %
-\begin{align}
+\begin{align}\label{eq: chapman kolmogorov}
     P(x_3|x_1) = \sum_{x_2} P(x_3|x_2) P(x_2|x_1).
 \end{align}
 %
 Here, the sum is over all possible values of $x_2$.
-\note{Something like: we consider $x$ discrete, $x \in \Delta x \Z $. }
+\note{What is x? Something like: we consider $x$ discrete, $x \in \Delta x \Z $. }
 
 Repeatedly applying this gives the conditional probability of two steps $x_1$ and $x_{n+1}$ arbitrarily far removed, 
 %
@@ -62,20 +62,7 @@ We see that this already begins to resemble something like a sum over all possib
 
 \note{Illustration}
 
-We will now take two different limits, which will yield the path integral.
-This means we will have to take the continuum limit.
 
-\note{Is this the right way to do it?}
-To do this, we must consider probability \emph{densities}, $\Pe(x) = P(x) / \Delta x $.
-The densities are ``probability of the value $x$ per $\Delta x$''.
-This allows us to go from sums to integrals,
-%
-\begin{align}
-    \sum_{x} P(x) = \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
-\end{align}
-%
-
-\note{Define $\D x(t)$}
 
 
 \section{Gaussian process and the Ornstein-Uhlenbeck process}
@@ -103,9 +90,9 @@ A specific example is the Ornstein-Uhlenbeck process,
 \end{align}
 %
 
-\note{details \dots}
+\note{More about this process \dots}
 
-This has the conditional probability
+This has the conditional probability\todo{where does $\Delta x$ come in here?}
 %
 \begin{align}
     P(x_{n + 1}| x_n) 
@@ -120,6 +107,22 @@ This has the conditional probability
 \end{align}
 %
 where we have introduced the discrete time-derivative, $\dot x_{n+1} = (x_{n + 1} - x_n) / \Delta t$.
+
+We will now take two different limits, which will yield the path integral.
+This means we will have to take the continuum limit.
+
+\note{Is this the right way to do it?}
+To do this, we must consider probability \emph{densities}, $\Pe(x) = P(x) / \Delta x $.
+The densities are ``probability of the value $x$ per $\Delta x$''.
+This allows us to go from sums to integrals,
+%
+\begin{align}
+    \sum_{x} P(x) = \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
+\end{align}
+%
+
+\note{Define $\D x(t)$}
+
 If we insert this into \autoref{eq: cond prob markov x0 given xn}, we get
 %
 \begin{align}
@@ -138,8 +141,172 @@ It is a functional, and not a function, as it takes in a function $x(t)$, and gi
 
 \section{Master equation}
 
-\note{Fill}
+We will here consider stochastic processes using a different formalism, the master equation.
+If we consider a random process $N(t)$,\todo{Why not $x$?} and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
+%
+\begin{align}\label{eq: expansion cond prob}
+    P(N'(t + \Delta t)| N(t)) = 
+    \underbrace{P(N'(t)|N(t))}_{\delta_{N'N}} + \Delta t 
+    \underbrace{\pdv{P(N'(t')|N(t))}{t'}\bigg|_{t'=t}}_{W_t(N'|N)} + \Oh(\Delta t).
+\end{align}
+%
+Here, we define the transition rates $W_t(N'|N)$.
+This can be considered as a matrix, 
+%
+\begin{align}
+    W_t(N'|N) = 
+    \begin{pmatrix}
+        W_t(1|1) & W_t(1|2)& W_t(1|3) &\cdots\\
+        W_t(2|1) & W_t(2|2)& W_t(2|3) &\cdots \\
+        \vdots & \vdots & \ddots & \cdots
+    \end{pmatrix},
+\end{align}
+%
+where the entries are the rate at which state $N'$ transitions to state $N$.
+If we consider $N' = N$, then we can, by the principle of total probability (the probability of all possible outcomes add up to one), we can write
+%
+\begin{align}
+    P(N(t + \Delta t)| N(t)) = 1 + \Delta t W_t(N|N) 
+    = 1 - \sum_{N' \neq N}P(N'(t + \Delta t)| N(t))
+    = 1 - \sum_{N' \neq N}\Delta t W_t(N',N),
+\end{align}
+%
+or
+%
+\begin{align}\label{eq: rate cons condition}
+    W_t(N|N) = - \sum_{N'\neq N}W_t(N'|N)
+\end{align}
+%
+This insures the conservation of probability.
+If we consider the matrix form of the rates, this means the diagonals of $W_t(N'|N)$ are given by minus the sum of each column,
+%
+\begin{align}
+    W_t(N'|N) = 
+    \begin{pmatrix}
+        - \sum_{N\neq 1} W_t(N|1) & W_t(1|2)& W_t(1|3) &\cdots\\
+        W_t(2|1) & - \sum_{N\neq 2} W_t(N|2)& W_t(2|3) &\cdots \\
+        \vdots & \vdots & \ddots & \cdots
+    \end{pmatrix},
+\end{align}
+%
+\todo{is this right?}
+If we expand the Chapman-Kolmogorov, \autoref{eq: chapman kolmogorov},
+%
+\begin{align}
+    P(N(t_3) |N(t_1))
+    & =
+    \sum_{N(t_2)} 
+    \left[
+        \delta_{N(t_3)N(t_2)}
+        + (t_3 - t_2) W_{t_2}(N(t_3)|N(t_2))
+    \right]
+    P(N(t_2)|N(t_1))
+    \\
+    & =
+    (t_3 - t_2)\sum_{N(t_2)\neq N(t_3)} 
+        W_{t_2}(N(t_3)|N(t_2)) P(N(t_2)|N(t_1))\\
+    & \quad 
+    + \left[ 1 + (t_3 - t_2) W_{t_2}(N(t_3)|N(t_2)=N(t_3))  \right] P(N(t_2)=N(t_3)|N(t_1))
+\end{align}
+%
+If we apply \autoref{eq: rate cons condition}, and define $\Delta t = t_3 - t_2$, we can rearrange this to read
+%
+\begin{align}
+    &\frac{P(N(t_3)|N(t_1)) - P(N(t_2)=N(t_3)|N(t_1))}{\Delta t}\\
+    &=
+    \sum_{N(t_2) \neq N(t_3)}
+    \left[
+        W_{t_2}(N(t_3)|N(t_2))P(N(t_2)|N(t_1))
+        - W_{t_2}(N(t_2)|N(t_2)=N(t_3))P(N(t_2)=N(t_3)|N(t_1))
+    \right]
+\end{align}
+%
+The top line of this equation is the difference in probability of finding the system in the state $N(t_3)$ at time $t_3$ and $N(t_2)$, so in the limit $\Delta t \rightarrow 0$ becomes a derivative.
+On the bottom, we have the diffenrence between the \emph{gain} rate and the \emph{loss} rate in to and out of state $N(t_3)$
+We take the limit, which gives the \emph{master equation},
+%
+\begin{align}
+    \partial_t P(N(t)|N_0) =
+    \sum_{N'\neq N} \left[
+        W_t(N(t)|N'(t))P(N'(t)|N_0)
+        - 
+        W_t(N'(t)|N(t))P(N(t)|N_0)
+    \right].
+\end{align}
+%
+
+The correspondence between the master-equation and the Onsager-Machlup functional is analogous to the relationship between the Schrödinger equation and the Feynamn path integral in QM.
+
+\note{more text on this}
+
+
 
 \section{Gaussian integrals}
 
-\note{Fill}
+The most important integrals we will meet are \emph{Gaussian integrals}.
+The simplest Gaussian integral, which will be the basis for this chapter, is
+%
+\begin{align}\label{eq: gaussian integral}
+    \int\limits_{-\infty}^\infty \dd x \, e^{-\frac{1}{2} x^2} = \sqrt{ 2 \pi }.
+\end{align}
+%
+The reason we can solve Gaussian processes, as we mentioned earlier, is that we can solve Gaussian integrals.
+With this simple result, we can solve path integrals over spaces of functions.
+Consider\todo{what }
+%
+\begin{align}
+    Z = \int \D \phi
+    \exp \left\{ 
+        - \frac{1}{2} \int \dd t_1 \dd t_2 \, 
+        \sum_{ab}
+        \phi_a(t_1) A_{ab}(t_1, t_2) \phi_b(t_2)
+    \right\}.
+\end{align}
+%
+Here, $\phi(t_1)$ is a vector function with $d$ components, $\phi_a(t) = (\phi_1(t), \phi_2(t)\dots)^T$, and $A_{ab}(t_1, t_2)$ is a matrix-function.
+In the case of Markov-processes, $A(t_1, t_2)$ will be \emph{time-local}.
+This means $A(t_1, t_2) = A(t_1) \delta(t_1 - t_2)$
+For the path integral $Z$ to be well-defined, we must discretize $t_n = n \Delta t$, with $n \in \Z$
+This gives us an extra set of indices, $\phi_a(t_i) = \phi_{a,i}$.
+However, we can deal with this by ``unpacking'' the two-dimensional structure of $\phi_{a,i}$,
+%
+\begin{align}
+    \phi_\alpha = 
+    \left[\phi_1, ... \phi_N\right]
+    \left[
+        \phi_{1, 1}, \phi_{2, 1}\dots\phi_{d,1}, \phi_{1, 2}\dots\phi_{d, n}
+    \right],
+\end{align}
+%
+where $N = d \times n$.
+This is analogous to ``flattening'' and array in computer programming.
+We also apply this to $A$.
+The discretized dirac-delta is $\delta(t_1 - t_2) \sim \frac{1}{\Delta t} \delta_{t_1, t_2}$, so factoring out this $\Delta t$ we get 
+%
+\begin{align}
+    A_{ab}(t_1,t_2)
+    \sim \frac{1}{\Delta t} A_{ab,ij}
+    \rightarrow \frac{1}{\Delta t} A_{\alpha \beta},
+\end{align}
+%
+The path-internal then discretizes as 
+%
+\begin{align}
+    Z = \int \left( \prod_{\alpha=1}^N \dd \phi_\alpha \right) \, 
+    \exp \left\{ 
+        \frac{1}{2} \Delta t \sum_{\alpha \beta} 
+        \phi_\alpha A_{\alpha \beta} \phi_\beta
+    \right\}.
+\end{align}
+%
+We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$.
+We can therefore perform a change of variables, $z = G^{-1}\phi$, which simplifies the integral\todo{what about jacobian}
+%
+\begin{align}
+    Z = \int \left( \prod_{\alpha=1}^N \dd z_\alpha \right)
+    \exp \left\{ \frac{1}{2}\Delta t \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}
+    =
+    \sqrt{ \det 2 \pi (\Delta t A)^{-1} }.
+\end{align}
+%
+Here, we factored the exponential, used the simple Gaussian integral \autoref{eq: gaussian integral}, and used the fact that the product of the eigenvalues is the determinant.
