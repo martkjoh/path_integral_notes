@@ -1,16 +1,15 @@
-In this section, we will derive and apply the Onsager-Machlup path integral.
-This is a formulation of Markovian stochastic processes that describe the conditional probabilities of a physical process as a sum of all possible paths the system can take
-The conditional probabilities are statements of the form ``Given this intital condition, what is the probability that the system ends up here'', and the in the path integral formulation this is calculated by summing over all possible ways, or ``paths'' the system could evolve from the initial to the final state.
+In this section, we will introduce the concept of a path integral in the context of Markovian stochastic processes.
+This is a formulation that describe the conditional probabilities of a physical process as a (suitably weighted) sum of all possible paths the system can take in its evolution between given initial and final state.
+The conditional probabilities are statements of the form ``Given this initial condition, what is the probability that the system ends up here'', and in the path integral formulation this is calculated by summing over all possible ways, or ``paths'' the system could evolve from the initial to the final state.
 The physical systems that can be described by this formulation are \emph{stochastic processes.}
 
 
 \section{Stochastic processes}
 
-A stochastic process $x(t)$ is a function of $t \in \Te$, where the only requirement on $\Te$ is that it is \emph{total ordered}.
-This means that, for any two elements $t_1, t_2 \in \Te$ and $t_1 \neq t_2$, then $t_1 < t_2$ or $t_2 < t_1$.
+A stochastic process $x(t)$ is a sequence of random variables. The variable $t \in \Te$ can be either discrete or continuous, the only requirement on $\Te$ being that it is \emph{totally ordered}.
+Roughly, this means that, for any two elements $t_1, t_2 \in \Te$ and $t_1 \neq t_2$, then $t_1 < t_2$ or $t_2 < t_1$.
 The most common example of $\Te$ is time, so $x(t)$ describes the evolution of $x$ thought time.
-However, $\Te$ might also be the links in a polymer, \dots \todo{more examples?}
-Furthermore, $\Te$ can be discrete or continuous.more
+However, $\Te$ might also be the set of indices of monomers in a linear polymer chain, or of symbols printed on a thin paper strip, to give a couple of examples.
 We will begin by considering discrete time steps with a length of $\Delta t$, so
 %
 \begin{align}
@@ -36,12 +35,13 @@ It is defined as
 %
 where $P(A\cap B)$ is the probability that \emph{both} $A$ and $B$ occur.
 
+
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=.5\textwidth]{fig/fig1.jpg}
     \caption{Illustration of a stochastic process}
     \label{fig: stochastic process}
-\end{figure}
+\end{figure}\todo{could you make sure that figures are referenced to in the text?}
 
 A \emph{Markov process} is a stochastic process with ``no memory''.
 This means that, if we have $n$ steps of the process $x(t_1), x(t_2), \dots x(t_n)$, then the conditional probability of $x(t_n)$, given $x(t_1), \dots x(t_{n-1})$, only depends on the last step $x(t_{n-1})$.
@@ -60,7 +60,7 @@ A non-Markovian description thus indicate that we have excluded degrees of freed
 Be ware that a system being Markovian does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_n)$
 
 
-From the definition of conditional probability, \autoref{eq: cond prob}, we can derive that the probability of three events, $x_1$, $x_2$ and $x_3$ are given by
+From the definition of conditional probability, \autoref{eq: cond prob}, we can derive that the joint probability of three events, $x_1$, $x_2$ and $x_3$ is given by
 %
 \begin{align}
     P(x_1, x_2, x_3) = P(x_3|x_2,x_1)P(x_2|x_1)P(x_1).
@@ -73,7 +73,7 @@ A Markovian process thus has the property
 \end{align}
 %
 We can furthermore write $P(x_3, x_1) = \sum_{x_2 \in \Ex} P(x_3, x_2, x_1)$.
-From this, we derive the Chapman-Kolmogorov equation,
+From this, we derive the Chapman-Kolmogorov equation, \todo{Here we could already include the case where $x$ is continuous, in which case the equation would involve integrals of a density $\mathcal{P}$, rather than sums. It seems a bit more intuitive than taking the continuum limit in $x$ after having introduced the (continuous) OU process...}
 %
 \begin{align}\label{eq: chapman kolmogorov}
     P(x_3|x_1) = \sum_{x_2} P(x_3|x_2) P(x_2|x_1).
@@ -97,6 +97,8 @@ We see that this already begins to resemble something like a sum over all possib
     \label{fig: paths}
 \end{figure}
 
+\todo{I feel like introducing continuous $x$ already here and discussing the limit $\Delta t \to 0$ where we define the path integral would be useful and may avoid giving the impression that one needs Gaussian processes to define the path integral}
+\todo{I am all up for hand-drawn figures but maybe they could be slightly cleaner? E.g. by doing them on blank paper}
 
 
 
@@ -109,11 +111,11 @@ These have the form
     P(x_{n+1}|x_n)
     =
     \frac{ 1 }{ \sqrt{ 2 \pi \sigma } }
-    \exp \left\{ {-\frac{(x_{n+1} - \bar x_{n + 1})^2}{\sigma }} \right\}
+    \exp \left\{ {-\frac{(x_{n+1} - \bar x_{n + 1})^2}{2 \sigma }} \right\}
 \end{align}
 %
-Here, $\bar x_{n+1}$ is the expected value of $x_{n+1}$. \todo{Should there be som factors of $2$ here?}
-As we consider Markovian processes, this is a function of only the previous step, $x_n$, and $\sigma$ is the variance of the process.
+Here, $\bar x_{n+1}$ is the expected value of $x_{n+1}$. 
+As we consider Markovian processes, this is a function of only the previous step, $x_n$, and $\sigma$ is the variance of the process. \todo{Is it clear that this is the variance conditioned on $x_n$? It might give the impression that we are talking about the steady-state variance, which does not depend on $x_n$}
 
 
 A specific example is the Ornstein-Uhlenbeck (OU) process,
@@ -123,9 +125,9 @@ A specific example is the Ornstein-Uhlenbeck (OU) process,
 \end{align}
 %
 This models, for example, a particle on a spring in a fluid with thermal noise where friction dominates.
-The $-\mu x(t)$ term is from Hooks law, and $\eta(t)$ is a random force modeling the forces of the fluid particles bumping into the particle.
+The $-\mu x(t)$ term is from Hooks law, and $\eta(t)$ is a zero-mean random force modeling the forces of the fluid particles bumping into the particle.
 You can read more about this process in~\footnote{\url{https://iopscience.iop.org/article/10.1088/1367-2630/ad7ef1/meta}}.
-The expectation value of the OU-process at time $t_{n+1}$ is $x_n - \mu x_n \Delta t$---the where it was the step before minus the correction due to the spring-force.
+The expectation value of the OU-process at time $t_{n+1}$ conditioned on $x(t_n)=x_n$ is $x_n - \mu x_n \Delta t$ --- i.e.\ where it was the step before minus the correction due to the spring-force.
 The variance is $\sigma = \frac{2D}{\mu}(1  - e^{- 2 \mu \Delta t})$, where $D$ is the diffusion constant, which is the variance of the noise $\eta$.
 With this, OU-process has the conditional probability distribution
 %
@@ -173,7 +175,7 @@ Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and tak
     \int \D x(t) \, \Phi[x(t)].
 \end{align}
 %
-$\Phi$ is the Onsager-Machlup \emph{functional}.
+where the limit $n\to \infty$ is taken at fixed $n\Delta t$ (process duration) and $\Phi$ is the Onsager-Machlup \emph{functional}.
 It is a functional, and not a function, as it takes in a function $x(t)$, and gives back a number.
 We have defined the functional integration measure,
 %
@@ -185,7 +187,7 @@ This measure is not necessarily well-defined.
 To performed calculations, we will have re-descritize the path integral, so this can be considered as a notational trick rather than a true limit.
 
 
-If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is
+If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is a multivariate Gaussian
 %
 \begin{align}
     P(x_{n_1}|x_n)
@@ -194,14 +196,14 @@ If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, 
     \exp \left\{ - \sum_{ab} (x_a(t_{n+1}) - \bar x_a(t_{n+1})) \Sigma_{ab}^{-1} (x_b(t_{n+1}) - \bar x_b(t_{n+1})) \right\}.
 \end{align}
 %
-Here, $\Sigma$ is the covariance matrix of $x$.
+Here, $\Sigma$ is the covariance matrix of $x$. \todo{Can this be moved further up where we define what a Gaussian process is?}
 An example of this may be a particle moving in three dimensions, so $\bm x$ is a three-dimensional vector, or a set of $N$ particles with position and velocity in three dimensions, so $\bm x$ is a $6 N$ component vector.
 
 
 \section{Master equation}
 
 We will here consider stochastic processes using a different formalism, the master equation.
-If we consider a random process $N(t)$, and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
+If we consider a discrete stochastic process $N(t)$, and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
 %
 \begin{align}\label{eq: expansion cond prob}
     P(N'(t + \Delta t)| N(t)) = 
@@ -222,7 +224,7 @@ This can be considered as a matrix,
 \end{align}
 %
 where the entries are the rate at which state $N'$ transitions to state $N$.
-If we consider $N' = N$, then we can, by the principle of total probability (the probability of all possible outcomes add up to one), we can write
+If we consider $N' = N$, then we can, by the principle of total probability (the probability of all possible outcomes add up to one), write
 %
 \begin{align}
     P(N(t + \Delta t)| N(t)) = 1 + \Delta t W_t(N|N) 
@@ -237,8 +239,7 @@ or
 \end{align}
 %
 This insures the conservation of probability.
-If we consider the matrix form of the rates, this means the diagonals of $W_t(N'|N)$ are given by minus the sum of each column,
-\todo{is this right?}
+If we consider the matrix form of the rates, this means the diagonals of $W_t(N'|N)$ are given by minus the sum of the off-diagonal elements in each column,
 %
 \begin{align}
     W_t(N'|N) = 
@@ -281,7 +282,7 @@ If we apply \autoref{eq: rate cons condition}, and define $\Delta t = t_3 - t_2$
 \end{align}
 %
 The top line of this equation is the difference in probability of finding the system in the state $N(t_3)$ at time $t_3$ and $N(t_2)$, so in the limit $\Delta t \rightarrow 0$ becomes a derivative.
-On the bottom, we have the diffenrence between the \emph{gain} rate and the \emph{loss} rate in to and out of state $N(t_3)$
+On the bottom, we have the difference between the \emph{gain} rate and the \emph{loss} rate in to and out of state $N(t_3)$
 We take the limit, which gives the \emph{master equation},
 %
 \begin{align}
@@ -293,13 +294,13 @@ We take the limit, which gives the \emph{master equation},
     \right].
 \end{align}
 %
-The master equation is equivalent to the Ornstein-Uhlenbeck path-integral---both are directly derived from the conditional probability distribution only by assuming the process is Markovian.
+Solving for $P(N(t)|N_0)$ by integrating the master equation will of course give the same result as computing the conditional probability by means of the corresponding path integral, since both are directly derived from the definition of the conditional probability distribution only by assuming the process is Markovian.
 Although the two formulations are equivalent, they may be better or worse suited for different problems.
 
 \begin{framed}
     \noindent
     \textbf{The quantum-stochastic analogy}\\
-    The master-equation is first-order a linear ODE giving the time-evolution of a probability distribution.
+    The master equation is a first-order linear ODE giving the time-evolution of a probability distribution.
     If this reminds you of the Schrödinger equation, the similarities does not stop here.
     In fact, the correspondence between the master-equation and the Onsager-Machlup functional is analogous to the relationship between the Schrödinger and the Feynman path integral in QM.
     The action of a process is a functional
@@ -312,7 +313,7 @@ Although the two formulations are equivalent, they may be better or worse suited
     In classical mechanics, the motion is determined by the Euler-Lagrange equations, $\fdv{ S }{ x(t) } = 0$, while in quantum-mechaics, the amplitude for a process is, according to the Feynman path integral,
     %
     \begin{align}
-        K(x_a, x_b) &= \sum_{\mathrm{paths}\, x} \Phi[x], & \Phi[x] \propto e^{iS[x] / \hbar}.
+        K(x_a, x_b) &= \sum_{\mathrm{paths}\, x} \Phi[x], & \Phi[x] \propto e^{iS[x] / \hbar}~.
     \end{align}
     %
     The Schrödinger equation gives the evolution of the wave-function,
@@ -321,7 +322,7 @@ Although the two formulations are equivalent, they may be better or worse suited
         i \hbar \odv{  }{ t } \Psi(x(t)) = \hat H \Psi(x(t)),
     \end{align}
     %
-    where $\hat H$ is the Hamiltonian operator, and the amplitude is the overlap between the initial and finite wave-functions, $K(x_a, x_b) = \braket{ \Psi(x(t_b)) | \Psi(x(t_a)) } $.
+    where $\hat H$ is the Hamiltonian operator, and the amplitude is the overlap between the initial and finite wave-functions, $K(x_a, x_b) = \braket{ \Psi(x(t_b)) | \Psi(x(t_a)) } $. Just like the master equation can be derived from the Chapman-Kolmogorov equation, so can the Schrödinger equation be derived from the Feynman path integral representation of the process by expanding the latter in small $\Delta t = t_b - t_a$.
 \end{framed}
 
 
@@ -386,8 +387,8 @@ The path-internal then discretizes as
     \right\}.
 \end{align}
 %
-We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$.
-We can therefore perform a change of variables, $z = G^{-1}\phi$, which simplifies the integral\todo{what about jacobian}
+We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$. Further assuming that $A$ is symmetric we have that $G^{-1}=G^T$ is a rotation, whence ${\rm det}(G)=1$.
+We can therefore perform a change of variables, $z = G^{-1}\phi$, which comes with a Jacobian of unity and simplifies the integral
 %
 \begin{align}
     Z = \int \left( \prod_{\alpha=1}^N \dd z_\alpha \right)
