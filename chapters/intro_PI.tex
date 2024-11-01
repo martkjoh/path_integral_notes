@@ -1,12 +1,13 @@
-In this section, we will introduce the concept of a path integral in the context of Markovian stochastic processes.
-This is a formulation that describe the conditional probabilities of a physical process as a (suitably weighted) sum of all possible paths the system can take in its evolution between given initial and final state.
-The conditional probabilities are statements of the form ``Given this initial condition, what is the probability that the system ends up here'', and in the path integral formulation this is calculated by summing over all possible ways, or ``paths'' the system could evolve from the initial to the final state.
-The physical systems that can be described by this formulation are \emph{stochastic processes.}
+In this section, we introduce the concept of path integrals in the context of \emph{Markovian stochastic processes.}
+Stochastic processes, such as a pollen particle in water affected by the random thermal fluctuations of the liquid particles bumping into it, are described by probability distributions.
+\emph{Conditional} probabilities are statements of the form ``Given this initial state, what is the probability that the system ends up in that final state?'', and are therefore a function of all possible ways the system can evolve between these states.
+We can therefore describe conditional probabilities of a physical process as a weighted sum (actually, an integral) of all possible ``paths'' the system can take between its initial and final state.
 
 
 \section{Stochastic processes}
 
-A stochastic process $x(t)$ is a sequence of random variables. The variable $t \in \Te$ can be either discrete or continuous, the only requirement on $\Te$ being that it is \emph{totally ordered}.
+A stochastic process $x(t)$ is a sequence of random variables, indexed by $t \in \Te$.
+The variable $t$ can be either discrete or continuous, the only requirement on $\Te$ being that it is \emph{totally ordered}.
 Roughly, this means that, for any two elements $t_1, t_2 \in \Te$ and $t_1 \neq t_2$, then $t_1 < t_2$ or $t_2 < t_1$.
 The most common example of $\Te$ is time, so $x(t)$ describes the evolution of $x$ thought time.
 However, $\Te$ might also be the set of indices of monomers in a linear polymer chain, or of symbols printed on a thin paper strip, to give a couple of examples.
@@ -18,14 +19,10 @@ We will begin by considering discrete time steps with a length of $\Delta t$, so
 %
 The notation $\Delta t \Z$ means set of all integers $\Z$ multiplied by $\Delta t$.
 
-We consider a stochastic process $x(t)$ that take on discrete values, $x \in \Ex$, where
-%
-\begin{align}
-    \Ex = \Delta x \Z.
-\end{align}
-%
-This process can be though of as a particle on a one-dimensional lattice with lattice points separated by $\Delta x$.
-The probability that, if the particle is at lattice point $x = n \Delta x$ at time $t$, it will jump to lattice point $x' = m \Delta x$ at the next time step $t + \Delta t$, is $P(x'(t + \Delta t) | x(t) )$.
+We begin by considering a one-dimensional process, so $x \in \Ex$ is a scalar, but it may be either discrete or continuous.
+A discrete process, with for example $\Ex = \Delta x \Z$, can be though of as a particle on a one-dimensional lattice with lattice points separated by $\Delta x$.
+The probability that, if the particle is at lattice point $x = n \Delta x$ at time $t$, it will jump to lattice point $x' = m \Delta x$ at the next time step $t + \Delta t$, is denoted by $P\left(x'(t + \Delta t) | x(t) \right)$.
+This is illustrated in \autoref{fig: stochastic process}.
 We use there the common notation for conditional probabilities, where $P(A|B)$ means ``the probability of $A$ given $B$''.
 It is defined as 
 %
@@ -38,17 +35,18 @@ where $P(A\cap B)$ is the probability that \emph{both} $A$ and $B$ occur.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=.5\textwidth]{fig/fig1.jpg}
+    \includegraphics[width=.4\textwidth]{fig/fig1.jpg}
     \caption{Illustration of a stochastic process}
     \label{fig: stochastic process}
-\end{figure}\todo{could you make sure that figures are referenced to in the text?}
+\end{figure}
+
 
 A \emph{Markov process} is a stochastic process with ``no memory''.
-This means that, if we have $n$ steps of the process $x(t_1), x(t_2), \dots x(t_n)$, then the conditional probability of $x(t_n)$, given $x(t_1), \dots x(t_{n-1})$, only depends on the last step $x(t_{n-1})$.
+This means that, if we have $n$ steps of the process, denoted $x(t_1), x(t_2), \dots x(t_n)$, then the conditional probability of observing $x(t_n)$ given $x(t_1), \dots x(t_{n-1})$, only depends on the last step $x(t_{n-1})$.
 This can be stated as
 %
 \begin{align}
-    P(x_n |x_{n-1}, x_{n-2} \dots x_1) = P(x_n | x_{n-1}).
+    P(x_n |x_{n-1}, x_{n-2}, \cdots, x_1) = P(x_n | x_{n-1}).
 \end{align}
 %
 Here, we use the shorthand $x_i = x(t_i)$.
@@ -57,7 +55,7 @@ As far as we know, the underlying laws of physics are fully described at each ti
 For example, if try to describe the flight of a football through the air with only its position, the description is not Markovian, as we need the current velocity to know where it will be at the next time-step.
 But, if we include the velocity in our description, the model is Markovian.
 A non-Markovian description thus indicate that we have excluded degrees of freedom that contain information about the system.
-Be ware that a system being Markovian does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_n)$
+Be ware that a system being Markovian does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_{n-1})$
 
 
 From the definition of conditional probability, \autoref{eq: cond prob}, we can derive that the joint probability of three events, $x_1$, $x_2$ and $x_3$ is given by
@@ -73,7 +71,7 @@ A Markovian process thus has the property
 \end{align}
 %
 We can furthermore write $P(x_3, x_1) = \sum_{x_2 \in \Ex} P(x_3, x_2, x_1)$.
-From this, we derive the Chapman-Kolmogorov equation, \todo{Here we could already include the case where $x$ is continuous, in which case the equation would involve integrals of a density $\mathcal{P}$, rather than sums. It seems a bit more intuitive than taking the continuum limit in $x$ after having introduced the (continuous) OU process...}
+From this, we derive the Chapman-Kolmogorov equation,
 %
 \begin{align}\label{eq: chapman kolmogorov}
     P(x_3|x_1) = \sum_{x_2} P(x_3|x_2) P(x_2|x_1).
@@ -88,6 +86,7 @@ By repeatedly applying this process, we can get conditional probability between 
 \end{align}
 %
 We see that this already begins to resemble something like a sum over all possible ``paths'' that the proces $x(t)$ can take to transition from $x_1$ at $t_1$ to $x_{n+1}$ at $x(t_{n+1})$.
+This is illustrated in \autoref{fig: paths}.
 
 
 \begin{figure}[!htb]
@@ -97,28 +96,92 @@ We see that this already begins to resemble something like a sum over all possib
     \label{fig: paths}
 \end{figure}
 
-\todo{I feel like introducing continuous $x$ already here and discussing the limit $\Delta t \to 0$ where we define the path integral would be useful and may avoid giving the impression that one needs Gaussian processes to define the path integral}
-\todo{I am all up for hand-drawn figures but maybe they could be slightly cleaner? E.g. by doing them on blank paper}
+
+\subsection*{The continuum limit}
+
+If we consider a particle on a line instead of a lattice, so $\Ex = \R$, we must consider \emph{probability densities} $\Pe(x)$.
+The probability of finding the particle between the points $x_i$ and $x_i + \Delta x$ is, for small $\Delta x$,
+%
+\begin{align}
+    P(x) \equiv P(x \in [x_i, x_i + \Delta x]) = \Delta x \Pe(x).
+\end{align}
+%
+This corresponds to the limit $\Delta x \rightarrow 0$ for the discrete process considered above, and allows us to go from sums to integrals,
+%
+\begin{align}
+    \sum_{x} P(x) \sim \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
+\end{align}
+%
+In this limit, \autoref{eq: cond prob markov x0 given xn} becomes
+%
+\begin{align}\label{eq: cond prob markov x0 given xn cont}
+    P(x_{n+1}|x_1) 
+    = \left(\int \prod_{i=1}^{n} \dd x_i\right)
+    \Pe(x_{n+1}|x_n) \Pe(x_n| x_{n-1})\cdots \Pe(x_2|x_1).
+\end{align}
+
+Likewise, we can take the limit $\Delta t\rightarrow 0$, corresponding to $n\rightarrow\infty$, to obtain a process with continuous time.
+In this case (``the continuum limit'') \autoref{eq: cond prob markov x0 given xn cont} becomes
+%
+\begin{align}\label{eq: general path integral}
+    P(x(t_0 + T) | x(t_0) ) 
+    &
+    =
+    \lim_{
+        \substack{\Delta x \rightarrow 0\\n\rightarrow \infty}
+    }
+    \left(\int \prod_{i = 1}^{n} \dd x_i C_n\right)
+    \Phi_n(\{x_i\})
+    \equiv
+    \int \D x(t) \, \Phi[x(t)].
+\end{align}
+%
+where $\Delta t = T/n$ and $t_i = t_1 + (i-1)\Delta t$.
+We have defined 
+%
+\begin{align}
+    \Phi(\{x_i\}) = \frac{1}{C_n} \Pe(x(t_{n+1}) | x(t_n) ) \cdots \frac{1}{C_n} \Pe(x(t_{2}) | x(t_1) ),
+\end{align}
+%
+where $C_n$ is a constant we will come back to later.
+In the last equality, we have defined the \emph{path integral measure} $\D x(t) = \lim_{n \rightarrow \infty} \prod_{i=1}^n \dd x(t_i) C_n$,
+and the \emph{Onsager-Machlup functional} $\Phi[x(t)]= \lim_{n \rightarrow \infty} \Phi_n(\{x_i\})$.
+This is a functional and not a function, as it takes as its argument a function $x(t)$.
+We see that \autoref{eq: general path integral} gives the conditional probability for $x(t_0 + T)$ given $x(t_0)$ by integrating over all possible paths $x(t)$ weighted by $\Phi[x(t)]$.
+For now, this is a very formal quantity.
+To see the power of this formalism, we consider a concrete process, the Ornstein-Uhleneck process.
 
 
 
 \section{Gaussian process and the Ornstein-Uhlenbeck process}
 
-The most important class of stochastic processes, as it is pretty much the only one we can solve, is Gaussian processes.
-These have the form
+The most important class of stochastic processes, as it is pretty much the only one we can solve, is Gaussian processes, which are processes with probability densities with the form
 %
 \begin{align}
-    P(x_{n+1}|x_n)
+    \Pe(x_{n+1}|x_n)
     =
-    \frac{ 1 }{ \sqrt{ 2 \pi \sigma } }
-    \exp \left\{ {-\frac{(x_{n+1} - \bar x_{n + 1})^2}{2 \sigma }} \right\}
+    \frac{ 1 }{ \sqrt{ 2 \pi \sigma_{n+1} } }
+    \exp \left\{ {-\frac{(x_{n+1} - \bar x_{n + 1})^2}{2 \sigma_{n+1} }} \right\}
 \end{align}
 %
-Here, $\bar x_{n+1}$ is the expected value of $x_{n+1}$. 
-As we consider Markovian processes, this is a function of only the previous step, $x_n$, and $\sigma$ is the variance of the process. \todo{Is it clear that this is the variance conditioned on $x_n$? It might give the impression that we are talking about the steady-state variance, which does not depend on $x_n$}
+Here, $\bar x_{n+1}$ is the expected value of $x_{n+1}$, and $\sigma_{n+1}$ the variance.
+As we consider Markovian processes, these quantities are functions of only the previous step, $x_n$.
 
 
-A specific example is the Ornstein-Uhlenbeck (OU) process,
+If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is a multivariate Gaussian
+%
+\begin{align}
+    P(x_{n_1}|x_n)
+    = 
+    \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
+    \exp \left\{ - \sum_{ab} \left[x_a(t_{n+1}) - \bar x_a(t_{n+1})\right] \Sigma_{ab}^{-1} \left[x_b(t_{n+1}) - \bar x_b(t_{n+1})\right] \right\}.
+\end{align}
+%
+Here, $\Sigma$ is the covariance matrix of $x$.
+An example of this may be a particle moving in three dimensions, so $\bm x$ is a three-dimensional vector, or a set of $N$ particles with position and velocity in three dimensions, so $\bm x$ is a $6 N$ component vector.
+
+
+A specific example is the Ornstein-Uhlenbeck (OU) process, which in one dimension is
 %
 \begin{align}
     \odv{ x(t) }{ t } = - \mu x(t) + \eta(t).
@@ -127,12 +190,12 @@ A specific example is the Ornstein-Uhlenbeck (OU) process,
 This models, for example, a particle on a spring in a fluid with thermal noise where friction dominates.
 The $-\mu x(t)$ term is from Hooks law, and $\eta(t)$ is a zero-mean random force modeling the forces of the fluid particles bumping into the particle.
 You can read more about this process in~\footnote{\url{https://iopscience.iop.org/article/10.1088/1367-2630/ad7ef1/meta}}.
-The expectation value of the OU-process at time $t_{n+1}$ conditioned on $x(t_n)=x_n$ is $x_n - \mu x_n \Delta t$ --- i.e.\ where it was the step before minus the correction due to the spring-force.
-The variance is $\sigma = \frac{2D}{\mu}(1  - e^{- 2 \mu \Delta t})$, where $D$ is the diffusion constant, which is the variance of the noise $\eta$.
-With this, OU-process has the conditional probability distribution
+For small $\Delta t$, the expectation value of the OU-process at time $t_{n+1}$ conditioned on $x(t_n)=x_n$ is $x_n - \mu x_n \Delta t$ --- i.e. where it was the step before minus the correction due to the spring-force.
+The variance is $\sigma = 2D \Delta t$, where $D$ is the diffusion constant, which is the variance of the noise $\eta$.
+With this, OU-process has the conditional probability density
 %
 \begin{align}
-    P(x_{n + 1}| x_n) 
+    \Pe(x_{n + 1}| x_n) 
     = \sqrt{ \frac{ \mu }{ 4 \pi D \Delta t } }
     \exp \left\{ -
     \frac{ \left(x_{n + 1} - x_n + \mu x_n \Delta t\right)^2 }{ 4 D \Delta t } 
@@ -144,18 +207,11 @@ With this, OU-process has the conditional probability distribution
 \end{align}
 %
 where we have introduced the discrete time-derivative, $\dot x_{n+1} = (x_{n + 1} - x_n) / \Delta t$.
+In the $\Delta t \rightarrow 0$-limit, this becomes a regular derivative.
 
-We will now take two different limits, which will yield the path integral.
-This means we will have to take the continuum limit.
-If we consider the particles to live on a line instead of a lattice, then the position is given by a probability density $\Pe(x)$.
-The probability of finding the particle between the points $x_i$ and $x_i + \Delta x$ is, for small $\Delta x$, $P(x) = P(x \in [x_i, x_i + \Delta x]) = \Pe(x) \Delta x$.
-This allows us to go from sums to integrals,
-%
-\begin{align}
-    \sum_{x} P(x) = \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
-\end{align}
-%
-Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and taking the continuous limit, we get
+
+
+Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and taking the continuum limit, we get
 %
 \begin{align}
     P(x_{n+1}|x_{1})
@@ -175,29 +231,15 @@ Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and tak
     \int \D x(t) \, \Phi[x(t)].
 \end{align}
 %
-where the limit $n\to \infty$ is taken at fixed $n\Delta t$ (process duration) and $\Phi$ is the Onsager-Machlup \emph{functional}.
-It is a functional, and not a function, as it takes in a function $x(t)$, and gives back a number.
-We have defined the functional integration measure,
+In this case, the integration measure is
 %
 \begin{align}
-    \D x(t) \equiv \lim_{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} } \prod_{n} \Delta x \sqrt{ \frac{\mu}{ 4 \pi D \Delta t }}
+    \D x(t) \equiv \lim_{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} } \prod_{n} \Delta x \sqrt{ \frac{\mu}{ 4 \pi D \Delta t }},
 \end{align}
 %
-This measure is not necessarily well-defined. 
+which corresponds to $C_n = \sqrt{\mu/4\pi D \Delta t}$.
+This measure is not strictly well-defined. 
 To performed calculations, we will have re-descritize the path integral, so this can be considered as a notational trick rather than a true limit.
-
-
-If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is a multivariate Gaussian
-%
-\begin{align}
-    P(x_{n_1}|x_n)
-    = 
-    \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
-    \exp \left\{ - \sum_{ab} (x_a(t_{n+1}) - \bar x_a(t_{n+1})) \Sigma_{ab}^{-1} (x_b(t_{n+1}) - \bar x_b(t_{n+1})) \right\}.
-\end{align}
-%
-Here, $\Sigma$ is the covariance matrix of $x$. \todo{Can this be moved further up where we define what a Gaussian process is?}
-An example of this may be a particle moving in three dimensions, so $\bm x$ is a three-dimensional vector, or a set of $N$ particles with position and velocity in three dimensions, so $\bm x$ is a $6 N$ component vector.
 
 
 \section{Master equation}
