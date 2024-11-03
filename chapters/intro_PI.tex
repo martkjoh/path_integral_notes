@@ -55,10 +55,10 @@ As far as we know, the underlying laws of physics are fully described at each ti
 For example, if try to describe the flight of a football through the air with only its position, the description is not Markovian, as we need the current velocity to know where it will be at the next time-step.
 But, if we include the velocity in our description, the model is Markovian.
 A non-Markovian description thus indicate that we have excluded degrees of freedom that contain information about the system.
-Be ware that a system being Markovian does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_{n-1})$
+Be aware that a system being Markovian does not imply statistical independence, so $P(x_{n}, x_{n-1})\neq P(x_n)P(x_{n-1})$
 
 
-From the definition of conditional probability, \autoref{eq: cond prob}, we can derive that the joint probability of three events, $x_1$, $x_2$ and $x_3$ is given by
+From the definition of conditional probability, \autoref{eq: cond prob}, we can derive that the joint probability of three sequential events, $x_1$, $x_2$ and $x_3$ is given by
 %
 \begin{align}
     P(x_1, x_2, x_3) = P(x_3|x_2,x_1)P(x_2|x_1)P(x_1).
@@ -116,12 +116,12 @@ In this limit, \autoref{eq: cond prob markov x0 given xn} becomes
 %
 \begin{align}\label{eq: cond prob markov x0 given xn cont}
     P(x_{n+1}|x_1) 
-    = \left(\int \prod_{i=1}^{n} \dd x_i\right)
+    = \left(\int \prod_{i=2}^{n} \dd x_i\right)
     \Pe(x_{n+1}|x_n) \Pe(x_n| x_{n-1})\cdots \Pe(x_2|x_1).
 \end{align}
 
 Likewise, we can take the limit $\Delta t\rightarrow 0$, corresponding to $n\rightarrow\infty$, to obtain a process with continuous time.
-In this case (``the continuum limit'') \autoref{eq: cond prob markov x0 given xn cont} becomes
+In this case (the ``continuum limit'') \autoref{eq: cond prob markov x0 given xn cont} becomes
 %
 \begin{align}\label{eq: general path integral}
     P(x(t_0 + T) | x(t_0) ) 
@@ -145,15 +145,15 @@ We have defined
 %
 where $C_n$ is a constant we will come back to later.
 In the last equality, we have defined the \emph{path integral measure} $\D x(t) = \lim_{n \rightarrow \infty} \prod_{i=1}^n \dd x(t_i) C_n$,
-and the \emph{Onsager-Machlup functional} $\Phi[x(t)]= \lim_{n \rightarrow \infty} \Phi_n(\{x_i\})$.
-This is a functional and not a function, as it takes as its argument a function $x(t)$.
+and the \emph{functional} $\Phi[x(t)]= \lim_{n \rightarrow \infty} \Phi_n(\{x_i\})$ emerging from the infinite product of conditional probabilities.
+This is a functional and not a function, as it itself takes as its argument a function $x(t)$ and returns a number.
 We see that \autoref{eq: general path integral} gives the conditional probability for $x(t_0 + T)$ given $x(t_0)$ by integrating over all possible paths $x(t)$ weighted by $\Phi[x(t)]$.
 For now, this is a very formal quantity.
 To see the power of this formalism, we consider a concrete process, the Ornstein-Uhleneck process.
 
 
 
-\section{Gaussian process and the Ornstein-Uhlenbeck process}
+\section{Gaussian processes and the Ornstein-Uhlenbeck process}
 
 The most important class of stochastic processes, as it is pretty much the only one we can solve, is Gaussian processes, which are processes with probability densities with the form
 %
@@ -165,7 +165,7 @@ The most important class of stochastic processes, as it is pretty much the only 
 \end{align}
 %
 Here, $\bar x_{n+1}$ is the expected value of $x_{n+1}$, and $\sigma_{n+1}$ the variance.
-As we consider Markovian processes, these quantities are functions of only the previous step, $x_n$.
+As we consider Markovian processes, these quantities are functions of (equivalently, conditioned on) only the previous step, $x_n$.
 
 
 If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is a multivariate Gaussian
@@ -174,7 +174,7 @@ If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, 
     P(x_{n_1}|x_n)
     = 
     \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
-    \exp \left\{ - \sum_{ab} \left[x_a(t_{n+1}) - \bar x_a(t_{n+1})\right] \Sigma_{ab}^{-1} \left[x_b(t_{n+1}) - \bar x_b(t_{n+1})\right] \right\}.
+    \exp \left\{ - \frac{1}{2}\sum_{ab} \left[x_a(t_{n+1}) - \bar x_a(t_{n+1})\right] \Sigma_{ab}^{-1} \left[x_b(t_{n+1}) - \bar x_b(t_{n+1})\right] \right\}.
 \end{align}
 %
 Here, $\Sigma$ is the covariance matrix of $x$.
@@ -187,12 +187,12 @@ A specific example is the Ornstein-Uhlenbeck (OU) process, which in one dimensio
     \odv{ x(t) }{ t } = - \mu x(t) + \eta(t).
 \end{align}
 %
-This models, for example, a particle on a spring in a fluid with thermal noise where friction dominates.
-The $-\mu x(t)$ term is from Hooks law, and $\eta(t)$ is a zero-mean random force modeling the forces of the fluid particles bumping into the particle.
+This models, for example, a particle on a spring in a fluid with thermal noise where friction dominates and inertial effects are negligible.
+The linear restoring term $-\mu x(t)$ is from Hooks law, and $\eta(t)$ is a zero-mean random force modeling the forces of the fluid particles bumping into the particle.
 You can read more about this process in~\footnote{\url{https://iopscience.iop.org/article/10.1088/1367-2630/ad7ef1/meta}}.
-For small $\Delta t$, the expectation value of the OU-process at time $t_{n+1}$ conditioned on $x(t_n)=x_n$ is $x_n - \mu x_n \Delta t$ --- i.e. where it was the step before minus the correction due to the spring-force.
-The variance is $\sigma = 2D \Delta t$, where $D$ is the diffusion constant, which is the variance of the noise $\eta$.
-With this, OU-process has the conditional probability density
+For small $\Delta t$, the expectation value of the OU-process at time $t_{n+1}$ conditioned on $x(t_n)=x_n$ is $\bar{x}_{n+1} = x_n - \mu x_n \Delta t$ --- i.e. where it was the step before minus the correction due to the spring-force.
+The variance is $\sigma_{n+1} = 2D \Delta t$, where $D$ is the diffusion constant, which is the variance of the noise $\eta$. Note that this latter quantity does not depend on $x_n$.
+With this, OU-process has the conditional probability density for small $\Delta t$
 %
 \begin{align}
     \Pe(x_{n + 1}| x_n) 
@@ -207,13 +207,13 @@ With this, OU-process has the conditional probability density
 \end{align}
 %
 where we have introduced the discrete time-derivative, $\dot x_{n+1} = (x_{n + 1} - x_n) / \Delta t$.
-In the $\Delta t \rightarrow 0$-limit, this becomes a regular derivative.
+In the $\Delta t \rightarrow 0$ limit, this becomes a regular derivative.
 
 
 
-Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and taking the continuum limit, we get
+Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and taking the continuum limit as discussed above, we get
 %
-\begin{align}
+\begin{align}\label{eq:om_func}
     P(x_{n+1}|x_{1})
     & =
     \sum_{x_2\cdots x_{n+1}}
@@ -239,12 +239,12 @@ In this case, the integration measure is
 %
 which corresponds to $C_n = \sqrt{\mu/4\pi D \Delta t}$.
 This measure is not strictly well-defined. 
-To performed calculations, we will have re-descritize the path integral, so this can be considered as a notational trick rather than a true limit.
+To performed calculations, we will have re-descritize the path integral, so this can be considered as a notational trick rather than a true limit. The functional $\Phi[x(t)]$ in Eq.~\eqref{eq:om_func} is often referred to as the Onsager-Machlup functional, thanks to its appearance in a 1953 paper by the two physicists. We'll come back to it later on in the course.
 
 
 \section{Master equation}
 
-We will here consider stochastic processes using a different formalism, the master equation.
+We will here consider stochastic processes using a different formalism, the master equation. While this formalism will be relevant later on in the course, we introduce it early on to make a point about the equivalence between the path integral representation of stochastic process and other, more common approaches.
 If we consider a discrete stochastic process $N(t)$, and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
 %
 \begin{align}\label{eq: expansion cond prob}
@@ -253,8 +253,9 @@ If we consider a discrete stochastic process $N(t)$, and Taylor-expand the condi
     \underbrace{\pdv{P(N'(t')|N(t))}{t'}\bigg|_{t'=t}}_{W_t(N'|N)} + \Oh(\Delta t).
 \end{align}
 %
-Here, we define the transition rates $W_t(N'|N)$.
-This can be considered as a matrix, 
+Here, we define the \emph{transition rates} $W_t(N'|N)$. The subscript highlights the fact that these may explicitly depend on time: for example, if the stochastic process $N(t)$ describes the number of individuals in the population of a particular species of insects, the transition rates $W_t(N+1|N)$ and $W_t(N-1|N)$ associated with birth and death processes might depend explicitly on time through seasonal variations in temperature.
+
+The transition rate $W_t(N'|N)$ can be considered as a matrix, 
 %
 \begin{align}
     W_t(N'|N) = 
@@ -265,7 +266,7 @@ This can be considered as a matrix,
     \end{pmatrix},
 \end{align}
 %
-where the entries are the rate at which state $N'$ transitions to state $N$.
+where the entries are the rate at which state $N$ transitions to state $N'$.
 If we consider $N' = N$, then we can, by the principle of total probability (the probability of all possible outcomes add up to one), write
 %
 \begin{align}
@@ -274,7 +275,7 @@ If we consider $N' = N$, then we can, by the principle of total probability (the
     = 1 - \sum_{N' \neq N}\Delta t W_t(N',N),
 \end{align}
 %
-or
+or equivalently
 %
 \begin{align}\label{eq: rate cons condition}
     W_t(N|N) = - \sum_{N'\neq N}W_t(N'|N).
@@ -343,9 +344,9 @@ Although the two formulations are equivalent, they may be better or worse suited
     \noindent
     \textbf{The quantum-stochastic analogy}\\
     The master equation is a first-order linear ODE giving the time-evolution of a probability distribution.
-    If this reminds you of the Schrödinger equation, the similarities does not stop here.
-    In fact, the correspondence between the master-equation and the Onsager-Machlup functional is analogous to the relationship between the Schrödinger and the Feynman path integral in QM.
-    The action of a process is a functional
+    If this reminds you of the Schrödinger equation for the quantum mechanical wave function, the similarities does not stop here.
+    In fact, the correspondence between the master equation and the Onsager-Machlup functional is analogous to the relationship between the Schrödinger and the Feynman path integral in QM. Let's briefly revisit the latter.
+    The classical action of a process is a functional
     %
     \begin{align}
         S[x] = \int\limits_{t_a}^{t_b} \dd t \, L(x, \dot x, t), 
@@ -355,25 +356,25 @@ Although the two formulations are equivalent, they may be better or worse suited
     In classical mechanics, the motion is determined by the Euler-Lagrange equations, $\fdv{ S }{ x(t) } = 0$, while in quantum-mechaics, the amplitude for a process is, according to the Feynman path integral,
     %
     \begin{align}
-        K(x_a, x_b) &= \sum_{\mathrm{paths}\, x} \Phi[x], & \Phi[x] \propto e^{iS[x] / \hbar}~.
+        K(x_b | x_a) &= \sum_{\mathrm{paths}\, x} \Phi[x], & \Phi[x] \propto e^{iS[x] / \hbar}~.
     \end{align}
     %
-    The Schrödinger equation gives the evolution of the wave-function,
+    The Schrödinger equation gives the equivalent evolution of the wave-function,
     %
     \begin{align}
         i \hbar \odv{  }{ t } \Psi(x(t)) = \hat H \Psi(x(t)),
     \end{align}
     %
-    where $\hat H$ is the Hamiltonian operator, and the amplitude is the overlap between the initial and finite wave-functions, $K(x_a, x_b) = \braket{ \Psi(x(t_b)) | \Psi(x(t_a)) } $. Just like the master equation can be derived from the Chapman-Kolmogorov equation, so can the Schrödinger equation be derived from the Feynman path integral representation of the process by expanding the latter in small $\Delta t = t_b - t_a$.
+    where $\hat H$ is the Hamiltonian operator, and the amplitude is the overlap between the initial and finite wave-functions, $K(x_b | x_a) = \braket{ \Psi(x(t_b)) | \Psi(x(t_a)) } $. Just like the master equation can be derived from the Chapman-Kolmogorov equation, so can the Schrödinger equation be derived from the Feynman path integral representation of the process by expanding the latter in small $\Delta t = t_b - t_a$. If you want to read more about the Feynman path integral, this is discuss very nicely in the related textbook by Feynman and Hibbs (available for free online).
 \end{framed}
 
 
 
 
-\section{Gaussian integrals}
+\section{Gaussian (path) integrals}
 
 The most important integrals we will meet are \emph{Gaussian integrals}.
-The simplest Gaussian integral, which will be the basis for this chapter, is
+The simplest Gaussian integral, which will be the basis for this section, is
 %
 \begin{align}\label{eq: gaussian integral}
     \int\limits_{-\infty}^\infty \dd x \, e^{-\frac{1}{2} a x^2} = \sqrt{ \frac{ 2 \pi  }{ a }}.
@@ -381,20 +382,19 @@ The simplest Gaussian integral, which will be the basis for this chapter, is
 %
 The reason we can solve Gaussian processes, as we mentioned earlier, is that we can solve Gaussian integrals.
 With this simple result, we can solve path integrals over spaces of functions.
-Consider
+Consider the following object, 
 %
 \begin{align}
     Z = \int \D \phi
     \exp \left\{ 
         - \frac{1}{2} \int \dd t_1 \dd t_2 \, 
         \sum_{ab}
-        \phi_a(t_1) A_{ab}(t_1, t_2) \phi_b(t_2)
+        \phi_a(t_1) \tilde{A}_{ab}(t_1, t_2) \phi_b(t_2)
     \right\}.
 \end{align}
 %
-Here, $\phi(t_1)$ is a vector function with $d$ components, $\phi_a(t) = (\phi_1(t), \phi_2(t)\dots)^T$, and $A_{ab}(t_1, t_2)$ is a matrix-function.
-In the case of Markov-processes, $A(t_1, t_2)$ will be \emph{time-local}.
-This means $A(t_1, t_2) = A(t_1) \delta(t_1 - t_2)$
+Here, $\phi(t_1)$ is a vector function with $d$ components, $\phi_a(t) = (\phi_1(t), \phi_2(t)\dots)^T$, and $\tilde{A}_{ab}(t_1, t_2)$ is a matrix-function, which we assume to be symmetric with respect to both component and time indices.
+%In the case of Markov-processes, $A(t_1, t_2)$ will be \emph{time-local}, meaning $A(t_1, t_2) = A(t_1) \delta(t_1 - t_2)$.
 For the path integral $Z$ to be well-defined, we must discretize $t_n = n \Delta t$, with $n \in \Z$
 This gives us an extra set of indices, $\phi_a(t_i) = \phi_{a,i}$.
 However, we can deal with this by ``unpacking'' the two-dimensional structure of $\phi_{a,i}$,
@@ -410,33 +410,34 @@ However, we can deal with this by ``unpacking'' the two-dimensional structure of
 %
 where $N = d \times n$.
 This is analogous to ``flattening'' an array in computer programming.
-We also apply this to $A$.
-The discretized dirac-delta is $\delta(t_1 - t_2) \sim \frac{1}{\Delta t} \delta_{t_1, t_2}$, so factoring out this $\Delta t$ we get 
+We also apply this to $\tilde{A}_{ab}(t_1,t_2) \to \tilde{A}_{\alpha\beta}$.
+Absorbing the factor $\Delta t^2$ coming from the integration into a redefinition of $\tilde{A} = A/\Delta t^2$,
+% The discretized Dirac-delta is $\delta(t_1 - t_2) \sim \frac{1}{\Delta t} \delta_{t_1, t_2}$, so factoring out this $\Delta t$ we get 
+% %
+% \begin{align}
+%     A_{ab}(t_1,t_2)
+%     \sim \frac{1}{\Delta t} A_{ab,ij}
+%     \rightarrow \frac{1}{\Delta t} A_{\alpha \beta},
+% \end{align}
 %
-\begin{align}
-    A_{ab}(t_1,t_2)
-    \sim \frac{1}{\Delta t} A_{ab,ij}
-    \rightarrow \frac{1}{\Delta t} A_{\alpha \beta},
-\end{align}
-%
-The path-internal then discretizes as 
+the path-internal then discretizes as 
 %
 \begin{align}
     Z = \int \left( \prod_{\alpha=1}^N \dd \phi_\alpha \right) \, 
     \exp \left\{ 
-        \frac{1}{2} \Delta t \sum_{\alpha \beta} 
+        \frac{1}{2} \sum_{\alpha \beta} 
         \phi_\alpha A_{\alpha \beta} \phi_\beta
     \right\}.
 \end{align}
 %
-We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$. Further assuming that $A$ is symmetric we have that $G^{-1}=G^T$ is a rotation, whence ${\rm det}(G)=1$.
+We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$. Based on our earlier assumption of symmetry we have that $G^{-1}=G^T$ is a rotation, whence ${\rm det}(G)=1$.
 We can therefore perform a change of variables, $z = G^{-1}\phi$, which comes with a Jacobian of unity and simplifies the integral
 %
 \begin{align}
     Z = \int \left( \prod_{\alpha=1}^N \dd z_\alpha \right)
-    \exp \left\{ \frac{1}{2}\Delta t \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}
+    \exp \left\{ \frac{1}{2} \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}
     =
-    \sqrt{ \det 2 \pi (\Delta t A)^{-1} }.
+    \sqrt{ \det 2 \pi A^{-1} }.
 \end{align}
 %
-Here, we factored the exponential, used the simple Gaussian integral \autoref{eq: gaussian integral}, and used the fact that the product of the eigenvalues is the determinant.
+Here, we factored the exponential, used the simple Gaussian integral \autoref{eq: gaussian integral}, and used the fact that the product of the eigenvalues is the determinant. 
