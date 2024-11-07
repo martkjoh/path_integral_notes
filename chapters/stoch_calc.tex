@@ -1,0 +1,106 @@
+The Ornstein-Uhlenbeck process, \autoref{eq: OUP} is an example of a Langevin equation, a differential equation where one of the terms, $\eta$ in that case, is a stochastic variable.
+To treat these forms of equations we must generalize the well familiar rules of calculus to \emph{stochastic calculus}.
+This chapter will serve as a short primer on stochastic calculus.
+For a modern introduction, see for example~\footnote{T. A. de Pirey, L. F. Cugliandolo, V. Lecomte, and F. van Wijland, Path integrals and stochastic calculus, Advances in Physics 71, 1 (2022). \href{https://doi.org/10.48550/arXiv.2211.09470}{ arXiv:2211.09470v2 }
+}~\footnote{
+    C. Gardiner, Stochastic Methods: A Handbook for the Natural and Social Sciences (Springer Berlin Heidelberg, 2009).
+}
+
+
+\section{Langevin equations}
+
+We consider Langevin equations of the form
+%
+\begin{align}
+    \odv{  }{ t } x(t) = f(x(t)) + g(x(t)) \eta(t).
+\end{align}
+%
+Here, $f(x(t))$ is the \emph{drift}-term, which often can be interpreted as deterministic forces, $g(x(t))$ is the \emph{noise amplitude}, while $\eta(t)$ is \emph{Gaussian white noise}.
+This is a stochastic variable, with the following statistical properties,
+%
+\begin{align}
+    \E{\eta(t)} &= 0, &
+    \E{\eta(t)\eta(t')} &= \delta(t - t').
+\end{align}
+%
+The ``delta-correlation'' means that the noise have no memory, there is no correlation between the value at different times.
+This Langevin equation is easily generalized to several degrees of freedom by promoting $x$, $f$ and $\eta$ as vectors, and $g$ as a matrix.
+
+If the amplitude of the noise is independent of the value of $x$, so $g = \const$, we say the equation has \emph{additive noise}.
+If, instead, $g = g(x)$ is non-constant, we say equation has \emph{multiplicative noise}.
+Additive noise is a lot easier to deal with that multiplicative noise, as we will see.
+
+We list some examples of Langevin equations, and where they appear:
+\begin{itemize}
+    \item \textit{Brownian motion}: The simplest case, where $f = 0$ and $g = \sqrt{ 2 D }  = \const $ yields 
+    %
+    \begin{align}
+        \odv{  }{ t } W(t)  = \eta(t).
+    \end{align}
+    %
+    $W(t)$ is called a \emph{Wiener-process}, and models Brownian motion such as pollen floating in water.
+    \item \emph{The Ornstein-Uhlenbeck process}: We encountered the OUP earlier, in \autoref{sectoin: gaussian and OUP}.
+    In its original formulation, the variable $v(t)$ modeled the velocity of a particle, $f(v) = - \mu v$ is the friction force.
+    The noise amplitude $g = \sqrt{ 2 \mu k_B T }$ is then given by the Einstein-relation, and Newton's second law takes the form of a Langevin equation:
+    %
+    \begin{align}
+        m \odv{  }{ t } v(t) = - \mu v(t) + \sqrt{ 2 \mu k_B T } \eta(t).
+    \end{align}
+    %
+    More generally, processes with a linear restoring force $f(x) = c x$ and additive noise are called Ornstein-Uhlenbeck processes.
+    \item \emph{The Black–Scholes equation}: 
+    This models the price of an \emph{option} over time, $s(t)$, a financial instrument all analogous to a stock.
+    This is modeled with a linear drift, as in the case of the OUP, but the fluctuations in price are assumed to increase with the price, so the noise amplitude proportional to $s$ giving multiplicative noise.
+    The reuslting Langevin equation is
+    %
+    \begin{align}
+        \odv{}{t} s(t) = \mu s(t) + \sigma s(t) \eta(t).
+    \end{align}
+    %
+    \item \textit{Population models}: The population number $p(t)$ of, for example, a species will for small numbers, grow linearly with size.
+    However, an ecosystem will usually have finite res courses, leading to a maximum value $p_\mathrm{max}$ for which the population will start to decline.
+    In addition, the fluctuation will depend on the population number---an extinct species cannot random fluctuation back into existance.
+    This can be modeled with the following Langevin equation,
+    %
+    \begin{align}
+        \odv{  }{ t } p(t) = \mu (p_\mathrm{max} - p(t)) p(t) + \sigma p(t) \eta(t).
+    \end{align}
+    %
+\end{itemize}
+
+The examples above are all stochastic \emph{ordinary} differential equations (SDE's).
+This means the variables are only dependent on one parameter, usually time.
+However, stochastic calculus can also be used to extend multivariable calculus, yielding stochastic \emph{partial} differential equations (SPDE's).
+We will only list one example here
+
+\begin{itemize}
+    \item \emph{Dean's equation}:
+    If we consider a set of interaction point particles, $x_\alpha(t)$, obeying the SDE's, we can write down a SPDE for the density function.
+    The density function is $\rho(x, t) = \sum_\alpha \delta(x - x_\alpha(t))$, and the resulting evolution equation is
+    %
+    \begin{align}
+        \pdv{  }{ t } \rho(x, t) = \nabla \cdot \left( \rho \nabla \fdv{ F }{ \rho(x,t) } \right) + \nabla \cdot \sqrt{\rho(x, t)} \nabla(x, t).
+    \end{align}
+    %
+    Here, the free-energy functional is
+    %
+    \begin{align}
+        F[\rho] = \int \dd x \rho(x, t) \left[V(x) + \nabla \ln \rho(x, t)\right],
+    \end{align}
+    %
+    where $V$ is the interaction potential.
+    The white noise in this Langevin field-equation is delta-correlated in both field and space,
+    %
+    \begin{align}
+        \E{\eta(x, t) \eta(x', t')} = \delta(x - x') \delta(t - t').
+    \end{align}
+    %
+\end{itemize}
+
+One problem with Langevin equations are that it alone is not well-defined, and can rather be called a ``pre-equation''.
+Additional info is needed to uniquely define the process that solves the equation.
+
+
+\section{Time discretization of stochastic processes}
+
+

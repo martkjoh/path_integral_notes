@@ -1,3 +1,8 @@
+%%%%%%%%%%%%%
+% Lecture 1 %
+%%%%%%%%%%%%%
+
+
 In this section, we introduce the concept of path integrals in the context of \emph{Markovian stochastic processes.}
 Stochastic processes, such as a pollen particle in water affected by the random thermal fluctuations of the liquid particles bumping into it, are described by probability distributions.
 \emph{Conditional} probabilities are statements of the form ``Given this initial state, what is the probability that the system ends up in that final state?'', and are therefore a function of all possible ways the system can evolve between these states.
@@ -154,6 +159,7 @@ To see the power of this formalism, we consider a concrete process, the Ornstein
 
 
 \section{Gaussian processes and the Ornstein-Uhlenbeck process}
+\label{sectoin: gaussian and OUP}
 
 The most important class of stochastic processes, as it is pretty much the only one we can solve, is Gaussian processes, which are processes with probability densities with the form
 %
@@ -183,7 +189,7 @@ An example of this may be a particle moving in three dimensions, so $\bm x$ is a
 
 A specific example is the Ornstein-Uhlenbeck (OU) process, which in one dimension is
 %
-\begin{align}
+\begin{align}\label{eq: OUP}
     \odv{ x(t) }{ t } = - \mu x(t) + \eta(t).
 \end{align}
 %
@@ -394,6 +400,7 @@ Consider the following object,
 \end{align}
 %
 Here, $\phi(t_1)$ is a vector function with $d$ components, $\phi_a(t) = (\phi_1(t), \phi_2(t)\dots)^T$, and $\tilde{A}_{ab}(t_1, t_2)$ is a matrix-function, which we assume to be symmetric with respect to both component and time indices.
+This can be done without loss of generality, as any antisymmetric part of $A$ does not contribute to the quadratic form $\phi^T A \phi$.
 %In the case of Markov-processes, $A(t_1, t_2)$ will be \emph{time-local}, meaning $A(t_1, t_2) = A(t_1) \delta(t_1 - t_2)$.
 For the path integral $Z$ to be well-defined, we must discretize $t_n = n \Delta t$, with $n \in \Z$
 This gives us an extra set of indices, $\phi_a(t_i) = \phi_{a,i}$.
@@ -423,9 +430,9 @@ Absorbing the factor $\Delta t^2$ coming from the integration into a redefinitio
 the path-internal then discretizes as 
 %
 \begin{align}
-    Z = \int \left( \prod_{\alpha=1}^N \dd \phi_\alpha \right) \, 
+    Z_0 = \int \left( \prod_{\alpha=1}^N \dd \phi_\alpha \right) \, 
     \exp \left\{ 
-        \frac{1}{2} \sum_{\alpha \beta} 
+        - \frac{1}{2} \sum_{\alpha \beta} 
         \phi_\alpha A_{\alpha \beta} \phi_\beta
     \right\}.
 \end{align}
@@ -433,11 +440,206 @@ the path-internal then discretizes as
 We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$. Based on our earlier assumption of symmetry we have that $G^{-1}=G^T$ is a rotation, whence ${\rm det}(G)=1$.
 We can therefore perform a change of variables, $z = G^{-1}\phi$, which comes with a Jacobian of unity and simplifies the integral
 %
-\begin{align}
-    Z = \int \left( \prod_{\alpha=1}^N \dd z_\alpha \right)
-    \exp \left\{ \frac{1}{2} \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}
+\begin{align}\label{eq: gaussian integral}
+    Z_0 
+    = 
+    \int \left( \prod_{\alpha=1}^N \dd z_\alpha \right)
+    \exp \left\{ - \frac{1}{2} \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}
     =
     \sqrt{ \det 2 \pi A^{-1} }.
 \end{align}
 %
 Here, we factored the exponential, used the simple Gaussian integral \autoref{eq: gaussian integral}, and used the fact that the product of the eigenvalues is the determinant. 
+
+%%%%%%%%%%%%%
+% Lecture 2 %
+%%%%%%%%%%%%%
+
+The next generalization we do, is to introduce a ``source'' $J$, which gives the \emph{moment generating function}
+%
+\begin{align}\label{eq: generating functional}
+    Z[J] = \int \left(\prod_\alpha  \dd \phi_\alpha \right) \exp \left\{ - \sum_{\alpha \beta} \phi_\alpha A_{\alpha \beta} \phi_\beta + \sum_\alpha J_\alpha \phi_\alpha \right\}.
+\end{align}
+%
+For $J = 0$, this reduces to the integral above.
+However, we can evaluate this integral explicitly, which yields
+%
+\begin{align}
+    Z[J] = Z_0 \exp \left\{ \frac{ 1 }{ 2 }  \sum_{\alpha \beta} J_\alpha A_{\alpha \beta}^{-1} J_\beta \right\}.
+\end{align}
+%
+
+\begin{framed}\noindent
+\textit{Exercise}: Evaluate the integral in \autoref{eq: generating functional}.
+If you \emph{complete the square} by introducing a shifted integration variable $\phi'$, so that the argument of the exponential takes the form $\phi' A \phi' + \const$, you can again use Gaussian integral formula \autoref{eq: gaussian integral}.
+\end{framed}
+
+With this result, we can compute arbitrary expectation values of products of fields.
+If the probability density of $\phi_\alpha$ is given by
+%
+\begin{align}
+    \Pe(\phi) = \frac{1}{Z_0} \exp \left\{ \frac{1}{2} \sum_{\alpha \beta} \phi_{\alpha} A_{\alpha \beta} \phi_\beta \right\},
+\end{align}
+%
+then
+%
+\begin{align}
+    \E{ \phi_{K_1} \phi_{K_2} \cdots \phi_{K_{2n}} }
+    & = 
+    \int \left( \prod_{\alpha=1}^N \dd z_\alpha \right)\, 
+    \phi_{K_1} \phi_{K_2} \cdots \phi_{K_{2n}}
+    \exp \left\{ - \frac{1}{2} \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}\\
+    & =
+    \left[\frac{1}{Z[0]}\partial_{K_1} \partial_{K_2} \cdots \partial_{K_{2n}} Z[J]\right]_{J = 0},
+\end{align}
+%
+where we write $\pdv{  }{ \phi_{\alpha} } = \partial_\alpha$.
+
+As an example, we compute the ``two-point function'' by Taylor-expanding the exponential in the generating functional:
+%
+\begin{align}
+    \E{\phi_{K_1} \phi_{K_2}} 
+    &
+    = 
+    \left[
+        \partial_{K_1} \partial_{K_2}
+        \left\{
+            1
+            + \frac{1}{2}\sum_{\alpha \beta} J_\alpha A_{\alpha \beta}^{-1} J_\beta
+            + \frac{ 1 }{ 2 } \left(\frac{1}{2}\sum_{\alpha \beta} J_\alpha A_{\alpha \beta}^{-1} J_\beta\right)^2
+            + \Oh(J^4)
+        \right\}
+    \right]_{J = 0} \\
+    & = \frac{1}{2}\left(  A_{K_1 K_2}^{-1} +  A_{K_2 K_1}^{-1} \right)
+    = A_{K_1K_2}
+    .
+\end{align}
+%
+As we set $J = 0$, only term with exactly 2 $J$-factors survive.
+In general, for only the terms with equal numbers of ``sources'' $J$ as fields $\phi$ in the expectation value survive.
+This is why all expectations with an odd number of fields vanish.
+The term $A_{K_1K_2}^{-1}$ has many names, but is often called the ``free propagator''.
+
+If we take a step to four-point functions, things quickly become more complicated.
+Explicitly,
+%
+\begin{align}
+    \E{\phi_{K_1} \phi_{K_2} \phi_{K_3} \phi_{K_4}} 
+    &
+    = 
+    \left[
+        \partial_{K_1} \partial_{K_2} \partial_{K_3} \partial_{K_4}
+        \left\{
+            \cdots
+            + \frac{ 1 }{ 2 } \left(\frac{1}{2}\sum_{\alpha \beta} J_\alpha A_{\alpha \beta}^{-1} J_\beta\right)^2
+            \cdots
+        \right\}
+    \right]_{J = 0} \\
+    & = \frac{1}{8}
+    \underbrace{
+        \left(  A_{K_1 K_2}^{-1} A_{K_3 K_4}^{-1} +  A_{K_1 K_3}^{-1} A_{K_2 K_4}^{-1}  + \cdots\right)
+    }_{4! \, \mathrm{terms}}.
+\end{align}
+%
+The terms all have the form $A_{K_i K_j}^{-1} A_{K_k K_\ell}^{-1}$, where $(i,j,k,\ell)$ is some permutation of $(1,2,3,4)$.
+There are $4!$ permutations of $4$ terms, which gives the number of terms.
+Luckily, there is a lot of redundancy.
+For example,
+%
+\begin{align}
+    A_{K_1 K_2}^{-1} A_{K_3 K_4}^{-1} 
+    = A_{K_3 K_4}^{-1} A_{K_1 K_2}^{-1} 
+    = A_{K_2 K_1}^{-1} A_{K_3 K_4}^{-1} 
+    = \cdots.
+\end{align}
+%
+We will introduce the graphical formalism of \emph{Feynman diagrams} to enumerate the distinct terms.
+
+In general, $2n$-point function is
+%
+\begin{align}\label{eq: Wicks theorem}
+    \E{\varphi_{K_1 } \cdots \varphi_{K_{2n}} }
+    = 
+    \frac{1}{2^n n!} \sum_{\sigma \in S_{2n}}
+    A^{-1}_{K_{\sigma(1)} K_{\sigma(2)}} \cdots A^{-1}_{K_{\sigma(2n-1)} K_{\sigma(2n)}}.
+\end{align}
+%
+Here, $\sigma$ is one permutation of the numbers $(1, 2, \dots 2n)$.
+It is a bijection of the form
+%
+\begin{align}
+    \sigma : (1, 2, \dots 2n) \longrightarrow (\sigma(1), \sigma(2), \dots \sigma(2n)),
+\end{align}
+%
+which means $i \neq j \Leftrightarrow \sigma(i) \neq \sigma(j)$.
+$S_n$ is the set of all such permutations.
+The size of this set is $|s_{2n}| = 2n!$.
+This set, together with composition, makes up the discreet \emph{symmetric group} of degree $2n$.
+This form result is called \emph{Wick-Isserlis' theorem}, or more commonly \emph{Wick's theorem}.
+Wick's theorem serves as the basis for perturbation field theory.
+By rewriting non-gaussian field integrals as infinite sums of Gaussian integral, we are able to systematically approximate much more complicated theories.
+
+As a final note, if we have a generic function $f(\phi)$ of the stochastic variables, we can evaluate expectation values as
+%
+\begin{align}\label{eq: expectation of f}
+    \E{f(\phi)} 
+    = \exp 
+    \left\{ 
+        \frac{ 1 }{ 2 } \sum_{\alpha \beta} A^{-1}_{\alpha \beta} \pdv{  }{ \phi_\alpha } \pdv{  }{ \phi_\beta } 
+    \right\} f(\phi) \bigg|_{\phi = 0}.
+\end{align}
+%
+Here, a function of a differential operator is understood to be defined in terms of its Taylor expansion.
+\begin{framed}\noindent
+    \textit{Exercise:} 
+    Derive the form \autoref{eq: expectation of f} using Wick's theorem \autoref{eq: Wicks theorem}.
+    Begin by expanding $f$ in a Taylor series.
+\end{framed}
+
+
+\section{Feynman diagrams}
+
+To more efficiently compute expectation value, we represent the propagators $A^{-1}$as lines connecting points, representing the stochastic variables $\phi_\alpha$.
+If we have several variables in an $n$-ponit function with the same index $K_i$, then this represents the same point, and the line representing the propagator can create a ``loop'' by starting and ending at that point, 
+Alternatively, we can create a chain of propagators starts and end at that point.
+As an illustration, we write out the expectation of six fields, where four have the same vertex:
+%
+\begin{align}
+    \E{\phi_1 \phi_2^4 \phi_3} 
+    = (illustration\,1) + (illustration\,2)
+    = 
+    s_1 A_{12}^{-1} A_{22}^{-1} A_{23}^{-1}
+    +s_2 A_{13}^-1 \left( A_{22}^{-1} \right)^2.
+\end{align}
+%
+Here, $s_1$ and $s_2$ are \emph{symmetry factors}, which count the number of distinct ways we could have created the same diagrams by connecting propagators.
+For the first diagram, $\phi_1$ can be connected 4 ways into the cluster, the cluster can self-connect in three different ways, and we are then left with only one way to connect the cluster to $\phi_3$, so $s_1 = 4 \times 3 \times 1 = 12$.
+For the second diagram, there is only one way to connect $\phi_1$ and $\phi_3$, then the first connection in the cluster can be done in $3$ ways, and the second is then forced.
+This gives $s_2 = 3$.
+
+Feynman diagrams often appear in a more abstract form, where the fields and propagators are implied.
+The diagrams illustrated above are then
+%
+\begin{align}
+    \E{\phi_1 \phi_2^4 \phi_3} = (illustration\,1) + (illustration\,2).
+\end{align}
+%
+Computation of Feynman diagrams is one of the main tasks in perturbative field-theory.
+However, the difficulty comes when the ``vertices'', such as $\phi_2^4$ are not just a single index, but a sum over indices, so $\sum_\alpha \varphi_\alpha^4$.
+The resulting propagators are then summed over matching indices, and in the continuum limit, these sums becomes integrals.
+Integrals are, as we all know, not easy to solve, so this is the main challenge of perturbative calculations.
+
+\begin{framed}\noindent
+    \textit{Exercise}:
+    Draw all diagrams, and count the symmetry factor for the following two expectation values:
+    %
+    \begin{align}
+        \E{\phi_1\phi_2^3\phi_3^2\phi_4} & = (illustration) +  \cdots\\
+        \E{\phi_1\phi_2^4\phi_3^4\phi_4} & = (illustration) +  \cdots
+    \end{align}
+    %
+    The two diagrams we included here are so-called \emph{self-energy} diagrams, one of the most common types of diagrams.
+    In fact, the second diagram has several names, for example ``sunset diagram'' or ``Jupiter diagram''.
+    It is ubiquitous, as it appears in ``$\phi^4$'' theories, one of the true work-horses of theoretical physics.
+\end{framed}
+
