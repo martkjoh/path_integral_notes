@@ -490,10 +490,9 @@ then
     \phi_{K_1} \phi_{K_2} \cdots \phi_{K_{2n}}
     \exp \left\{ - \frac{1}{2} \sum_{\alpha} \lambda_\alpha z_\alpha^2 \right\}\\
     & =
-    \left[\frac{1}{Z[0]}\partial_{K_1} \partial_{K_2} \cdots \partial_{K_{2n}} Z[J]\right]_{J = 0},
+    \left[\frac{1}{Z[0]} \pdv{ }{ J_{K_1} } \pdv{ }{ J_{K_2} } \cdots \pdv{ }{ J_{K_{2n}} }Z[J]\right]_{J = 0},
 \end{align}
 %
-where we write $\pdv{  }{ \phi_{\alpha} } = \partial_\alpha$.
 
 As an example, we compute the ``two-point function'' by Taylor-expanding the exponential in the generating functional:
 %
@@ -502,7 +501,7 @@ As an example, we compute the ``two-point function'' by Taylor-expanding the exp
     &
     = 
     \left[
-        \partial_{K_1} \partial_{K_2}
+        \pdv{ }{ J_{K_1} }\pdv{ }{ J_{K_2} }
         \left\{
             1
             + \frac{1}{2}\sum_{\alpha \beta} J_\alpha A_{\alpha \beta}^{-1} J_\beta
@@ -511,10 +510,10 @@ As an example, we compute the ``two-point function'' by Taylor-expanding the exp
         \right\}
     \right]_{J = 0} \\
     & = \frac{1}{2}\left(  A_{K_1 K_2}^{-1} +  A_{K_2 K_1}^{-1} \right)
-    = A_{K_1K_2}
-    .
+    = A_{K_1K_2}^{-1},
 \end{align}
 %
+where we exploited the assumed symmetry of $A$ for the last equality.
 As we set $J = 0$, only term with exactly 2 $J$-factors survive.
 In general, for only the terms with equal numbers of ``sources'' $J$ as fields $\phi$ in the expectation value survive.
 This is why all expectations with an odd number of fields vanish.
@@ -528,7 +527,7 @@ Explicitly,
     &
     = 
     \left[
-        \partial_{K_1} \partial_{K_2} \partial_{K_3} \partial_{K_4}
+        \pdv{ }{ J_{K_1} }\pdv{ }{ J_{K_2} }\pdv{ }{ J_{K_3} }\pdv{ }{ J_{K_4} }
         \left\{
             \cdots
             + \frac{ 1 }{ 2 } \left(\frac{1}{2}\sum_{\alpha \beta} J_\alpha A_{\alpha \beta}^{-1} J_\beta\right)^2
@@ -573,11 +572,11 @@ It is a bijection of the form
 %
 which means $i \neq j \Leftrightarrow \sigma(i) \neq \sigma(j)$.
 $S_n$ is the set of all such permutations.
-The size of this set is $|s_{2n}| = 2n!$.
-This set, together with composition, makes up the discreet \emph{symmetric group} of degree $2n$.
-This form result is called \emph{Wick-Isserlis' theorem}, or more commonly \emph{Wick's theorem}.
-Wick's theorem serves as the basis for perturbation field theory.
-By rewriting non-gaussian field integrals as infinite sums of Gaussian integral, we are able to systematically approximate much more complicated theories.
+The size of this set is $|S_{2n}| = 2n!$.
+This set, together with the operation of composition, makes up the discreet \emph{symmetric group} of degree $2n$.
+This form result is called \emph{the Wick-Isserlis theorem}, or more commonly \emph{Wick's theorem}.
+Wick's theorem serves as the basis for perturbative field theory.
+By rewriting non-Gaussian field integrals as infinite sums of Gaussian integral, we are able to systematically approximate much more complicated theories.
 
 As a final note, if we have a generic function $f(\phi)$ of the stochastic variables, we can evaluate expectation values as
 %
@@ -599,7 +598,7 @@ Here, a function of a differential operator is understood to be defined in terms
 
 \section{Feynman diagrams}
 
-To more efficiently compute expectation value, we represent the propagators $A^{-1}$as lines connecting points, representing the stochastic variables $\phi_\alpha$.
+To more efficiently compute expectation value, we represent the propagators $A^{-1}$ as lines connecting points, representing the stochastic variables $\phi_\alpha$.
 If we have several variables in an $n$-ponit function with the same index $K_i$, then this represents the same point, and the line representing the propagator can create a ``loop'' by starting and ending at that point, 
 Alternatively, we can create a chain of propagators starts and end at that point.
 As an illustration, we write out the expectation of six fields, where four have the same vertex:
@@ -658,7 +657,7 @@ The diagrams illustrated above are then
 \end{align}
 %
 Computation of Feynman diagrams is one of the main tasks in perturbative field-theory.
-However, the difficulty comes when the ``vertices'', such as $\phi_2^4$ are not just a single index, but a sum over indices, so $\sum_\alpha \varphi_\alpha^4$.
+However, the difficulty comes when the ``vertices'', such as $\phi_2^4$ are not just a single index, but a sum over indices, so $\sum_\alpha \phi_\alpha^4$.
 The resulting propagators are then summed over matching indices, and in the continuum limit, these sums becomes integrals.
 Integrals are, as we all know, not easy to solve, so this is the main challenge of perturbative calculations.
 
@@ -667,7 +666,7 @@ Integrals are, as we all know, not easy to solve, so this is the main challenge 
     Draw all diagrams, and count the symmetry factor for the following two expectation values:
     %
     \begin{align}
-        \E{\phi_1\phi_2^3\phi_3^2\phi_4} & = 
+        \E{\phi_1\phi_2^3\phi_3^3\phi_4} & = 
         \parbox{16mm}{
         \centering
         \begin{fmfgraph*}(16,10)

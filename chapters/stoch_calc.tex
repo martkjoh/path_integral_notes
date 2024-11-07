@@ -49,14 +49,15 @@ We list some examples of Langevin equations, and where they appear:
     %
     More generally, processes with a linear restoring force $f(x) = c x$ and additive noise are called Ornstein-Uhlenbeck processes.
     \item \emph{The Black–Scholes equation}: 
-    This models the price of an \emph{option} over time, $s(t)$, a financial instrument all analogous to a stock.
+    This models the price of an \emph{option} over time, $s(t)$, a financial instrument analogous to a stock.
     This is modeled with a linear drift, as in the case of the OUP, but the fluctuations in price are assumed to increase with the price, so the noise amplitude proportional to $s$ giving multiplicative noise.
-    The reuslting Langevin equation is
+    The resulting Langevin equation is
     %
     \begin{align}
         \odv{}{t} s(t) = \mu s(t) + \sigma s(t) \eta(t).
     \end{align}
     %
+    The Black-Scholes equation has been partially blamed, by some, to have caused the 2008 financial crisis \footnote{\url{https://www.theguardian.com/science/2012/feb/12/black-scholes-equation-credit-crunch}}.
     \item \textit{Population models}: The population number $p(t)$ of, for example, a species will for small numbers, grow linearly with size.
     However, an ecosystem will usually have finite res courses, leading to a maximum value $p_\mathrm{max}$ for which the population will start to decline.
     In addition, the fluctuation will depend on the population number---an extinct species cannot random fluctuation back into existance.
@@ -75,11 +76,11 @@ We will only list one example here
 
 \begin{itemize}
     \item \emph{Dean's equation}:
-    If we consider a set of interaction point particles, $x_\alpha(t)$, obeying the SDE's, we can write down a SPDE for the density function.
-    The density function is $\rho(x, t) = \sum_\alpha \delta(x - x_\alpha(t))$, and the resulting evolution equation is
+    If we consider a set of interaction point particles, $x_\alpha(t)$, obeying the SDE's, we can write down a SPDE for the density function, $\rho(x, t) = \sum_\alpha \delta(x - x_\alpha(t))$.
+    The resulting time-evolution equation is
     %
     \begin{align}
-        \pdv{  }{ t } \rho(x, t) = \nabla \cdot \left( \rho \nabla \fdv{ F }{ \rho(x,t) } \right) + \nabla \cdot \sqrt{\rho(x, t)} \nabla(x, t).
+        \pdv{  }{ t } \rho(x, t) = \nabla \cdot \left( \rho \nabla \fdv{ F[\rho] }{ {\rho(x,t)} } \right) + \nabla \cdot \sqrt{\rho(x, t)} \eta(x, t).
     \end{align}
     %
     Here, the free-energy functional is
@@ -89,24 +90,24 @@ We will only list one example here
     \end{align}
     %
     where $V$ is the interaction potential.
-    The white noise in this Langevin field-equation is delta-correlated in both field and space,
+    The white noise in this Langevin field-equation is delta-correlated in both time and space,
     %
     \begin{align}
-        \E{\eta(x, t) \eta(x', t')} = \delta(x - x') \delta(t - t').
+        \E{\eta(x, t) \eta(x', t')} = \delta^d(x - x') \delta(t - t').
     \end{align}
     %
 \end{itemize}
 
-One problem with Langevin equations are that it alone is not well-defined, and can rather be called a ``pre-equation''.
-Additional info is needed to uniquely define the process that solves the equation.
+One problem with Langevin equations are that they alone are not well-defined, and can rather be called``pre-equations''.
+Given a Langevin equation, additional details are needed to uniquely define the process that solves this equation.
 
 
 \section{Time discretization of stochastic processes}
 
 \todo[inline]{Maybe we should write more on why $\Delta \eta\sim \sqrt{ \Delta t }$.}
 
-If we consider a discrete time-step, then we are free to choose if want to evaluate the forces affecting $x$ at the time $t$, $t + \Delta t$, or anywhere between.
-In general, the corresponding step in $x$ is
+If we consider a discrete time-step, then we are free to choose if want to evaluate the forces affecting $x$ at the time $t$, $t + \Delta t$, or anywhere inbetween.
+In general, the corresponding increment in $x$ is
 %
 \begin{align}
     \Delta x(t) & \equiv x(t + \Delta t) - \Delta x(t)
@@ -135,8 +136,7 @@ However, we may see that this is not the case in stochastic calculus, by expandi
 A $\Delta t^{3/2}$-term is sub-leading, so the discretization does not affect this term.
 However, in the noise-amplitude, shifting the discretization leads to a $\Oh(\Delta t)$ term, which will affect the result.
 The choice of discretization is thus only relevant when dealing with multiplicative noise.
-But in this case, a Langevin equation is only well-defined if we specify the discretization.
-
+But in this case, a Langevin equation is only well-defined until we specify the discretization.
 We therefore add the discretization above the equality in Langevin equation:
 %
 \begin{align}
@@ -145,7 +145,7 @@ We therefore add the discretization above the equality in Langevin equation:
 %
 This is now a well-defined equation!
 
-The most common choices of discretization and their names are
+The most common choices of discretizations and their names are
 %
 \begin{align}
     \alpha
@@ -153,12 +153,12 @@ The most common choices of discretization and their names are
     \begin{cases}
         0, & \text{Itô}, \\
         \frac{1}{2}, & \mathrm{Stratonovich}, \\
-        1, & \text{Hänggi-Klimontovich/Anti-Itô},
+        1, & \text{Hänggi-Klimontovich/Anti-Itô}.
     \end{cases}
 \end{align}
 %
-The ``right'' choice of $\alpha$ often depends on the source of the equation. 
-If one starts with an equation with a finite correlation time and inertia,
+The ``correct'' choice of $\alpha$ often depends on the source of the equation. 
+One way is to obtain a Langevin equation is to begin with an equation with a finite correlation time and inertia,
 %
 \begin{align}
     m \odv[2]{   }{ t } x(t) + \mu \odv{  }{ t } x(t) + g(x(t)) \eta(t) = 0,
@@ -167,20 +167,21 @@ If one starts with an equation with a finite correlation time and inertia,
 where\todo{is this right?}
 %
 \begin{align}
-    \E{\eta(t)\eta(t')} = \frac{1}{\tau} e^{-|t - t'|^2 / \tau}
+    \E{\eta(t)\eta(t')} = \frac{1}{\tau} e^{-|t - t'|^2 / \tau}.
 \end{align}
 %
-then the correct discretization in the overdamped ($m\rightarrow 0$) and short correlation time ($\tau \rightarrow 0$) limits yields a white-noise, first order Langevin equation, but with different discretization depending on the order of the limit.
+Due to the finite correlation length $\tau$, we don't need to specify a discretization yet.
+In the overdamped ($m\rightarrow 0$) and short correlation time ($\tau \rightarrow 0$) limits, this yields a white-noise, first order Langevin equation, but with different discretization depending on the order of the limit.
 
 The choice of discretization may also be one of convenience.
-Given a Langevin equation in one discretization, one find a \emph{different} Langevin equation with a \emph{different} discretization, but which yields the same process $x(t)$.
-The different discretization have different advantages and drawbacks.
-As we saw, Stratonovich yields implicit equations, while Itô yields a different chain-rule, as we will see shortly.
+Given a Langevin equation in one discretization, you can find a \emph{different} Langevin equation with a \emph{different} discretization, but which yields the same process $x(t)$.
+The different discretization have their own advantages and drawbacks.
+As we saw, Stratonovich yields implicit equations, while Itô yields a more complicated chain-rule, as we will see shortly.
 
 
 \subsection*{Some useful properties}
 
-To change between discretization, we use the following formula
+(I) To change between discretization, we use the following formula
 %
 \begin{align}
     \odv{  }{ t } x(t)
@@ -188,22 +189,26 @@ To change between discretization, we use the following formula
     \overset{\alpha'}{=} f(x(t)) + (\alpha-\alpha') g'(x(t)) g(x(t)) +  g(x(t)) \eta(t).
 \end{align}
 %
-The additional term for the $\alpha'$-discretization is called a \emph{sporious dift term}.
+The additional term for the $\alpha'$-discretization is called a \emph{sporious drift term}.\\ 
 
-If we have a new variable, $u(t)$, which is a function of a stochastic process, $u = U(x)$, then we may derive the Langevin equation for this new variable using the stochastic chain rule,
+\noindent
+(II) If we have a new variable, $u(t)$, which is a function of a stochastic process, $u = U(x)$, then we may derive the Langevin equation for this new variable using the stochastic chain rule,
 %
 \begin{align}
-    \odv{  }{ t }u(t) = U'(x(t)) f(x(t)) + U'(x(t)) g\eta + \left(\frac{ 1 }{ 2 } - \alpha \right) U''(x(t)) g^2(x(t)).
+    \odv{  }{ t }u(t)  
+    \overset{\alpha}{=}
+    U'(x(t)) f(x(t)) + U'(x(t)) g\eta + \left(\frac{ 1 }{ 2 } - \alpha \right) U''(x(t)) g^2(x(t)).
 \end{align}
 %
 In the case of Stratonovich, the last term cancels, and we are left with the familiar chain-rule.
-In the case of Itô, this is called \emph{Itô's Lemma}.
+In the case of Itô, this is called \emph{Itô's lemma}.\\ 
 
-Lastly, if we want to get rid of multiplicative noise, this is possible for a scalar process, $x \in \R$.
+\noindent
+(III) If we want to get rid of multiplicative noise, this is possible for a scalar process, $x \in \R$.
 This is done by introducing the following variable process,
 %
 \begin{align}
-    U(x) = \exp \left\{ \int^x \dd x' \frac{1}{g(x)} \right\}.
+    U(x) = \exp \left\{ \int^x \dd x' \frac{1}{g(x')} \right\}.
 \end{align}
 %
 In the noise term, $U'(x) g(x) \eta(t)$, the change-of-variable factor $U'$ will then cancel the noise-strength $g(x)$.
