@@ -606,10 +606,13 @@ As an illustration, we write out the expectation of six fields, where four have 
 %
 \begin{align}
     \E{\phi_1 \phi_2^4 \phi_3} 
-    = (illustration\,1) + (illustration\,2)
-    = 
+    &=&&
+    \parbox{.3\textwidth}{\includegraphics[width=.3\textwidth]{fig/pathint_01.jpg} }
+    &&+&&
+    \parbox{.3\textwidth}{\includegraphics[width=.3\textwidth]{fig/pathint_02.jpg} }\\
+    &= &&
     s_1 A_{12}^{-1} A_{22}^{-1} A_{23}^{-1}
-    +s_2 A_{13}^-1 \left( A_{22}^{-1} \right)^2.
+    &&+&&s_2 A_{13}^{-1} \left( A_{22}^{-1} \right)^2.
 \end{align}
 %
 Here, $s_1$ and $s_2$ are \emph{symmetry factors}, which count the number of distinct ways we could have created the same diagrams by connecting propagators.
@@ -621,7 +624,37 @@ Feynman diagrams often appear in a more abstract form, where the fields and prop
 The diagrams illustrated above are then
 %
 \begin{align}
-    \E{\phi_1 \phi_2^4 \phi_3} = (illustration\,1) + (illustration\,2).
+    \E{\phi_1 \phi_2^4 \phi_3} = 
+    \parbox{16mm}{
+    \centering
+    \begin{fmfgraph*}(16,10)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmftop{t}
+        \fmf{plain}{i,c,o}
+        \fmffreeze
+        \fmf{plain,left}{c,t}
+        \fmf{plain,left}{t,c}
+    \end{fmfgraph*}
+    }
+    +
+    \parbox{16mm}{
+    \centering
+    \begin{fmfgraph*}(10,4)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{plain,left}{i,c,o,c,i}
+    \end{fmfgraph*}\\
+    \begin{fmfgraph*}(16,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{plain}{i,c,o}
+    \end{fmfgraph*}
+    }
+    .
 \end{align}
 %
 Computation of Feynman diagrams is one of the main tasks in perturbative field-theory.
@@ -634,8 +667,33 @@ Integrals are, as we all know, not easy to solve, so this is the main challenge 
     Draw all diagrams, and count the symmetry factor for the following two expectation values:
     %
     \begin{align}
-        \E{\phi_1\phi_2^3\phi_3^2\phi_4} & = (illustration) +  \cdots\\
-        \E{\phi_1\phi_2^4\phi_3^4\phi_4} & = (illustration) +  \cdots
+        \E{\phi_1\phi_2^3\phi_3^2\phi_4} & = 
+        \parbox{16mm}{
+        \centering
+        \begin{fmfgraph*}(16,10)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,c1}
+            \fmf{plain,left,tension=1/2}{c1,c2,c1}
+            \fmf{plain}{c2,o}
+        \end{fmfgraph*}
+        }
+        +  \cdots\\
+        \E{\phi_1\phi_2^4\phi_3^4\phi_4} & = 
+        \parbox{16mm}{
+        \centering
+        \begin{fmfgraph*}(16,10)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,c1}
+            \fmf{plain}{c2,o}
+            \fmf{plain,tension=1/3}{c1,c2}
+            \fmf{plain,left,tension=1/3}{c1,c2,c1}
+        \end{fmfgraph*}
+        }
+         +  \cdots
     \end{align}
     %
     The two diagrams we included here are so-called \emph{self-energy} diagrams, one of the most common types of diagrams.
