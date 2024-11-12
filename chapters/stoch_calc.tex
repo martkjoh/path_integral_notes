@@ -1,5 +1,5 @@
 The Ornstein-Uhlenbeck process, \autoref{eq: OUP} is an example of a Langevin equation, a differential equation where one of the terms, $\eta$ in that case, is a stochastic variable.
-To treat these forms of equations we must generalize the well familiar rules of calculus to \emph{stochastic calculus}.
+To treat these forms of equations we must generalize the familiar rules of calculus to \emph{stochastic calculus}.
 This chapter will serve as a short primer on stochastic calculus.
 For a modern introduction, see for example~\footnote{T. A. de Pirey, L. F. Cugliandolo, V. Lecomte, and F. van Wijland, Path integrals and stochastic calculus, Advances in Physics 71, 1 (2022). \href{https://doi.org/10.48550/arXiv.2211.09470}{ arXiv:2211.09470v2 }
 }~\footnote{
@@ -23,7 +23,7 @@ This is a stochastic variable, with the following statistical properties,
     \E{\eta(t)\eta(t')} &= \delta(t - t').
 \end{align}
 %
-The ``delta-correlation'' means that the noise have no memory, there is no correlation between the value at different times.
+The ``delta-correlation'' means that the noise has no memory, there is no correlation between the value at different times.
 This Langevin equation is easily generalized to several degrees of freedom by promoting $x$, $f$ and $\eta$ as vectors, and $g$ as a matrix.
 
 If the amplitude of the noise is independent of the value of $x$, so $g = \const$, we say the equation has \emph{additive noise}.
@@ -38,7 +38,7 @@ We list some examples of Langevin equations, and where they appear:
         \odv{  }{ t } W(t)  = \eta(t).
     \end{align}
     %
-    $W(t)$ is called a \emph{Wiener-process}, and models Brownian motion such as pollen floating in water.
+    $W(t)$ is called a \emph{Wiener-process}, and models Brownian motion such as pollen floating in water. It is in this sense that Gaussian white noise is sometimes defined as the ``derivative'' of Brownian motion. 
     \item \emph{The Ornstein-Uhlenbeck process}: We encountered the OUP earlier, in \autoref{sectoin: gaussian and OUP}.
     In its original formulation, the variable $v(t)$ modeled the velocity of a particle, $f(v) = - \mu v$ is the friction force.
     The noise amplitude $g = \sqrt{ 2 \mu k_B T }$ is then given by the Einstein-relation, and Newton's second law takes the form of a Langevin equation:
@@ -104,9 +104,7 @@ Given a Langevin equation, additional details are needed to uniquely define the 
 
 \section{Time discretization of stochastic processes}
 
-\todo[inline]{Maybe we should write more on why $\Delta \eta\sim \sqrt{ \Delta t }$.}
-
-If we consider a discrete time-step, then we are free to choose if want to evaluate the forces affecting $x$ at the time $t$, $t + \Delta t$, or anywhere inbetween.
+If we consider a discrete time-step $\Delta t$, then we are free to choose if want to evaluate the forces affecting $x$ at the time $t$, $t + \Delta t$, or anywhere inbetween.
 In general, the corresponding increment in $x$ is
 %
 \begin{align}
@@ -116,7 +114,7 @@ In general, the corresponding increment in $x$ is
     + g\left(x(t) + \alpha \Delta x(t)\right) \Delta \eta,
 \end{align}
 %
-where $\alpha \in [0, 1]$.
+where $\alpha \in [0, 1]$ and $\Delta \eta = \int_t^{t+\Delta t} \eta(t') dt' \equiv \Delta W$ are i.i.d.\ increments of Brownian motion. Accordingly, at every time-step $\Delta \eta$ is drawn from a zero-mean Gaussian distribution with variance $\Delta t$, whence the order of magnitude $\Delta \eta \sim \sqrt{\Delta t}$. 
 For $\alpha \neq 0$, this is an implicit equation for $\Delta x(t)$.
 
 In standard calculus, $x(t)$ is given by the Riemann integral, in which case the choice of discretization $\alpha$ does not affect the result.
@@ -133,10 +131,10 @@ However, we may see that this is not the case in stochastic calculus, by expandi
     g'(X(t))(\alpha - \alpha') \Delta x \Delta \eta = \Oh(\Delta t).
 \end{align}
 %
-A $\Delta t^{3/2}$-term is sub-leading, so the discretization does not affect this term.
-However, in the noise-amplitude, shifting the discretization leads to a $\Oh(\Delta t)$ term, which will affect the result.
+A $\Delta t^{3/2}$-term is sub-leading, so the discretization does not affect the drift term.
+However, in the noise-amplitude, shifting the discretization leads to a $\Oh(\Delta t)$ term, which will affect the result as it is of the same order as the drift.
 The choice of discretization is thus only relevant when dealing with multiplicative noise.
-But in this case, a Langevin equation is only well-defined until we specify the discretization.
+But in this case, a Langevin equation is only well-defined after we specify the discretization.
 We therefore add the discretization above the equality in Langevin equation:
 %
 \begin{align}
@@ -164,17 +162,17 @@ One way is to obtain a Langevin equation is to begin with an equation with a fin
     m \odv[2]{   }{ t } x(t) + \mu \odv{  }{ t } x(t) + g(x(t)) \eta(t) = 0,
 \end{align}
 %
-where\todo{is this right?}
+where
 %
 \begin{align}
-    \E{\eta(t)\eta(t')} = \frac{1}{\tau} e^{-|t - t'|^2 / \tau}.
+    \E{\eta(t)\eta(t')} = \frac{1}{2 \tau} e^{-|t - t'| / \tau}.
 \end{align}
 %
 Due to the finite correlation length $\tau$, we don't need to specify a discretization yet.
 In the overdamped ($m\rightarrow 0$) and short correlation time ($\tau \rightarrow 0$) limits, this yields a white-noise, first order Langevin equation, but with different discretization depending on the order of the limit.
 
 The choice of discretization may also be one of convenience.
-Given a Langevin equation in one discretization, you can find a \emph{different} Langevin equation with a \emph{different} discretization, but which yields the same process $x(t)$.
+Given a Langevin equation in one discretization, you can find a \emph{different} Langevin equation with a \emph{different} discretization, but which yields the same process $x(t)$ in the continuum limit (see below).
 The different discretization have their own advantages and drawbacks.
 As we saw, Stratonovich yields implicit equations, while Itô yields a more complicated chain-rule, as we will see shortly.
 
@@ -189,10 +187,10 @@ As we saw, Stratonovich yields implicit equations, while Itô yields a more comp
     \overset{\alpha'}{=} f(x(t)) + (\alpha-\alpha') g'(x(t)) g(x(t)) +  g(x(t)) \eta(t).
 \end{align}
 %
-The additional term for the $\alpha'$-discretization is called a \emph{sporious drift term}.\\ 
+The additional term for the $\alpha'$-discretization is called a \emph{spurious drift term}.\\ 
 
 \noindent
-(II) If we have a new variable, $u(t)$, which is a function of a stochastic process, $u = U(x)$, then we may derive the Langevin equation for this new variable using the stochastic chain rule,
+(II) If we have a new variable, $u(t)$, which is a smooth invertible function of a stochastic process, $u = U(x)$, then we may derive the Langevin equation for this new variable using the stochastic chain rule,
 %
 \begin{align}
     \odv{  }{ t }u(t)  
@@ -200,8 +198,8 @@ The additional term for the $\alpha'$-discretization is called a \emph{sporious 
     U'(x(t)) f(x(t)) + U'(x(t)) g\eta + \left(\frac{ 1 }{ 2 } - \alpha \right) U''(x(t)) g^2(x(t)).
 \end{align}
 %
-In the case of Stratonovich, the last term cancels, and we are left with the familiar chain-rule.
-In the case of Itô, this is called \emph{Itô's lemma}.\\ 
+In the case of Stratonovich ($\alpha = 1/2$), the last term cancels, and we are left with the familiar chain-rule.
+In the case of Itô ($\alpha=0$), this is called \emph{Itô's lemma}.\\ 
 
 \noindent
 (III) If we want to get rid of multiplicative noise, this is possible for a scalar process, $x \in \R$.
@@ -213,4 +211,4 @@ This is done by introducing the following variable process,
 %
 In the noise term, $U'(x) g(x) \eta(t)$, the change-of-variable factor $U'$ will then cancel the noise-strength $g(x)$.
 Some care is necessary here, to make sure this transformation is well-defined.
-This is not generally possible in higher dimensions.
+This is not generally possible in higher dimensions ~\footnote{\url{https://iopscience.iop.org/article/10.1088/1751-8113/47/19/195001}}.
