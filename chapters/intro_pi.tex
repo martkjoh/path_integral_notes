@@ -103,6 +103,7 @@ This is illustrated in \autoref{fig: paths}.
 
 
 \subsection*{The continuum limit}
+\label{subsection: continuum limit}
 
 If we consider a particle on a line instead of a lattice, so $\Ex = \R$, we must consider \emph{probability densities} $\Pe(x)$.
 The probability of finding the particle between the points $x_i$ and $x_i + \Delta x$ is, for small $\Delta x$,
@@ -117,7 +118,13 @@ This corresponds to the limit $\Delta x \rightarrow 0$ for the discrete process 
     \sum_{x} P(x) \sim \sum_{x} \Delta x \Pe(x) \underset{\Delta x \rightarrow 0}{\longrightarrow} \int \dd x \, \Pe(x).
 \end{align}
 %
-In this limit, \autoref{eq: cond prob markov x0 given xn} becomes
+In this limit the Chapman-Kolgomorov equation, \autoref{eq: chapman kolmogorov}, becomes
+%
+\begin{align}\label{eq: chapman kolgomorov cont}
+    \Pe(x'|x) = \int \dd x'' \, \Pe(x'|x'') \Pe(x''|x),
+\end{align}
+%
+and \autoref{eq: cond prob markov x0 given xn} becomes
 %
 \begin{align}\label{eq: cond prob markov x0 given xn cont}
     P(x_{n+1}|x_1) 

@@ -1,0 +1,209 @@
+We will now consider a complementary approach to the path integral, based around the Fokker-Planck equation.
+This is a different formalism for stochastic processes, in contrast to the Langevin-equation approach taken in the previous chapter.
+We derive the Fokker-Planck equation from the Kramers–Moyal expansion.
+
+\section{Kramers-Moyal expansion}
+
+To derive the Kramers-Moyal expansion, consider a particle with a certain initial condition, so $\Pe(x, t = 0) = \delta(x)$.
+Then its probability distribution for later times \emph{equals} the conditional probability that it started at that point.
+That is, $\Pe(x, t) = \Pe(x, t| x = 0, t=0)$.
+We will only consider continuous Markov processes.
+The Chapman-Kolgomorov equation, \autoref{eq: chapman kolgomorov cont}, for a time-step $\Delta t$ is then
+%
+\begin{align}\label{eq: CK for KM}
+    \Pe(x, t + \Delta t) = \int \dd x' \Pe(x, t + \Delta t) \Pe(x', t).
+\end{align}
+%
+We now define the \emph{conditional moments},
+%
+\begin{align}
+    K^{(n)}(x', t, \Delta t)
+    =
+    \E{\left[ x(t + \Delta t) - x(t) \right]^n}_{x(t) = x'}
+    =
+    \int \dd x \, (x - x')^n \Pe(x, t + \Delta t|x', t).
+\end{align}
+%
+The subscript on the expectation value here indicates the initial conditions $x'$ at $t$.
+To derive the KM-expansion, we rewrite the delta-function as
+%
+\begin{align}
+    \delta(x - y)
+    = \delta(x' - x + y - x')
+    & =
+    \sum_{n = 0}^\infty
+    \frac{1}{n!} (y - x')^n
+    \left( \pdv{  }{ x' } \right)^n \delta(x' - x)\\
+    & =
+    \sum_{n = 0}^\infty
+    \frac{(-1)^n}{n!} (y - x')^n
+    \left( \pdv{  }{ x } \right)^n \delta(x' - x).
+\end{align}
+%
+Here, we have Taylor-expanded the delta function, and change the variable with respect to which we differentiate in the last line.
+The derivative of the dirac-delta function is defined if we consider it in terms of an integral together with a test-function $f(x)$---we then integrate by parts, so
+%
+\begin{align}
+    \int \dd x\, \delta'(x - x_0) f(x) = - \int \dd x\, \delta(x-x_0) f'(x) = - f'(x_0),
+\end{align}
+%
+and so on.
+
+Inserting this into the trivial rewriting, 
+%
+\begin{align}
+    \Pe(x, t + \Delta t| x', t) = \int \dd y\, \delta(y - x) \Pe(y, t + \Delta t | x', t).
+\end{align}
+%
+we get
+%
+\begin{align}
+    \Pe(x, t + \Delta t | x', t)
+    & =
+    \sum_{n = 0}^\infty
+    \frac{(-1)^n}{n!} 
+    \left( \pdv{  }{ x } \right)^n \delta(x' - x)
+    \int \dd y \, (y - x')^n \Pe(y, t + \Delta t| x', t)\\
+    & =
+    \delta(x' - x) + 
+    \sum_{n = 1}^\infty
+    \frac{(-1)^n}{n!} 
+    \left( \pdv{  }{ x } \right)^n \left[\delta(x' - x) K^{(n)}(x', t \Delta t)\right].
+\end{align}
+%
+Combining this rewriting with the Chapman-Kolgomorov, \autoref{eq: CK for KM}, and expanding in $\Delta t$, we get
+%
+\begin{align}
+    \Pe(x, t + \Delta t) - \Pe(x, t) & = \Delta t \pdv{ \Pe(x, t) }{ t } + \Oh(\Delta t^2) \\
+    & = \int \dd x' \Pe(x, t + \Delta t|x', t) \Pe(x', t) - \Pe(x, t) \\
+    & = 
+    \int \dd x' \,
+    \left\{
+        \delta(x' - x) + 
+        \sum_{n = 1}^\infty
+        \frac{(-1)^n}{n!} 
+        \left( \pdv{  }{ x } \right)^n \left[\delta(x' - x) K^{(n)}(x, t \Delta t)\right]
+    \right\}
+    \Pe(x', t)
+    - \Pe(x, t)\\
+    & = 
+    \sum_{n = 1}^\infty
+    \frac{(-1)^n}{n!} 
+    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) K^{(n)}(x, t \Delta t)\right] 
+\end{align}
+%
+\todo{This is maybe a bit fast with integral by parts and everyting...}
+We define the \emph{Kramers-Moyal coefficients},
+%
+\begin{align}
+    \D^{(n)}(x, t) \equiv \lim_{\Delta t \rightarrow 0 } \frac{K^{(n)}(x, t, \Delta)}{n! \Delta t},
+\end{align}
+%
+which means that we can, in the limit $\Delta t\rightarrow 0$, write
+%
+\begin{align}
+    \pdv{ \Pe(x, t) }{ t }
+    =
+    \sum_{n = 1}^\infty
+    \frac{(-1)^n}{n!} 
+    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) \D^{(n)}(x, t \Delta t)\right] .
+\end{align}
+%
+This is the Kramers-Moyal equation.
+
+We thus have an invitation series which gives the time-evolution of the Kramers-Moyal coefficients, which depend on the conditional moments.
+However, in many cases this simplifies.
+In fact, there are only three cases, as given by \emph{Pawula's theorem}.
+The cases are
+
+(1) The series is truncated at $n = 1$, so $\D^{(n)} = 0$ for $n > 1$.
+This corresponds to deterministic evolution of $\Pe(x, t) = \delta(x - x(t))$, and the Kramers-Moyal equation becomes Liouville's equation.
+
+(2) The series is truncated at $n = 2$. This gives the Fokker-Planck equation, and will be what we concern ourselves with.
+
+(3) The sarees is infinite, and any truncation leads to non-positive probability densities.
+It is usually this in this case the equation is called the ``Kramers-Moyal equation''.
+
+\begin{framed}
+    \noindent
+    \textit{Proof of Pawula's theorem:}
+    \todo[inline]{TODO: write proof (?)}
+\end{framed}
+
+\section{Connection to the Langevin equation}
+
+Consider the Langevin equation in the Itô discretization,
+%
+\begin{align}
+    \odv{  }{ t } x(t)
+    \overset{\alpha=0}{=}
+    a_I(x(t), t) + b_I(x(t), t) \eta(t).
+\end{align}
+%
+Then, the Kramers-Moyal coefficients are
+%
+\begin{align}
+    D^{(1)}(x, t) & = a_I(x, t), &
+    D^{(2)}(x, t) & = \frac{ 1 }{ 2 } b_I^2(x, t), &
+    D^{(n)}(x, t) & = 0, \quad n > 2.
+\end{align}
+%
+\begin{framed}
+    \noindent
+    \textit{Exercise:} Derive the Kramers-Moyal coefficients given above.
+\end{framed}
+We therefore get case (3) of Pawula's theorem, and the Kramers-Moyal equation reduces to the Fokker-Plank, which takes the form
+%
+\begin{align}
+    \partial_t \Pe(x, t)
+    = - \partial_x \left[a_I(x, t) \Pe(x, t)\right] + \frac{ 1 }{ 2 } \partial_x^2 \left[b_I(x, t)^2 \Pe(x, t)\right].
+\end{align}
+%
+On the other hand, if we instead consider an equation with the Stratonovich discretization,
+%
+\begin{align}
+    \odv{  }{ t } x(t)
+    \overset{\alpha=1/2}{=}
+    a_S(x(t), t) + b_S(x(t), t) \eta(t),
+\end{align}
+%
+we have the following relationship, from the change-of-discrization formula \autoref{eq: change of discrtization},
+%
+\begin{align}
+    a_I(x, t) &= a_S(x, t) + \frac{ 1 }{ 2 } b_S(x, t) \partial_x b_S(x, t), \\
+    b_I(x, t) & = b_I(x, t).
+\end{align}
+%
+Therefore, the corresponding Fokker-Planck is
+%
+\begin{align}
+    \partial_t \Pe(x, t)
+    & = - \partial_x \left[\left\{a_S(x, t) + \frac{ 1 }{ 2 } b_S(x, t) \partial_x b_S(x, t) \right\} \Pe(x, t)\right] 
+    + \frac{ 1 }{ 2 } \partial_x^2 \left[b_S(x, t)^2 \Pe(x, t)\right] \\
+    & = - \partial_x \left[a_S(x, t)  \Pe(x, t)\right] 
+    + \frac{ 1 }{ 2 } \partial_x \left\{ b_S(x, t)\partial_x \left[ b_S(x, t) \Pe(x, t)\right] \right\}.
+\end{align}
+%
+In higher dimensions, the Langevin equations, where $\bm x\in \R^n$ and $\bm \eta \in \R^m$,
+%
+\begin{align}
+    \odv{  }{ t } x_i
+    &\overset{\alpha=0}{=}
+    - \partial_i a_{I,i}(\bm x, t) + B_{I,ij}(\bm x, t) \eta_j(t),\\
+    \odv{  }{ t } x_i
+    &\overset{\alpha=1/2}{=}
+    - \partial_i a_{S,i}(\bm x, t) + B_{S,ij}(\bm x, t) \eta_j(t),\\
+\end{align}
+%
+correspond to the following Fokker-Plancks:
+%
+\begin{align}
+    \partial_t \Pe(\bm x, t) 
+    & = - \partial_i \left[A_{I,i}(\bm x, t) \Pe(\bm x, t)\right]
+    + \frac{ 1 }{ 2 } \partial_i \partial_j \left[B_{I, ik}(\bm x, t) B_{I, j k}(\bm x, t) \Pe(\bm x, t)\right], \\
+    \partial_t \Pe(\bm x, t) 
+    & = - \partial_i \left[A_{S,i}(\bm x, t) \Pe(\bm x, t)\right]
+    + \frac{ 1 }{ 2 } \partial_i \left\{ B_{S, ik}(\bm x, t) \partial_j  \left[ B_{S, j k}(\bm x, t) \Pe(\bm x, t)\right] \right\},
+\end{align}
+%
+where we have used Einstein's summation convention.
