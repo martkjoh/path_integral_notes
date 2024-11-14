@@ -107,7 +107,7 @@ Given a Langevin equation, additional details are needed to uniquely define the 
 If we consider a discrete time-step $\Delta t$, then we are free to choose if want to evaluate the forces affecting $x$ at the time $t$, $t + \Delta t$, or anywhere inbetween.
 In general, the corresponding increment in $x$ is
 %
-\begin{align}
+\begin{align}\label{eq: Delta x}
     \Delta x(t) & \equiv x(t + \Delta t) - \Delta x(t)
     =
     f\left(x(t) + \alpha \Delta x(t)\right) \Delta t
@@ -187,7 +187,44 @@ As we saw, Stratonovich yields implicit equations, while Itô yields a more comp
     \overset{\alpha'}{=} f(x(t)) + (\alpha-\alpha') g'(x(t)) g(x(t)) +  g(x(t)) \eta(t).
 \end{align}
 %
-The additional term for the $\alpha'$-discretization is called a \emph{spurious drift term}.\\ 
+The additional term for the $\alpha'$-discretization is called a \emph{spurious drift term}.
+To show this, we expand the increment in $x$, which from \autoref{eq: Delta x} is
+%
+\begin{align}
+    \Delta x_K 
+    & =
+    f(x_K)\Delta t
+    + g(x_K + \alpha \Delta x_K) \Delta \eta_K 
+    + \Oh(\Delta t^{3/2})
+    \\
+    & = 
+    f(x_K)\Delta t
+    + g(x_K + \alpha' \Delta x_K + (\alpha - \alpha')\Delta x_K ) \Delta \eta_K 
+    + \Oh(\Delta t^{3/2})
+    \\
+    & = 
+    f(x_K)\Delta t
+    + g(x_K + \alpha' \Delta x_K) \Delta \eta_K 
+    + g'(x_K + \alpha' \Delta x_K) g(x_K + \alpha \Delta x_K)(\alpha - \alpha')\Delta \eta^2
+    + \Oh(\Delta t^{3/2})
+\end{align}
+%
+Again, we use the ``replacement rule'' $\delta \eta^2 \rightarrow \delta t$, which gives
+%
+\begin{align}
+    \Delta x_K = 
+    \left[
+        f(x_K)
+        + 
+        (\alpha - \alpha')
+        g'(x_K) g(x_K)
+    \right]
+    \Delta t
+    + g(x_K + \alpha' \Delta x_K) \Delta \eta_K 
+    + \Oh(\Delta t^{3/2}). 
+\end{align}
+%
+We get the property (I) by dividing with $\Delta t$.\\
 
 \noindent
 (II) If we have a new variable, $u(t)$, which is a smooth invertible function of a stochastic process, $u = U(x)$, then we may derive the Langevin equation for this new variable using the stochastic chain rule,
@@ -199,7 +236,38 @@ The additional term for the $\alpha'$-discretization is called a \emph{spurious 
 \end{align}
 %
 In the case of Stratonovich ($\alpha = 1/2$), the last term cancels, and we are left with the familiar chain-rule.
-In the case of Itô ($\alpha=0$), this is called \emph{Itô's lemma}.\\ 
+In the case of Itô ($\alpha=0$), this is called \emph{Itô's lemma}.
+We find this, similarly, by considering an increment in $u$.
+Anticipating that we get $\Delta \eta^2$, we expand to second order, yielding
+%
+\begin{align}
+    \Delta u_K 
+    &= u(x_K + \Delta x_k) -  u(x_K ) \\
+    & = u'(x_k) \Delta x_K + \frac{ 1 }{ 2 } u''(x_K) \delta x_K^2 + \Oh(\Delta t^{3/2})\\
+    & = u'(x_K) \left[f(x_k) \Delta t + g(x_K + \alpha \Delta x_K)\right] 
+    + \frac{ 1 }{ 2 } u''(x_K) g^2(x_K) \delta t
+    + \Oh(\Delta t^{3/2}).
+\end{align}
+%
+We have 
+%
+\begin{align}
+    u'(x_K) = u'(x_K + \alpha \Delta x_K) - \alpha \Delta x_K u''(x_K + \alpha \Delta x_K) 
+    + \Oh(\Delta t^{3/2}),
+\end{align}
+%
+so we may write
+%
+\begin{align}
+    \Delta u_K = 
+    \left[
+    u'(x_K) f(x_K) 
+    + \left(\frac{ 1 }{ 2 } - \alpha \right) u''(x_K) g^2(x_K) 
+    \right]\Delta t
+    + u'(x_K + \alpha \Delta x_K) g(x_K + \alpha \Delta x_K) \Delta \eta.
+\end{align}
+%
+The property (II) is the obtained by dividing with $\Delta t$, and taking the limit of $\Delta t \rightarrow 0$.\\ 
 
 \noindent
 (III) If we want to get rid of multiplicative noise, this is possible for a scalar process, $x \in \R$.
@@ -210,5 +278,5 @@ This is done by introducing the following variable process,
 \end{align}
 %
 In the noise term, $U'(x) g(x) \eta(t)$, the change-of-variable factor $U'$ will then cancel the noise-strength $g(x)$.
-Some care is necessary here, to make sure this transformation is well-defined.
-This is not generally possible in higher dimensions ~\footnote{\url{https://iopscience.iop.org/article/10.1088/1751-8113/47/19/195001}}.
+Some care is necessary to make sure this transformation is well-defined.
+This is not generally possible in higher dimensions\footnote{\url{https://iopscience.iop.org/article/10.1088/1751-8113/47/19/195001}}.
