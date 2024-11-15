@@ -127,7 +127,71 @@ It is usually this in this case the equation is called the ``Kramers-Moyal equat
 \begin{framed}
     \noindent
     \textit{Proof of Pawula's theorem:}
-    \todo[inline]{TODO: write proof (?)}
+    We sketch the proof of the theorem here.
+    It is based on (as so many proofs) Schwartz inequality,
+    %
+    \begin{align}
+        \left[
+            \int \dd x\, p(x) f(x) g(x)
+        \right]^2
+        \leq
+        \int \dd x\, p(x) f^2(x)
+        \int \dd x\, p(x) g^2(x).
+    \end{align}
+    %
+    In this case, $p(x) = \Pe(x', t, + \Delta t | x, t)$, and
+    %
+    \begin{align}
+        f(x) & = 
+        \begin{cases}
+            (x - x')^{\frac{ m - 1 }{ 2 }}, & \text{if } m \text{ is odd and } m\geq 3\\
+            (x - x')^{\frac{ m - 2 }{ 2 }}, & \text{if } m \text{ is even and } m\geq 4
+        \end{cases},\\
+        g(x) & = 
+        \begin{cases}
+            (x - x')^{\frac{ m + 1 }{ 2 }}, & \text{if } m \text{ is odd and } m\geq 3\\
+            (x - x')^{\frac{ m + 2 }{ 2 }}, & \text{if } m \text{ is even and } m\geq 4
+        \end{cases}.
+    \end{align}
+    %
+    Then, the inequality becomes between conditional moments.
+    On the left-hand side, switching $x'\rightarrow x$\textcolor{red}{IS THIS RIGHT?}
+    %
+    \begin{align}
+        \left[
+            \int \dd x\, p(x) f(x) g(x)
+        \right]^2
+        = \left[K^m(x, t, \Delta t)\right]^2
+    \end{align}
+    %
+    Consider $m$ even, then the right-hand side is
+    %
+    \begin{align}
+        \int \dd x\, p(x) f^2(x)
+        \int \dd x\, p(x) g^2(x)
+        =
+        K^{m-1}(x, t, \Delta t)
+        K^{m+1}(x, t, \Delta t),
+    \end{align}
+    %
+    so, applying with $ \lim_{\Delta t\rightarrow 0} \frac{ 1 }{ \Delta t^{2m} }$, the inequality becomes
+    %
+    \begin{align}
+        \D^{m}(x, t) &\leq \frac{ (m-1)! (m+1)! }{ (m!)^2 } \D^{m-1}(x, t) \D^{m+1}(x, t),
+        &&
+        m \text{ odd and } m \geq 3.
+    \end{align}
+    %
+    In the case of $m$ even, we instead get
+    %
+    \begin{align}
+        \D^{m}(x, t) &\leq \frac{ (m-2)! (m+2)! }{ (m!)^2 } \D^{m-2}(x, t) \D^{m+2}(x, t),
+        &&
+        m \text{ even and } m \geq 4.
+    \end{align}
+    %
+    We see now that the different coefficients are linked together in an infinite chain.
+    We leave it as an exercise to show that if $\D_r = 0$ for any $r \geq 3$, then $\D_m = 0$ for all $m \geq 0$.
 \end{framed}
 
 \section{Connection to the Langevin equation}
@@ -207,3 +271,144 @@ correspond to the following Fokker-Plancks:
 \end{align}
 %
 where we have used Einstein's summation convention.
+
+
+\subsection*{Underdamped equation}
+
+If consider have an underdamped equation for a particle,
+%
+\begin{align}
+    \odv{  }{ t } \bm x & = \bm v, \\
+    m \odv{  }{ t } \bm v &= - \gamma \bm v - \bm \nabla U(\bm x) + \sqrt{ 2 \gamma k_B T } \bm \eta(t),
+\end{align}
+%
+where
+%
+\begin{align}
+    \E{\eta_i(t) \eta_j(t')} = \delta_{ij} \delta(t),
+\end{align}
+%
+then the corresponding Fokker-Planck equation is called \emph{Kramers equation}, and models the probability distribution of both velocity and position.
+
+\subsection*{Overdamped equation}
+
+In the limit $m/\gamma\rightarrow 0$, the above equation becomes an over-damped equation,
+%
+\begin{align}
+    \odv{  }{ t } \bm x &=  - \mu\bm \nabla U(\bm x) + \sqrt{ 2 \mu k_B T } \bm \eta(t),
+\end{align}
+%
+where $\mu = 1 / \gamma$ is the mobility.
+The corresponding Fokker-Planck is
+%
+\begin{align}
+    \partial_t \Pe(\bm x, t)
+    =
+    \mu \bm \nabla \cdot \left[ \left(\bm \nabla U(\bm x) + \mu k_B T \bm \nabla\right) \Pe(\bm x, t)\right].
+\end{align}
+%
+Straight away, we get the Einstein relation $D = \mu k_B T$.
+In case of equilibrium, the probability current $\bm J$, defined by $ = \left(\bm \nabla U(\bm x) + \mu k_B T \bm \nabla\right) \Pe(\bm x, t) $, must vansih. 
+This yields the Boltzmann distribution,
+%
+\begin{align}
+    \Pe(\bm x) = e^{- {U(\bm x)}/{k_B T} }.
+\end{align}
+%
+
+
+\section{Wiener integral}
+
+To connect this back to the path integral, we will now consider the \emph{Wiener} (or \emph{Brownian}) \emph{integral}.
+If we consider a particle with Brownian motion initialized in the origin at $t = 0$, the probability distribution is, as we have seen earlier,
+%
+\begin{align}
+    \Pe(x, t) = \Pe(x, t|0, 0)  = \frac{ 1 }{ \sqrt{ 4 \pi D t } } e^{-x^2/4 D t}.
+\end{align}
+%
+This is easily generalized, as
+%
+\begin{align}
+    \Pe(x, t|x_0, t_0) = \Pe(x - x_0 , t - t_0|0, 0).
+\end{align}
+%
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=.3\textwidth]{fig/path.jpg}
+    \caption{A discretized path}
+    \label{fig: path}
+\end{figure}
+
+As discussed around \autoref{eq: probability density}, when dealing with continuous space, and thus probability densities, the probability of finding a particle in the interval $(a, b)$ is
+%
+\begin{align}
+    P(x\in (a, b), t ) = \int_a^b \dd x \, \Pe(\bm x, t).
+\end{align}
+%
+To define probability density (``measure'') on an entier \emph{path}, and not just at isolated points, we discretize the path as
+%
+\begin{align}
+    t_i &= i \Delta t, & i &\in [1, N], & t_N &= t, & x_i = x(t_i)
+\end{align}
+%
+We consider paths with fixed endpoints, $x_0 = 0$, and $x_N = x$, as illustrated in \autoref{fig: path}.
+A discretized path thus consists of finding the particle in certain intervals $(a_i, b_i)$ at times $t_i, i\in[1, N]$.
+We define the probability measure of such a discretized path as
+%
+\begin{align}
+    \Pe(x, t | x_i\in(a_i, b_i),\,  i \in 1, \cdots N )
+    =
+    \int\limits_{a_1}^{b_1} \dd x_1
+    \cdots
+    \int\limits_{a_{N-1}}^{b_{N-1}} \dd x_{N-1}\,
+    \Pe(x, t | x_{N-1}, t_{N-1}) \cdots \Pe(x_{2}, t_{2} | x_{1}, t_{1}) \Pe(x_{1}, t_{1}) 
+\end{align}
+%
+\todo[inline]{in the notes, the last integral is over $x_N$, but I assume it is $x_{N-1}$?}
+Then, in the continuum limit, this becomes Brownian integral,
+%
+\begin{align}
+    \D x(t)
+    \equiv
+    \lim_{\substack{|a_i-b_i|\rightarrow 0\\N \rightarrow \infty \\ t = \const}}
+    \Pe(x, t | x_i\in(a_i, b_i),\,  i \in 1, \cdots N ).
+\end{align}
+%
+This is a more careful definition of the path-integral measure defined in \autoref{section: introducing pi}.
+In fact, this is a bone fide probability measure, as it has
+%
+\begin{enumerate}
+    \item a \emph{sample space} (all paths)
+    \item a $\sigma$-albebra \todo{define?}
+    \item a measure on the sample space.
+\end{enumerate}
+%
+
+\subsection*{Brownian functional}
+
+Suppose $Q[x]$ is some \emph{functional} of the paths $x(t)$ with the form
+%
+\begin{align}
+    Q[x] = \exp \left\{ - \int_0^t \dd \tau \, U(x(\tau)) \right\}.
+\end{align}
+%
+We have already encountered such a functional in the Onsager-Machlup functional.
+This is called a \emph{Brownian functional}.
+In discretized form, this is a function $Q(x_1, \cdots x_{N-1})$.
+Then, the expectation of this functional is\todo{Should we use $\E{\cdot } $ instead to be consistent?}
+%
+\begin{align}
+    \mathbb{E}_{(x, t)}[Q]
+    &
+    \equiv
+    \lim_{\substack{|a_i-b_i|\rightarrow 0\\N \rightarrow \infty \\ t = \const}}
+    \int\limits_{a_1}^{b_1} \dd x_1
+    \cdots
+    \int\limits_{a_{N-1}}^{b_{N-1}} \dd x_{N-1}\,
+    \Pe(x, t | x_{N-1}, t_{N-1}) \cdots \Pe(x_{2}, t_{2} | x_{1}, t_{1}) \Pe(x_{1}, t_{1}) 
+    Q(x_1, \cdots x_{N-1}) \\
+    &= \int\limits_{x(0) = 0}^{x(t) = x} \D x(t) \, Q[x].
+\end{align}
+%
+We see immediately that $ \mathbb{E}_{(x, t)}[1] = 1$.

@@ -280,3 +280,56 @@ This is done by introducing the following variable process,
 In the noise term, $U'(x) g(x) \eta(t)$, the change-of-variable factor $U'$ will then cancel the noise-strength $g(x)$.
 Some care is necessary to make sure this transformation is well-defined.
 This is not generally possible in higher dimensions\footnote{\url{https://iopscience.iop.org/article/10.1088/1751-8113/47/19/195001}}.
+
+
+
+\section{Stochastic integrals}
+
+As with stochastic differentiation, when integrating stochastic processes, there is need to take care when defining the discretization.
+A stochastic integral is, in many cases, not well-defined without specifying the discretization $\alpha$.
+We assume we have some stochastic process $x(t)$, defined by
+%
+\begin{align}
+    \odv{ }{ t } x(t) 
+    \overset{\alpha'}{=}
+    a(x, t) + b(x, t) \eta(t).
+\end{align}
+%
+In that case, we have two may type of integrals.
+Type A is
+%
+\begin{align}
+    \Oh_A
+    \overset{\alpha}{=}
+    \int_0^{t_f} \dd t \, h(x(t)) 
+    &\equiv \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t}h(x_K + \alpha \Delta x_K)\\
+    & = \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t}h(x_K) + \Oh \left(\Delta t^{3/2}\right),
+\end{align}
+%
+where $h(x)$ is some arbitrary function.\todo{Riemann integrable, or any stronger conditions?}
+We see here that the choice of discretization, $\alpha$, does not affect the result.
+
+Case $B$ are integrals of the form
+%
+\begin{align}
+    \Oh_B
+    \overset{\alpha}{=}
+    \int_0^{t_f} \dd t \, \dot x(t) h(x(t)) 
+    &\equiv \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t} \frac{\Delta x_K}{\Delta t} h(x_K + \alpha \Delta x_K)\\
+    & = \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t}
+    \Delta x_K \left[h(x_K) + \alpha \Delta x_K h'(x_K)\right]
+    + \Oh \left(\Delta t^{3/2}\right).
+\end{align}
+%
+Since, in general, $\Delta x_K^2 = \Oh(\Delta t)$, we cannot ignore the second term in the parenthesis.
+We are left with
+%
+\begin{align}
+    \Oh_B
+    \overset{\alpha}{=}
+    \lim_{\Delta t \rightarrow \infty} \sum_{K = 0}^{t_f/\Delta t}
+    \left[\Delta x_K h(x_K) + \alpha \Delta t h'(x_K) g^2(x_K)\right].
+\end{align}
+%
+Notice that, we do not have to use the same discretization for the stochastic process $x(t)$---we may ``Stratonovich integrate'' an ``Itô procees''.
+
