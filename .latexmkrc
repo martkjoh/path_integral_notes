@@ -2,7 +2,6 @@ $go_mode = 3;
 $bibtex_use = 2;
 $out_dir = 'build';
 set_tex_cmds("--synctex=1 -interaction=nonstopmode -file-line-error %O %S");
-$pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S;';
 
 # Thaks to Overleaf
 #############
