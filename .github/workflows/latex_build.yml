@@ -8,14 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.message, 'publish')
     steps:
-      
+
       - uses: actions/checkout@v4
-      
-      - uses: xu-cheng/texlive-action@v2
+      - uses: xu-cheng/latex-action@v3
         with:
-          run: |
-            sh build.sh
-      
+          root_file: main.tex
+
       - name: Release PDF
         id: release
         uses: softprops/action-gh-release@v1
