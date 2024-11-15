@@ -68,7 +68,7 @@ we get
     \delta(x' - x) + 
     \sum_{n = 1}^\infty
     \frac{(-1)^n}{n!} 
-    \left( \pdv{  }{ x } \right)^n \left[\delta(x' - x) K^{(n)}(x', t \Delta t)\right].
+    \left( \pdv{  }{ x } \right)^n \left[\delta(x' - x) K^{(n)}(x', t, \Delta t)\right].
 \end{align}
 %
 Combining this rewriting with the Chapman-Kolgomorov, \autoref{eq: CK for KM}, and expanding in $\Delta t$, we get
@@ -82,21 +82,21 @@ Combining this rewriting with the Chapman-Kolgomorov, \autoref{eq: CK for KM}, a
         \delta(x' - x) + 
         \sum_{n = 1}^\infty
         \frac{(-1)^n}{n!} 
-        \left( \pdv{  }{ x } \right)^n \left[\delta(x' - x) K^{(n)}(x, t \Delta t)\right]
+        \left( \pdv{  }{ x } \right)^n \left[\delta(x' - x) K^{(n)}(x, t, \Delta t)\right]
     \right\}
     \Pe(x', t)
     - \Pe(x, t)\\
     & = 
     \sum_{n = 1}^\infty
     \frac{(-1)^n}{n!} 
-    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) K^{(n)}(x, t \Delta t)\right] 
+    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) K^{(n)}(x, t, \Delta t)\right] 
 \end{align}
 %
 \todo{This is maybe a bit fast with integral by parts and everyting...}
 We define the \emph{Kramers-Moyal coefficients},
 %
 \begin{align}
-    \D^{(n)}(x, t) \equiv \lim_{\Delta t \rightarrow 0 } \frac{K^{(n)}(x, t, \Delta)}{n! \Delta t},
+    \D^{(n)}(x, t) \equiv \lim_{\Delta t \rightarrow 0 } \frac{K^{(n)}(x, t, \Delta t)}{n! \Delta t},
 \end{align}
 %
 which means that we can, in the limit $\Delta t\rightarrow 0$, write
@@ -105,8 +105,8 @@ which means that we can, in the limit $\Delta t\rightarrow 0$, write
     \pdv{ \Pe(x, t) }{ t }
     =
     \sum_{n = 1}^\infty
-    \frac{(-1)^n}{n!} 
-    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) \D^{(n)}(x, t \Delta t)\right] .
+    (-1)^n
+    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) \D^{(n)}(x, t)\right] .
 \end{align}
 %
 This is the Kramers-Moyal equation.
