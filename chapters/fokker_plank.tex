@@ -1,34 +1,32 @@
-We will now consider a complementary approach to the path integral, based around the Fokker-Planck equation.
-This is a different formalism for stochastic processes, in contrast to the Langevin-equation approach taken in the previous chapter.
-We derive the Fokker-Planck equation from the Kramers–Moyal expansion.
+We will now consider a complementary and equivalent approach to the path integral, based on the Fokker-Planck equation.
+Rather than examining the trajectory point of view discussed by the Langevin-equation approach in the previous chapter,  we look at its ensemble statistics. Indeed, the Fokker-Planck equation describes the evolution of  $\mathcal{P}(x,t)$, the probability density to find a particle at position $x$ at time $t$. Similarly, one can define the conditional probability density $\mathcal{P}(x,t|x',t')$ of a particle being at $x$ at time $t$, given that it was at $x'$ at the earlier time $t'$. In the case where the particle is initialized at $x_0$ at time $t_0$, i.e., $\mathcal{P}(x,t_0)=\delta(x-x_0)$, it follows from Chapman-Kolmogorov equation that $\mathcal{P}(x,t)=\mathcal{P}(x,t|x_0,t_0)$.
+In the following section, we derive the Fokker-Planck equation from the Kramers–Moyal expansion.
 
 \section{Kramers-Moyal expansion}
 
-To derive the Kramers-Moyal expansion, consider a particle with a certain initial condition, so $\Pe(x, t = 0) = \delta(x)$.
-Then its probability distribution for later times \emph{equals} the conditional probability that it started at that point.
-That is, $\Pe(x, t) = \Pe(x, t| x = 0, t=0)$.
-We will only consider continuous Markov processes.
-The Chapman-Kolgomorov equation, \autoref{eq: chapman kolgomorov cont}, for a time-step $\Delta t$ is then
+%To derive the Kramers-Moyal expansion, consider a particle with a certain initial condition, so $\Pe(x, t = 0) = \delta(x)$.
+%Then its probability distribution for later times \emph{equals} the conditional probability that it started at that point.
+%That is, $\Pe(x, t) = \Pe(x, t| x = 0, t=0)$.
+The derivation of the Fokker-Planck via the Kramers-Moyal expansion relies on the only assumptions that the underlying process is continuous and Markovian. Accordingly, we can start from the Chapman-Kolgomorov equation, \autoref{eq: chapman kolgomorov cont}, for a time-step $\Delta t$ is then
 %
 \begin{align}\label{eq: CK for KM}
-    \Pe(x, t + \Delta t) = \int \dd x' \Pe(x, t + \Delta t) \Pe(x', t).
+    \Pe(x, t + \Delta t) = \int \dd x' \Pe(x, t + \Delta t|x',t) \Pe(x', t).
 \end{align}
 %
-We now define the \emph{conditional moments},
+For later convenience, we now define the \emph{conditional moments},
 %
 \begin{align}
     K^{(n)}(x', t, \Delta t)
     =
     \E{\left[ x(t + \Delta t) - x(t) \right]^n}_{x(t) = x'}
     =
-    \int \dd x \, (x - x')^n \Pe(x, t + \Delta t|x', t).
+    \int \dd x \, (x - x')^n \Pe(x, t + \Delta t|x', t),
 \end{align}
-%
-The subscript on the expectation value here indicates the initial conditions $x'$ at $t$.
+describing the moments of the amplitude of the typical displacement of the process in the time interval $\Delta t$ conditioned on the fact that it was at $x'$ at time $t$.
 To derive the KM-expansion, we rewrite the delta-function as
 %
 \begin{align}
-    \delta(x - y)
+    \delta(y-x)
     = \delta(x' - x + y - x')
     & =
     \sum_{n = 0}^\infty
@@ -41,7 +39,7 @@ To derive the KM-expansion, we rewrite the delta-function as
 \end{align}
 %
 Here, we have Taylor-expanded the delta function, and change the variable with respect to which we differentiate in the last line.
-The derivative of the dirac-delta function is defined if we consider it in terms of an integral together with a test-function $f(x)$---we then integrate by parts, so
+The derivative of the Dirac-delta function is defined if we consider it in terms of an integral together with a test-function $f(x)$---we then integrate by parts, so
 %
 \begin{align}
     \int \dd x\, \delta'(x - x_0) f(x) = - \int \dd x\, \delta(x-x_0) f'(x) = - f'(x_0),
@@ -49,7 +47,7 @@ The derivative of the dirac-delta function is defined if we consider it in terms
 %
 and so on.
 
-Inserting this into the trivial rewriting, 
+Inserting the last expression into the trivial rewriting, 
 %
 \begin{align}
     \Pe(x, t + \Delta t| x', t) = \int \dd y\, \delta(y - x) \Pe(y, t + \Delta t | x', t).
@@ -89,11 +87,10 @@ Combining this rewriting with the Chapman-Kolgomorov, \autoref{eq: CK for KM}, a
     & = 
     \sum_{n = 1}^\infty
     \frac{(-1)^n}{n!} 
-    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) K^{(n)}(x, t, \Delta t)\right] 
+    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) K^{(n)}(x, t, \Delta t)\right].
 \end{align}
 %
-\todo{This is maybe a bit fast with integral by parts and everyting...}
-We define the \emph{Kramers-Moyal coefficients},
+We define the \emph{Kramers-Moyal coefficients} as
 %
 \begin{align}
     \D^{(n)}(x, t) \equiv \lim_{\Delta t \rightarrow 0 } \frac{K^{(n)}(x, t, \Delta t)}{n! \Delta t},
@@ -106,29 +103,28 @@ which means that we can, in the limit $\Delta t\rightarrow 0$, write
     =
     \sum_{n = 1}^\infty
     (-1)^n
-    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) \D^{(n)}(x, t)\right] .
+    \left( \pdv{  }{ x } \right)^n \left[\Pe(x, t) \D^{(n)}(x, t)\right],
 \end{align}
 %
-This is the Kramers-Moyal equation.
+thus leading to the Kramers-Moyal equation.
+Note that the coefficients $\mathcal{D}^{(n)}(x,t)$ are defined for $n$ integer larger then zero since $K^{(0)}=1$. They express the time variation of the $n$-th conditional moment of the amplitude of the infinitesimal step of the process. For simple Brownian motion, one expects $K^({1})=0$ (zero average displacement, similarly null for all odd-$n$ contributions), and $K^{(2)}\propto \Delta t$ (typical scaling of diffusion), while all other even moments $K^{(2n)}\propto (\Delta t)^n$ (show this with Wick theorem), implying that only $\mathcal{D}^{(2)}$ is non-null, thus retrieving the diffusion equation.
+In general, it is possible to show that infinite KM expansion often features only a few non-vanishing contributions. This is rigorously expressed by \emph{Pawula's theorem}, which states that only three cases can occur for the Kramers-Moyal expansion:
+\begin{itemize}
+    \item[(1)] The series is truncated at $n = 1$, so $\D^{(n)} = 0$ for $n > 1$.
+This corresponds to the deterministic evolution of $\Pe(x, t) = \delta(x - x(t))$, and the Kramers-Moyal equation becomes Liouville's equation.
+\item[(2)] The series is truncated at $n = 2$. This gives the Fokker-Planck equation and will be what we concern ourselves with.
 
-We thus have an invitation series which gives the time-evolution of the Kramers-Moyal coefficients, which depend on the conditional moments.
-However, in many cases this simplifies.
-In fact, there are only three cases, as given by \emph{Pawula's theorem}.
-The cases are
-
-(1) The series is truncated at $n = 1$, so $\D^{(n)} = 0$ for $n > 1$.
-This corresponds to deterministic evolution of $\Pe(x, t) = \delta(x - x(t))$, and the Kramers-Moyal equation becomes Liouville's equation.
-
-(2) The series is truncated at $n = 2$. This gives the Fokker-Planck equation, and will be what we concern ourselves with.
-
-(3) The sarees is infinite, and any truncation leads to non-positive probability densities.
+\item[(3)] The series is infinite, and any truncation leads to non-positive probability densities.
 It is usually this in this case the equation is called the ``Kramers-Moyal equation''.
+\end{itemize}
+
+
 
 \begin{framed}
     \noindent
     \textit{Proof of Pawula's theorem:}
     We sketch the proof of the theorem here.
-    It is based on (as so many proofs) Schwartz inequality,
+    It is based on (as in so many proofs) Schwartz inequality,
     %
     \begin{align}
         \left[
@@ -136,10 +132,11 @@ It is usually this in this case the equation is called the ``Kramers-Moyal equat
         \right]^2
         \leq
         \int \dd x\, p(x) f^2(x)
-        \int \dd x\, p(x) g^2(x).
+        \int \dd x\, p(x) g^2(x),
     \end{align}
+    where $p(x)$ is a non-negative integrable function, and $g(x)$ and $f(x)$ are arbitrary integrable functions. You can think of $\int \mathrm{d}x p(x) f(x) g(x)$ as the scalar product of $f$ and $g$ defined on the (metric) functional space of integrable functions.
     %
-    In this case, $p(x) = \Pe(x', t, + \Delta t | x, t)$, and
+    In this case, we choose $p(x) = \Pe(x', t, + \Delta t | x, t)$, and
     %
     \begin{align}
         f(x) & = 
@@ -155,7 +152,7 @@ It is usually this in this case the equation is called the ``Kramers-Moyal equat
     \end{align}
     %
     Then, the inequality becomes between conditional moments.
-    On the left-hand side, switching $x'\rightarrow x$\textcolor{red}{IS THIS RIGHT?}
+    On the left-hand side, switching $x'\rightarrow x$
     %
     \begin{align}
         \left[
@@ -170,14 +167,14 @@ It is usually this in this case the equation is called the ``Kramers-Moyal equat
         \int \dd x\, p(x) f^2(x)
         \int \dd x\, p(x) g^2(x)
         =
-        K^{m-1}(x, t, \Delta t)
-        K^{m+1}(x, t, \Delta t),
+        K^{(m-1)}(x, t, \Delta t)
+        K^{(m+1)}(x, t, \Delta t),
     \end{align}
     %
     so, applying with $ \lim_{\Delta t\rightarrow 0} \frac{ 1 }{ \Delta t^{2m} }$, the inequality becomes
     %
     \begin{align}
-        \D^{m}(x, t) &\leq \frac{ (m-1)! (m+1)! }{ (m!)^2 } \D^{m-1}(x, t) \D^{m+1}(x, t),
+        \D^{(m)}(x, t) &\leq \frac{ (m-1)! (m+1)! }{ (m!)^2 } \D^{(m-1)}(x, t) \D^{(m+1)}(x, t),
         &&
         m \text{ odd and } m \geq 3.
     \end{align}
@@ -185,26 +182,28 @@ It is usually this in this case the equation is called the ``Kramers-Moyal equat
     In the case of $m$ even, we instead get
     %
     \begin{align}
-        \D^{m}(x, t) &\leq \frac{ (m-2)! (m+2)! }{ (m!)^2 } \D^{m-2}(x, t) \D^{m+2}(x, t),
+        \D^{(m)}(x, t) &\leq \frac{ (m-2)! (m+2)! }{ (m!)^2 } \D^{(m-2)}(x, t) \D^{(m+2)}(x, t),
         &&
         m \text{ even and } m \geq 4.
     \end{align}
     %
     We see now that the different coefficients are linked together in an infinite chain.
-    We leave it as an exercise to show that if $\D_r = 0$ for any $r \geq 3$, then $\D_m = 0$ for all $m \geq 0$.
+    We leave it as an exercise to show that if $\D^{(r)} = 0$ for any $r \geq 3$, then $\D^{(m)} = 0$ for all $m \geq 0$.
 \end{framed}
 
 \section{Connection to the Langevin equation}
 
-Consider the Langevin equation in the Itô discretization,
+As in the case of the simple Brownian motion discussed in the previous section, we would like to bridge the Langevin dynamics of continuous process to the corresponding Fokker-Planck equation.
+For this purpose, it is convenient to consider the Langevin equation in the Itô discretization,
 %
 \begin{align}
     \odv{  }{ t } x(t)
     \overset{\alpha=0}{=}
-    a_I(x(t), t) + b_I(x(t), t) \eta(t).
+    a_I(x(t), t) + b_I(x(t), t) \eta(t),
 \end{align}
+where $\eta(t)$ denotes the usual Gaussian white noise.
 %
-Then, the Kramers-Moyal coefficients are
+Then, it is easy to prove that the Kramers-Moyal coefficients are given by
 %
 \begin{align}
     D^{(1)}(x, t) & = a_I(x, t), &
@@ -216,7 +215,7 @@ Then, the Kramers-Moyal coefficients are
     \noindent
     \textit{Exercise:} Derive the Kramers-Moyal coefficients given above.
 \end{framed}
-We therefore get case (3) of Pawula's theorem, and the Kramers-Moyal equation reduces to the Fokker-Plank, which takes the form
+We therefore get case (2) of Pawula's theorem, and the Kramers-Moyal equation reduces to the Fokker-Plank, which takes the form
 %
 \begin{align}
     \partial_t \Pe(x, t)
@@ -275,20 +274,18 @@ where we have used Einstein's summation convention.
 
 \subsection*{Underdamped equation}
 
-If consider have an underdamped equation for a particle,
+If consider have an underdamped Langevin equation for a particle experiencing a force $-\bm \nabla U$,
 %
 \begin{align}
     \odv{  }{ t } \bm x & = \bm v, \\
     m \odv{  }{ t } \bm v &= - \gamma \bm v - \bm \nabla U(\bm x) + \sqrt{ 2 \gamma k_B T } \bm \eta(t),
 \end{align}
 %
-where
-%
-\begin{align}
-    \E{\eta_i(t) \eta_j(t')} = \delta_{ij} \delta(t),
-\end{align}
-%
-then the corresponding Fokker-Planck equation is called \emph{Kramers equation}, and models the probability distribution of both velocity and position.
+where the noise is assumed to be uncorrelated for different components according to
+%\begin{align}
+$  \E{\eta_i(t) \eta_j(t')} = \delta_{ij} \delta(t-t')$,
+%\end{align}
+then the corresponding multi-dimensional Fokker-Planck equation is called \emph{Kramers equation}, and models the probability distribution of both velocity and position.
 
 \subsection*{Overdamped equation}
 
@@ -299,21 +296,20 @@ In the limit $m/\gamma\rightarrow 0$, the above equation becomes an over-damped 
 \end{align}
 %
 where $\mu = 1 / \gamma$ is the mobility.
-The corresponding Fokker-Planck is
+The corresponding Fokker-Planck reads
 %
 \begin{align}
     \partial_t \Pe(\bm x, t)
     =
-    \mu \bm \nabla \cdot \left[ \left(\bm \nabla U(\bm x) + \mu k_B T \bm \nabla\right) \Pe(\bm x, t)\right].
+    \mu \bm \nabla \cdot \left[ \left(\bm \nabla U(\bm x) + k_B T \bm \nabla\right) \Pe(\bm x, t)\right].
 \end{align}
 %
 Straight away, we get the Einstein relation $D = \mu k_B T$.
-In case of equilibrium, the probability current $\bm J$, defined by $ = \left(\bm \nabla U(\bm x) + \mu k_B T \bm \nabla\right) \Pe(\bm x, t) $, must vansih. 
-This yields the Boltzmann distribution,
+In case of equilibrium, the probability current $\bm J$, defined by $ \bm J= -\mu \left(\bm \nabla U(\bm x) + k_B T \bm \nabla\right) \Pe(\bm x, t) $, must vanish, thus yielding the Boltzmann distribution
 %
-\begin{align}
-    \Pe(\bm x) = e^{- {U(\bm x)}/{k_B T} }.
-\end{align}
+%\begin{align}
+    $\Pe(\bm x) = e^{- {U(\bm x)}/{k_B T} }$.
+%\end{align}
 %
 
 
@@ -326,11 +322,11 @@ If we consider a particle with Brownian motion initialized in the origin at $t =
     \Pe(x, t) = \Pe(x, t|0, 0)  = \frac{ 1 }{ \sqrt{ 4 \pi D t } } e^{-x^2/4 D t}.
 \end{align}
 %
-This is easily generalized, as
+%This is easily generalized, as
 %
-\begin{align}
-    \Pe(x, t|x_0, t_0) = \Pe(x - x_0 , t - t_0|0, 0).
-\end{align}
+%\begin{align}
+%    \Pe(x, t|x_0, t_0) = \Pe(x - x_0 , t - t_0|0, 0).
+%\end{align}
 %
 
 \begin{figure}[!htb]
@@ -346,10 +342,10 @@ As discussed around \autoref{eq: probability density}, when dealing with continu
     P(x\in (a, b), t ) = \int_a^b \dd x \, \Pe(\bm x, t).
 \end{align}
 %
-To define probability density (``measure'') on an entier \emph{path}, and not just at isolated points, we discretize the path as
+To define probability density (``measure'') on an entire \emph{path}, and not just at isolated points, we discretize the path as
 %
 \begin{align}
-    t_i &= i \Delta t, & i &\in [1, N], & t_N &= t, & x_i = x(t_i)
+    t_i &= i \Delta t, & i &\in [1, N], & t_N &= t, & x_i = x(t_i).
 \end{align}
 %
 We consider paths with fixed endpoints, $x_0 = 0$, and $x_N = x$, as illustrated in \autoref{fig: path}.
@@ -365,7 +361,6 @@ We define the probability measure of such a discretized path as
     \Pe(x, t | x_{N-1}, t_{N-1}) \cdots \Pe(x_{2}, t_{2} | x_{1}, t_{1}) \Pe(x_{1}, t_{1}) 
 \end{align}
 %
-\todo[inline]{in the notes, the last integral is over $x_N$, but I assume it is $x_{N-1}$?}
 Then, in the continuum limit, this becomes Brownian integral,
 %
 \begin{align}
@@ -376,12 +371,12 @@ Then, in the continuum limit, this becomes Brownian integral,
 \end{align}
 %
 This is a more careful definition of the path-integral measure defined in \autoref{section: introducing pi}.
-In fact, this is a bone fide probability measure, as it has
+In fact, this is a bonafide probability measure, as one can easily recognize the three fundamental ingredients characterizing a probability space:
 %
 \begin{enumerate}
-    \item a \emph{sample space} (all paths)
-    \item a $\sigma$-albebra \todo{define?}
-    \item a measure on the sample space.
+    \item a \emph{sample space}: the space of all possible events, here given by the space of all continuous trajectories between two points at different times;
+    \item a $\sigma$-algebra: all subsets of the sample space (endowed with a proper topological structure) that can be measured, here represented by the sets of all trajectories crossing all the intermediate $(a_i,b_i)$ sets;
+    \item a measure on the sample space, which assigns a non-negative real number (probability) to every element of the $\sigma-$algebra, here given by the (normalized) Wiener integral.
 \end{enumerate}
 %
 
@@ -396,10 +391,11 @@ Suppose $Q[x]$ is some \emph{functional} of the paths $x(t)$ with the form
 We have already encountered such a functional in the Onsager-Machlup functional.
 This is called a \emph{Brownian functional}.
 In discretized form, this is a function $Q(x_1, \cdots x_{N-1})$.
-Then, the expectation of this functional is\todo{Should we use $\E{\cdot } $ instead to be consistent?}
+Then, the expectation of this functional is%\todo{Should we use $\E{\cdot } $ instead to be consistent?}
 %
 \begin{align}
-    \mathbb{E}_{(x, t)}[Q]
+    %\mathbb{E}_{(x, t)}[Q]
+    \E{Q}_{(x, t)}
     &
     \equiv
     \lim_{\substack{|a_i-b_i|\rightarrow 0\\N \rightarrow \infty \\ t = \const}}
@@ -411,4 +407,4 @@ Then, the expectation of this functional is\todo{Should we use $\E{\cdot } $ ins
     &= \int\limits_{x(0) = 0}^{x(t) = x} \D x(t) \, Q[x].
 \end{align}
 %
-We see immediately that $ \mathbb{E}_{(x, t)}[1] = 1$.
+We see immediately that $ \E{1}_{(x, t)} = 1$.
