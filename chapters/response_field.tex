@@ -1,0 +1,59 @@
+In this chapter, we will consider Langevin equations with the form
+%
+\begin{align}\label{eq: langevin for response}
+    \odv{  }{ t } \phi(t)
+    \overset{\alpha}{=}
+    f(\phi(t)) + h(t) + \zeta(t),
+\end{align}
+%
+where
+%
+\begin{align}
+    \E{\zeta(t) \zeta(t')} = 2 T \delta(t - t').
+\end{align}
+%
+This lecture is based on \footnote{\cite{hertzPathIntegralMethods2016}---\fullcite{hertzPathIntegralMethods2016}}, so we refer to these notes for the derivation---they are free to download.
+This contains the calculations of correlation functions and response function,
+%
+\begin{align}
+    C(t - t') &= \E{\phi(t)\phi(t')} \big|_{h=0}, &
+    R(t - t') &= \fdv{ \E{\phi(t)} }{ h(t') } \bigg|_{h=0}
+    =
+    \frac{1}{2 T}
+    \E{\phi(t)\zeta(t')} \big|_{h=0}.
+\end{align}
+%
+
+As shown by \cite{hertzPathIntegralMethods2016}, the discretized version of \autoref{eq: langevin for response} is
+%
+\begin{align}
+    \label{eq: discretized langevin for response}
+    \phi_{n + 1} = \phi_n + \Delta t 
+    \left\{
+        (1 - \alpha) (f_n + h_n) + \alpha (f_{n+1} + h_{n+1})
+    \right\} + \zeta_n
+\end{align}
+%
+Here, $f_n = f(x(t_n))$ and $h_n = h(t_n)$, while
+%
+\begin{align}
+    \zeta_n = \int_{t_n}^{t_{n+1}} \dd \tau \, \zeta(t).
+\end{align}
+%
+With this, the \emph{generating functional} is
+%
+\begin{align}
+    Z[\psi]
+    \equiv
+    \E{\exp \left\{ i \sum_n \psi_n \phi_n \right\}}
+    =\int \dd \phi \, 
+    \exp \left\{ - \Delta t \alpha \sum_{n=1}^M f'_n + i \sum_n \psi_n \phi_n  \right\}
+    \times
+    \frac{ 1 }{ \sqrt{ 4 \pi \Delta t T } }
+    \exp \left\{ - \frac{ 1 }{ 4 T \Delta t } \sum_n \zeta_n^2(\phi) \right\}
+\end{align}
+%
+where $\zeta_n(\phi)$ is given by \autoref{eq: discretized langevin for response}.
+This is essentially the Onsager-Machlup functional~\autoref{eq:om_func}.
+
+

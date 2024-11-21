@@ -274,11 +274,11 @@ where we have used Einstein's summation convention.
 
 \subsection*{Underdamped equation}
 
-If consider have an underdamped Langevin equation for a particle experiencing a force $-\bm \nabla U$,
+If consider have an underdamped Langevin equation for a particle experiencing a force $-\bm \nabla U(\bm x)$,
 %
 \begin{align}
-    \odv{  }{ t } \bm x & = \bm v, \\
-    m \odv{  }{ t } \bm v &= - \gamma \bm v - \bm \nabla U(\bm x) + \sqrt{ 2 \gamma k_B T } \bm \eta(t),
+    \odv{  }{ t } \bm x(t) & = \bm v(t), \\
+    m \odv{  }{ t } \bm v(t) &= - \gamma \bm v(t) - \bm \nabla U(\bm x(t)) + \sqrt{ 2 \gamma k_B T } \bm \eta(t),
 \end{align}
 %
 where the noise is assumed to be uncorrelated for different components according to
@@ -292,7 +292,7 @@ then the corresponding multi-dimensional Fokker-Planck equation is called \emph{
 In the limit $m/\gamma\rightarrow 0$, the above equation becomes an over-damped equation,
 %
 \begin{align}
-    \odv{  }{ t } \bm x &=  - \mu\bm \nabla U(\bm x) + \sqrt{ 2 \mu k_B T } \bm \eta(t),
+    \odv{  }{ t } \bm x(t) &=  - \mu\bm \nabla U(\bm x(t)) + \sqrt{ 2 \mu k_B T } \bm \eta(t),
 \end{align}
 %
 where $\mu = 1 / \gamma$ is the mobility.
@@ -395,16 +395,283 @@ Then, the expectation of this functional is%\todo{Should we use $\E{\cdot } $ in
 %
 \begin{align}
     %\mathbb{E}_{(x, t)}[Q]
-    \E{Q}_{(x, t)}
-    &
-    \equiv
-    \lim_{\substack{|a_i-b_i|\rightarrow 0\\N \rightarrow \infty \\ t = \const}}
+    \E{Q[x]}_{(x, t)}
+    & =
+    \int\limits_{x(0) = 0}^{x(t) = x} \D x(t) \, Q[x]\\
+    & \equiv \lim_{\substack{|a_i-b_i|\rightarrow 0\\N \rightarrow \infty \\ t = \const}}
     \int\limits_{a_1}^{b_1} \dd x_1
     \cdots
     \int\limits_{a_{N-1}}^{b_{N-1}} \dd x_{N-1}\,
-    \Pe(x, t | x_{N-1}, t_{N-1}) \cdots \Pe(x_{2}, t_{2} | x_{1}, t_{1}) \Pe(x_{1}, t_{1}) 
-    Q(x_1, \cdots x_{N-1}) \\
-    &= \int\limits_{x(0) = 0}^{x(t) = x} \D x(t) \, Q[x].
+    \Pe(x, t | x_{N-1}, t_{N-1}) \cdots 
+    \Pe(x_{2}, t_{2} | x_{1}, t_{1}) \Pe(x_{1}, t_{1}) 
+    Q(x_1, \cdots x_{N-1}).
 \end{align}
 %
-We see immediately that $ \E{1}_{(x, t)} = 1$.
+We see immediately that $ \E{1}_{(x, t)} = \Pe(x, t)$, the probability density of $x$ at time $t$.
+
+
+
+
+
+\section{Feynman-Kac formula}
+
+We now want to calculate
+%
+\begin{align}
+    W(x, t) \equiv \E{Q[x]}_{x, t}.
+\end{align}
+%
+This is done by expanding the exponential in $Q[x]$.
+We have
+%
+\begin{align}
+    W(x, t)
+    & 
+    = \sum_{n = 0}^\infty (-1)^n W_n(x, t), &
+    W_n(x, t) = \frac{1}{n!} 
+    \E{ \left( \int_0^t \dd \tau \,  U(x(\tau)) \right)^n }_{(x, t)}.
+\end{align}
+%
+For $n =0$, this is simply $W_0(x,t) = \Pe(x, t)$.
+For $n = 1$, we have
+%
+\begin{align}\label{eq: W_1}
+    W_1(x, t) & = 
+    \int_0^t \dd \tau \, \E{U(x(\tau))}
+    = 
+    \int_0^t \dd \tau \, \int_{-\infty}^\infty \dd x_1 \Pe(x, t | x_1, \tau) U(x_1) \Pe(x_1, \tau)
+\end{align}
+%
+
+To see the general case, we define
+%
+\begin{align}
+    g_n(t) &\equiv \left[\int_0^t \dd \tau \, f(\tau)\right]^n, & g_n(0) = 0.
+\end{align}
+%
+Then, for $s < t$,
+%
+\begin{align}
+    \odv{ g_n(s) }{ s } = n g_{n-1}(s) f(s).
+\end{align}
+%
+Integrating this, applying the boundary condition on $g_n$, gives
+%
+\begin{align}
+    g_n(t) = \int_0^t \dd s \, \odv{ g_n(s) }{ s } = n \int_0^t \dd s \, g_{n-1}(s)f(s).
+\end{align}
+%
+Applying this recursively, with $g_1(t) = f(t)$, we get the formula for time ordering
+%
+\begin{align}
+    \left[\int_0^t \dd \tau \, f(\tau)\right]^n
+    & = 
+    n! \int_0^t \dd \tau_1 \int_0^{\tau_1} \dd \tau_2 \cdots \int_0^{\tau_{N-1}} \dd \tau_N
+    f(\tau_1) f(\tau_2) \cdots f(\tau_N)
+\end{align}
+%
+This corresponds to changing the domain of integration from a hypercube to one ``slice'' of the hypercube.
+The other ``slices'' then yields the same integral, due to the symmetry of the integrand.
+This is illustrated in \autoref{fig: time ordering}.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=.5\textwidth]{fig/time-ordering.jpg}
+    \caption{We change the domain of integration from the cube to the smaller slice, illustrated in red.}
+    \label{fig: time ordering}
+\end{figure}
+
+
+Using this formula, we get
+%
+\begin{align}
+    W_n(x, t) = 
+    \int_0^t \dd \tau_1 \int_0^{\tau_1} \dd \tau_2 \cdots \int_0^{\tau_{N-1}} \dd \tau_N \, 
+    \E{U(x(\tau_1)) U(x(\tau_2)) \cdots U(x(\tau_N)) }_{(x,t)}
+\end{align}
+%
+Take then $n = 2$:
+%
+\begin{align}
+    W_2(x, t) 
+    &= \int_0^t \dd \tau_1 \int_0^{\tau_1} \dd \tau_2 \,
+    \E{U(x(\tau_1)) U(x(\tau_2))}_{(x,t)} \\
+    &
+    = 
+    \int_0^t \dd \tau_1 \int_0^{\tau_1} \dd \tau_2 
+    \int \dd x_2 \int \dd x_1 \, 
+    \Pe(x, t|x_1, \tau_1) U(x_1)   \Pe(x_1, \tau_1 | x_2, \tau_2) U(x_2) \Pe(x_2, \tau_2) \\
+    & =
+    \int_0^t \dd \tau_1 
+    \int \dd x_1\,
+    \Pe(x, t|x_1, \tau_1) U(x_1)   
+     W_1(x_1, \tau_1) ,
+\end{align}
+%
+where we used \autoref{eq: W_1}.
+You may convince yourself that this recursive form holds in general---$W_n$ will always just add one more integral to $W_N$, so
+%
+\begin{align}
+    W_n(x, t) = 
+    \int_0^t \dd \tau_1 
+    \int \dd x_1\,
+    \Pe(x, t|x_1, \tau_1) U(x_1)   
+    W_{n-1}(x_1, \tau_1) .
+\end{align}
+%
+
+Next, we put this form into $W(x, t)$, 
+%
+\begin{align}
+    W(x,t) = W_0(x, t) 
+    - \sum_{n = 0}^\infty (-1)^n
+    \int_0^t \dd \tau_1  \int \dd x_1 \,
+    W_n (x_1, \tau_1) U(x_2) \Pe(x_1, \tau_1).
+\end{align}
+%
+Next, we take the time derivative.
+We will use the fact that
+%
+\begin{align}
+    \pdv{  }{ t } W_0(x, t) = D \pdv[2]{  }{ x } W_0(x, t), 
+\end{align}
+%
+as $W_0 = \Pe$.
+This gives
+%
+\begin{align}
+    &\pdv{  }{ t } W(x, t) 
+    = D \pdv[2]{  }{ x } W_0(x, t)\\\nonumber
+    & - \sum_{n = 0}^\infty (-1)^n
+    \int \dd x_1\,
+    \left\{
+        \Pe(x, t|x_1, t) U(x_1)   
+        W_{n-1}(x_1, t)
+        +
+        \int_0^t \dd \tau_1 
+        \int \dd x_1\,
+        \left[D \pdv[2]{  }{ x } \Pe(x, t|x_1, \tau_1) \right]
+        U(x_1) 
+        W_{n}(x_1, \tau_1)
+    \right\}.
+\end{align}
+%
+We have used that the conditional probability also obeys the Fokker Planck equation in the last term in the curly brackets.
+We then use $\Pe(x, t|x_1, t) = \delta(x - x_1)$, and the fact that we can pull out the spatial derivative, to obtain
+%
+\begin{align}
+    \pdv{  }{ t } W(x, t) 
+    &= 
+    D \pdv[2]{  }{ x } 
+    \left\{
+    W_0(x, t)
+    - \sum_{n = 0}^\infty (-1)^n
+    \int_0^t \dd \tau_1 
+    \int \dd x_1\,
+     \Pe(x, t|x_1, \tau_1) U(x_1)
+    W_{n}(x_1, \tau_1)
+    \right\}\\
+    & \quad
+    - 
+    \Pe(x, t|x, t) U(x_1)   
+    \sum_{n = 0}^\infty (-1)^n W_{n-1}(x, t) \\
+    & = D \pdv[2]{  }{ x } W(x, t) + U(x) W(x, t).
+\end{align}
+%
+The wiener integral is thus given by a partial differential equation.
+We see that for $t \rightarrow i t'$, we obtain the Schödinger equation, again underlining the stochastic-quantum analogy.
+
+This correspondence between a path integral and a partial differential equation,
+%
+\begin{align}
+    \pdv{W(x, t)}{t} &= D \pdv[2]{ W(x, t) }{ x } + U(x) W(x, t)&
+    &\iff&
+    W(x, t) = \int\limits_{x(0) = x}^{x(t) = x} \D x(t) \, \exp \left\{ - \int_0^t U(x(t)) \right\},
+\end{align}
+%
+is called the Feynman-Kac formula.
+
+
+\section{Application: First passage time}
+
+As an application, we calculate the \emph{first passage time} of a particle $x(t)$.
+This is the time $T$ such that $x = a > 0$, for some value $a$, \emph{for the fist time}.
+So, for a given realization $x$, there is some time $T$ such that $x(T) = a$ for the first time.
+This varies by realization, and it thus has a distribution $\Pe_{\text{fp}}(T)$.
+This is related to the probability distribution of $x$ by
+%
+\begin{align}
+    \Pe_\text{fp}(T > t) = \int_t^\infty \dd \tau \, \Pe_\text{fp}(\tau) = 
+    \Pe(x(\tau) < a,\, \forall \tau \in[0, t])
+    \equiv \Pe( x < a, t).
+\end{align}
+%
+Thus, 
+%
+\begin{align} \label{eq: first passage time}
+    \Pe_\text{fp}(t) =
+    - \odv{  }{ t } \Pe_\text{fp}(T > t) =
+    - \odv{  }{ t } \Pe(x < a, t).
+\end{align}
+%
+
+We may obtain $\Pe(x < a, t)$ by defining a Brownian integral.
+Let
+%
+\begin{align}
+    Q[x] &= \exp \left\{ - \int_0^t \dd \tau \, U(x(t)) \right\},
+    &
+    U(x) & = 
+    \begin{cases}
+        0 & x < a \\
+        \infty & x \geq b .
+    \end{cases}
+\end{align}
+%
+Thus,
+%
+\begin{align}
+    Q[x] & = 
+    \begin{cases}
+        1 & x(\tau) < a, \, \forall \tau < t \\
+        0 & \text{else}.
+    \end{cases}
+\end{align}
+%
+This is because, if any of the points of the integral is infinite, the whole integral becomes infinite.
+$Q[x]$ is thus an indicator functional for paths $x(t)$ that do \emph{not} pass $a$, and so
+%
+\begin{align}
+    \Pe(x < a, t | x(t) = x) 
+    = 
+    \E{Q[x(t)]}_{(x, t)}.
+\end{align}
+%
+This is the probability of not passing $a$, condition on the endpoints.
+The total probability is
+%
+\begin{align}\label{eq: first passage x}
+    \Pe(x < a, t)
+    = 
+    \int \dd x'
+    \E{Q[x(t)]}_{(x', t)}.
+\end{align}
+%
+We can then find  $W(x, t) = \E{Q[x(t)]}_{(x, t)}$ using the Feynman-Kac formula, which says that $W$ is given by
+%
+\begin{align} \label{eq: feynman kac for first passage time}
+    W(x, t) &= \int\limits_{x(0) = x}^{x(t) = x} \D x(t) \, \exp \left\{ - \int_0^t U(x(t)) \right\}, &
+    U(x) & = 
+    \begin{cases}
+        0 & x < a \\
+        \infty & x \geq b .
+    \end{cases}.
+\end{align}
+%
+
+\begin{framed}
+    \textit{Exercise:}
+    Calculate the Brownian integral $W(x, t)$ of \autoref{eq: feynman kac for first passage time} by solving the PDE.
+    With this result, use \autoref{eq: first passage time} and \autoref{eq: first passage x} to find the probability density of the first-passage time.
+\end{framed}
+
