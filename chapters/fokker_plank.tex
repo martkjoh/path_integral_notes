@@ -353,7 +353,7 @@ A discretized path thus consists of finding the particle in certain intervals $(
 We define the probability measure of such a discretized path as
 %
 \begin{align}
-    \Pe(x, t | x_i\in(a_i, b_i),\,  i \in 1, \cdots N )
+    \Pe(x, t; x_i\in(a_i, b_i),\,  i \in 1, \cdots N )
     =
     \int\limits_{a_1}^{b_1} \dd x_1
     \cdots
@@ -367,7 +367,7 @@ Then, in the continuum limit, this becomes Brownian integral,
     \D x(t)
     \equiv
     \lim_{\substack{|a_i-b_i|\rightarrow 0\\N \rightarrow \infty \\ t = \const}}
-    \Pe(x, t | x_i\in(a_i, b_i),\,  i \in 1, \cdots N ).
+    \Pe(x, t;  x_i\in(a_i, b_i),\,  i \in 1, \cdots N ).
 \end{align}
 %
 This is a more careful definition of the path-integral measure defined in \autoref{section: introducing pi}.
@@ -415,14 +415,13 @@ We see immediately that $ \E{1}_{(x, t)} = \Pe(x, t)$, the probability density o
 
 \section{Feynman-Kac formula}
 
-We now want to calculate
+We now want to calculate an expression for the expected value of the Brownian functional over realizations of the Brownian motion (Wiener measure), i.e.,
 %
 \begin{align}
     W(x, t) \equiv \E{Q[x]}_{x, t}.
 \end{align}
 %
-This is done by expanding the exponential in $Q[x]$.
-We have
+By expanding the exponential in $Q[x]$, we get the following representation in terms of moments of time-integrated potential $U$: 
 %
 \begin{align}
     W(x, t)
@@ -433,17 +432,18 @@ We have
 \end{align}
 %
 For $n =0$, this is simply $W_0(x,t) = \Pe(x, t)$.
-For $n = 1$, we have
+For $n = 1$, we can express $W_1(x,t)$ as 
 %
 \begin{align}\label{eq: W_1}
     W_1(x, t) & = 
     \int_0^t \dd \tau \, \E{U(x(\tau))}
     = 
-    \int_0^t \dd \tau \, \int_{-\infty}^\infty \dd x_1 \Pe(x, t | x_1, \tau) U(x_1) \Pe(x_1, \tau)
+    \int_0^t \dd \tau \, \int_{-\infty}^\infty \dd x_1 \Pe(x, t | x_1, \tau) U(x_1) \Pe(x_1, \tau).
 \end{align}
 %
+Last equality follows from considering the average over all trajectories that start in the origin and end at $x$ at time $t$, conditioning on the position $x_1$ at time $\tau$, where $U$ is evaluated. Note that all the quantities in the integral are known.
 
-To see the general case, we define
+To proceed with the $n$-th general case, we consider the following integral quantity
 %
 \begin{align}
     g_n(t) &\equiv \left[\int_0^t \dd \tau \, f(\tau)\right]^n, & g_n(0) = 0.
@@ -461,7 +461,7 @@ Integrating this, applying the boundary condition on $g_n$, gives
     g_n(t) = \int_0^t \dd s \, \odv{ g_n(s) }{ s } = n \int_0^t \dd s \, g_{n-1}(s)f(s).
 \end{align}
 %
-Applying this recursively, with $g_1(t) = f(t)$, we get the formula for time ordering
+Applying the last identity recursively, with $g_0(t) = 1$, we get the formula for time ordering
 %
 \begin{align}
     \left[\int_0^t \dd \tau \, f(\tau)\right]^n
@@ -481,8 +481,7 @@ This is illustrated in \autoref{fig: time ordering}.
     \label{fig: time ordering}
 \end{figure}
 
-
-Using this formula, we get
+Adapting this formula to $W_n(x,t)$, we get the time-ordered integration
 %
 \begin{align}
     W_n(x, t) = 
@@ -519,25 +518,24 @@ You may convince yourself that this recursive form holds in general---$W_n$ will
     W_{n-1}(x_1, \tau_1) .
 \end{align}
 %
-
-Next, we put this form into $W(x, t)$, 
+Next, we substitute the last relation into the expansion of $W(x, t)$, 
 %
-\begin{align}
+\begin{align}\label{eq:Wexp}
     W(x,t) = W_0(x, t) 
     - \sum_{n = 0}^\infty (-1)^n
-    \int_0^t \dd \tau_1  \int \dd x_1 \,
-    W_n (x_1, \tau_1) U(x_2) \Pe(x_1, \tau_1).
+    \int_0^t \dd \tau_1  \int \dd x_1 \,\Pe(x, t|x_1, \tau_1) U(x_1)   
+    W_{n}(x_1, \tau_1).
 \end{align}
 %
-Next, we take the time derivative.
-We will use the fact that
+This recursive integral expression for $W(x,t)$ is exact but impractical. In this spirit, we will use Eq. \eqref{eq:Wexp} to find a differential equation for $W(x,t)$.
+We will use the fact that for the Brownian motion
 %
 \begin{align}
     \pdv{  }{ t } W_0(x, t) = D \pdv[2]{  }{ x } W_0(x, t), 
 \end{align}
 %
 as $W_0 = \Pe$.
-This gives
+If we now take the time derivative of Eq. \eqref{eq:Wexp}, we get
 %
 \begin{align}
     &\pdv{  }{ t } W(x, t) 
@@ -546,7 +544,7 @@ This gives
     \int \dd x_1\,
     \left\{
         \Pe(x, t|x_1, t) U(x_1)   
-        W_{n-1}(x_1, t)
+        W_{n}(x_1, t)
         +
         \int_0^t \dd \tau_1 
         \int \dd x_1\,
@@ -556,7 +554,7 @@ This gives
     \right\}.
 \end{align}
 %
-We have used that the conditional probability also obeys the Fokker Planck equation in the last term in the curly brackets.
+We have used that the conditional probability also obeys the Fokker-Planck equation in the last term in the curly brackets.
 We then use $\Pe(x, t|x_1, t) = \delta(x - x_1)$, and the fact that we can pull out the spatial derivative, to obtain
 %
 \begin{align}
@@ -573,20 +571,20 @@ We then use $\Pe(x, t|x_1, t) = \delta(x - x_1)$, and the fact that we can pull 
     \right\}\\
     & \quad
     - 
-    \Pe(x, t|x, t) U(x_1)   
-    \sum_{n = 0}^\infty (-1)^n W_{n-1}(x, t) \\
-    & = D \pdv[2]{  }{ x } W(x, t) + U(x) W(x, t).
+ U(x)   
+    \sum_{n = 0}^\infty (-1)^n W_{n}(x, t) \\
+    & = D \pdv[2]{  }{ x } W(x, t) - U(x) W(x, t).
 \end{align}
 %
-The wiener integral is thus given by a partial differential equation.
-We see that for $t \rightarrow i t'$, we obtain the Schödinger equation, again underlining the stochastic-quantum analogy.
+Accordingly, we can express the solution of the above differential equation as the expectation value over the Wiener measure of a suitable exponential Brownian functional.
+Moreover, note that for $t \rightarrow i t'$, we obtain the Schrödinger equation, again underlining the stochastic-quantum analogy.
 
 This correspondence between a path integral and a partial differential equation,
 %
 \begin{align}
-    \pdv{W(x, t)}{t} &= D \pdv[2]{ W(x, t) }{ x } + U(x) W(x, t)&
+    \pdv{W(x, t)}{t} &= D \pdv[2]{ W(x, t) }{ x } - U(x) W(x, t)&
     &\iff&
-    W(x, t) = \int\limits_{x(0) = x}^{x(t) = x} \D x(t) \, \exp \left\{ - \int_0^t U(x(t)) \right\},
+    W(x, t) = \int\limits_{x(0) = 0}^{x(t) = x} \D x(t) \, \exp \left\{ - \int_0^t U(x(t)) \right\},
 \end{align}
 %
 is called the Feynman-Kac formula.
@@ -594,29 +592,30 @@ is called the Feynman-Kac formula.
 
 \section{Application: First passage time}
 
-As an application, we calculate the \emph{first passage time} of a particle $x(t)$.
-This is the time $T$ such that $x = a > 0$, for some value $a$, \emph{for the fist time}.
+As an application, we calculate the \emph{first passage time} of a Brownian particle $x(t)$.
+This is the time $T$ such that $x = a > 0$, for some value $a$, \emph{for the first time}.
 So, for a given realization $x$, there is some time $T$ such that $x(T) = a$ for the first time.
-This varies by realization, and it thus has a distribution $\Pe_{\text{fp}}(T)$.
+This varies by realization, and it thus has a cumulative distribution $\Pe_{\text{fp}}(T)$, which identifies the probability that the first passage time is smaller that a given value $T$.
 This is related to the probability distribution of $x$ by
 %
 \begin{align}
-    \Pe_\text{fp}(T > t) = \int_t^\infty \dd \tau \, \Pe_\text{fp}(\tau) = 
+    \Pe_\text{fp}(T > t) = \int_t^\infty \dd \tau \, p_\text{fp}(\tau) = 
     \Pe(x(\tau) < a,\, \forall \tau \in[0, t])
-    \equiv \Pe( x < a, t).
+    \equiv \Pe( x < a, t),
 \end{align}
+which states that the probability for $T>t$ is equal to the fact that the particle position never crosses $a$ in the time interval $(0,t)$; $p_\text{fp}$ denotes the probability density of the first passage time.
 %
-Thus, 
+Thus, by taking the derivative with respect to $t$ on both sides we get
 %
 \begin{align} \label{eq: first passage time}
-    \Pe_\text{fp}(t) =
+    p_\text{fp}(t) =
     - \odv{  }{ t } \Pe_\text{fp}(T > t) =
     - \odv{  }{ t } \Pe(x < a, t).
 \end{align}
 %
-
-We may obtain $\Pe(x < a, t)$ by defining a Brownian integral.
-Let
+We have reduced the problem of studying the statistics of the first passage time to that of a constrained Brownian motion.
+Indeed, we may obtain $\Pe(x < a, t)$ by defining a Brownian integral.
+Let us define the following Brownian functional
 %
 \begin{align}
     Q[x] &= \exp \left\{ - \int_0^t \dd \tau \, U(x(t)) \right\},
@@ -647,7 +646,7 @@ $Q[x]$ is thus an indicator functional for paths $x(t)$ that do \emph{not} pass 
     \E{Q[x(t)]}_{(x, t)}.
 \end{align}
 %
-This is the probability of not passing $a$, condition on the endpoints.
+This is the probability of not crossing $a$, condition on the endpoints.
 The total probability is
 %
 \begin{align}\label{eq: first passage x}
@@ -672,6 +671,6 @@ We can then find  $W(x, t) = \E{Q[x(t)]}_{(x, t)}$ using the Feynman-Kac formula
 \begin{framed}
     \textit{Exercise:}
     Calculate the Brownian integral $W(x, t)$ of \autoref{eq: feynman kac for first passage time} by solving the PDE.
-    With this result, use \autoref{eq: first passage time} and \autoref{eq: first passage x} to find the probability density of the first-passage time.
+    With this result, use \autoref{eq: first passage time} and \autoref{eq: first passage x} to find the probability density of the first-passage time, and its first moment.
 \end{framed}
 
