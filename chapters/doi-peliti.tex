@@ -254,16 +254,16 @@ $
 \subsection*{Catalysis
 $
 \left(
-    \parbox{30mm}{
+    \parbox{34mm}{
     \centering
-    \begin{fmfgraph*}(22,6)
+    \begin{fmfgraph*}(28,6)
         \setval
         \fmfleft{i,i2}
         \fmfright{o,o2}
         \fmf{fermion}{i2,c,o2}
         \fmflabel{$t$}{c}
         \fmffreeze
-        \fmf{fermion,left=.3}{i,c,o}
+        \fmf{fermion,left=.2}{i,c,o}
         \fmflabel{$A$}{i2}
         \fmflabel{$B$}{o2}
         \fmflabel{$C$}{i}
@@ -307,7 +307,7 @@ The corresponding diagram is
         \fmflabel{$\ell_2A_2$}{o2}
         \fmflabel{$\ell_1A_1$}{o3}
     \end{fmfgraph*}
-    },
+    }
 \end{align}
 %
 and the transition rates are
@@ -342,3 +342,277 @@ the (discrete) diffusion equation.
 
 
 \section{Probability generating function}
+
+We define the function
+%
+\begin{align}
+    \Em(z, t) = \sum_N z^N P(N, t)
+\end{align}
+%
+for a single proces, or for many procesess,
+%
+\begin{align}
+    \Em(z_1, ... z_K, t) 
+    =
+    \Em(\bm z, t) 
+    = \sum_{\bm N} z^{N_1}\cdots z^{N_k} P(\bm N, t).
+\end{align}
+%
+This is called the probability generating function because we can obtain the probability of having the state $N = \ell$ by taking derivatives of it,
+%
+\begin{align}
+    P(\ell, t) = \frac{ 1 }{ \ell! } \partial_z^\ell \Em(z, t)\big|_{z = 0}.
+\end{align}
+%
+Notice that, for all $t$, $M(z = 1, t) = 1$.
+
+If we again consider the master equation for the birth and death process,
+%
+\begin{align}
+    \partial_t P(N, t) = 
+    \epsilon
+    \left[
+        (N + 1) P(N+1, t)
+        - 
+        N P(N, t)
+    \right]
+    +
+    \gamma 
+    \left\{
+        P(N - 1, t) - P(N, t)
+    \right\},
+\end{align}
+%
+and apply $\sum_N z^N \cdot$, we get an equation for $\Em$,
+%
+\begin{align}
+    \partial_t \Em(z, t) 
+    &= 
+    \epsilon 
+    \sum_N 
+    \left\{
+        \underbrace{z^N (N + 1)}_{\partial_z z^{N + 1}} P(N + 1, t)
+        - 
+        \underbrace{z^N N}_{z \partial_z z^N} P(N, t )
+    \right\}
+    +
+    \gamma \sum_N
+    z^N
+    \left\{
+         P(N-1, t) - P(N, t)
+    \right\}\\
+    & = \epsilon (1 - z) \partial_z \Em(z, t)
+    + \gamma (z - 1) \Em(z, t).
+\end{align}
+%
+If we consider steady state $\partial_t \Em = 0$, we get 
+%
+\begin{align}
+    \Em_S(z) = \Em_0 e^{\gamma /\epsilon z}
+    \implies
+    P_S(N) = 
+    \frac{ 1 }{ N! }
+    \left(\frac{ \gamma }{ \epsilon }\right)^N 
+    e^{-\gamma/\epsilon},
+\end{align}
+%
+as before.
+
+\begin{framed}
+    \textit{Exercise:}
+    Show that, for the generic process described above, the equation of the generating function is
+    %
+    \begin{align}
+        \partial_t \Em(\bm z, t)
+        = \frac{ r }{ \prod_k \ell_k ! }
+        \left[
+            \left(
+                \prod_k z^{j_k}_k \partial_{z_k}^{\ell_k}
+            \right)
+            -
+            \left(
+                \prod_k z^{\ell_k}_k \partial_{z_k}^{\ell_k}
+            \right)
+        \right]
+        \Em(\bm z, t).
+    \end{align}
+    %
+\end{framed}
+
+We end this section with a note: although the definition of the generating function is analytic, as it is a power series, the result differential equations may have non-analytic solutions, which must be discarded.
+We may also obtain moments from the generating functions by exploiting its analytical properties to write
+%
+\begin{align}
+    \E{N^k(t)}
+    = 
+    \sum_N \left(z \odv{  }{ z }\right)^k z^N P(N) \big|_{z=1}
+    = 
+    \left(z \odv{  }{ z }\right)^k \Em(z, t).
+\end{align}
+%
+
+
+
+\section{Second quantization}
+
+With the definition and properties of the probability generating function clear, we now introduce a new formalism called \emph{second quantization}, due to its close relation to the similarly named formalism of quantum field theory.
+This formalism is a mapping of the objects from the previous chapter to a new notation.
+This mapping has the following dicitionary,
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+        Usual & 2nd quant. \\[.1cm]
+        \hline\\[-.2cm]
+        Factors of $z^N$ & particle state $\ket{N}$ \\[.1cm]
+        Multiplication with $z$ & Creation operator $a^\dagger$\\[.1cm]
+        Derivative $\odv{  }{ z }$ & Annihilation operator $a$ \\[.1cm]
+        PGF $\Em(z, t)$ & System state $\ket{\Em(t)}$
+    \end{tabular}
+\end{table}
+
+If the PGF is $\Em(z, t) = Z^M$, then $P(N, t) = \delta_{N,M}$, so we may write
+%
+\begin{align}
+    \ket{\Em(t)} = \sum_N P(N, t) \ket{N}.
+\end{align}
+%
+This is familiar to anyone who has done some many-particle quantum mechanics---a state is the linear combination of states with different numbers of particles.
+Likewise, we have
+%
+\begin{align}
+    a\ket{N} &= N \ket{N},&
+    a^\dagger\ket{N} &= \ket{N+1},&
+    [a^\dagger, a] \equiv a^\dagger a - a a^\dagger = 1.
+\end{align}
+%
+The last term is the familiar canonical commutation relation for bosons.
+One may consider fermionic systems, representing exclusion processes where only a finite number of particles can occupy a state, but we will keep to bosons here.
+
+If we have multi species systems, the generalization is straight forward.
+The states, operators and their commutations are denote
+%
+\begin{align}
+    \ket{N_1, \dots N_k}
+    = \ket{\bm N}
+    , &&
+    a_i,\, a_j^\dagger, &&
+    [a_i^\dagger, a_j] & = \delta_{ij}.
+\end{align}
+%
+The equation for the state vector can now be written on a form similar to the Schrödinger equation,
+%
+\begin{align}
+    \odv[]{}{t} \ket{\Em(t)} = \Ell[a^\dagger, a] \ket{\Em(t)},
+\end{align}
+%
+which has the formal solution
+%
+\begin{align}
+    \ket{\Em(t)}
+    = 
+    e^{\Ell[a^\dagger, a](t-t_0)}
+    \ket{\Em(t_0)}.
+\end{align}
+%
+
+
+In addition to the \emph{ket} vectors, $\ket{\cdot}$, we introduce the corresponding \emph{dual vectors}, or \emph{bra}'s, denoted $\bra{\cdot}$.
+Since $\ket{N} = z^N$, we can consider $\ket{\Em(t)} = \sum_N P(N, t)\ket{N}$ as an element of the vector space of analytic functions, $V$, with $P(N, t)$ as the components.
+\note{I guess the vector space is actually $\ell^1$, since $\sum |P(N)| = 1$? So a different space than Fokk space, which is $\ell^2$.}
+When we have such a vector space, \emph{Riesz representation theorem} says that the space of all linear operators from $V$ to real numbers, $V^*$, is also a vector space, with a basis of elements $\bra{M} \in V^*$ such that
+%
+\begin{align}
+    \braket{M|N} = \delta_{M,N}.
+\end{align}
+%
+This is the dual space, and $\bra{M}$ is the basis for dual vectors.
+The inner product is defined as
+%
+\begin{align}
+    \braket{\cdot| N} &= \int \dd z \, \cdot z^N, \\
+    \braket{M| \cdot} & = \int \dd z \, \frac{ (-1)^M }{ M! } \delta^{(M)}(z) \cdot.
+\end{align}
+%
+Here, $\delta^{(M)}(z)$ is the M'th derivative of the Dirac delta, defined by partial integration,
+%
+\begin{align}
+    \int \dd z \, \delta^{(N)} f(z)
+    = 
+    (-1)^N f^{(N)}(0)
+    \implies 
+    \braket{M | \Em{t}} = P(N, t).
+\end{align}
+%
+
+The action of the operators on the dual vector can be deduced as follows:
+%
+\begin{align}
+    \bra{M} \left(a \ket{N}\right)
+    &= N \braket{M|N-1} = N \delta_{M, N-1}
+    = (M - 1) \braket{M+1 | N}\\
+    \implies 
+    \bra{M}a & = (M + 1)\bra{M + 1}.
+\end{align}
+%
+and
+\begin{align}
+    \bra{M} \left(a^\dagger \ket{N}\right)
+    &= \braket{M|N+1} = \delta_{M, N-1}
+    = \braket{M-1 | N}\\
+    \implies 
+    \bra{M}a^\dagger & = \bra{M - 1}.
+\end{align}
+% 
+From this, we get
+%
+\begin{align}
+    \bra{M} &= \bra{0} \frac{ a^\dagger }{ M! }, &
+    \braket{M|\cdot} &= \bra{0} \frac{ a^\dagger }{ M! }\ket{\cdot}, &
+    \braket{0|\cdot} = \int \dd z \, \delta(z)\cdot.
+\end{align}
+%
+We may write moments as
+%
+\begin{align}
+    \E{N^k(t)} 
+    =
+    \sum_N \left(z \odv{  }{ z }\right)^k z^N \big|_{z = 1} P(N, t)
+    =
+    \sum_N \left(z \odv{  }{ z }\right)^k\Em(z, t)\big|_{z = 1}
+    =
+    \int \dd z \, \delta(z - 1)
+    \sum_N \left(z \odv{  }{ z }\right)^k\Em(z, t).
+\end{align}
+%
+We may Taylor-expand this around $z = 0$, so
+%
+\begin{align}
+    \E{N^k(t)} 
+    =
+    \sum_m
+    \int \dd z \, \frac{ \delta(z) }{ m! }
+    \odv[m]{  }{ z }
+    \sum_N \left(z \odv{  }{ z }\right)^k\Em(z, t)
+    =
+    \bra{0}e^a (a^\dagger a)^k \ket{\Em(t)}.
+\end{align}
+%
+We call
+%
+\begin{align}
+    \bra{0}e^a
+    \equiv
+    \bra{\star}
+\end{align}
+%
+the \emph{coherent state}, or \emph{abyss}.
+
+\emph{
+    Maybe a bit on the differences from QM, this is not quite clear to me.
+    The operators are not unitary, right?
+    Is the dagger actually hermitian conjugate?
+    etc...
+    }
+\emph{This might also be interesting in that context:
+\url{https://arxiv.org/pdf/2302.10778}}
