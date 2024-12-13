@@ -1,0 +1,282 @@
+The response and Onsager-Machlup formalism is useful for perturbative calculations, however, it relies on some assumption which do not always hold.
+Most importantly, if we cannot describe the small time-step as a Gaussian process, or/and the random variable in question cannot be modeled as continuous, then it fails.
+Examples of discrete processes are birth and death processes with low population number, or discrete jump processes, automata or reaction-diffusion processes.
+In this case, we can instead use the Doi-Peliti formalism.
+To derive this, we start with the master equation, as we derived in (REF).
+
+\section{Discrete master equation}
+
+We will consider one or more random variables $N(t) \in \NN$.
+The corresponding master equation is
+%
+\begin{align}
+    \partial_t P(N, t)
+    = 
+    \sum_{N'}
+    \left\{
+        W_t(N | N') P(N, t)
+        - W_t(N'|N)P(N, t)
+    \right\}.
+\end{align}
+%
+To recap, the first term is the gain term, while the second is the loss-term.
+The $W$'s are transition rates, infinite dimensional matrices that contain the rates at which one state transition into another.
+The result is an infinite set of ODE's for the probabilities $P(N, t)$.
+Some examples of these processes are
+\note{It is a bit wierd to have partial derivative, then call it ode's. Maybe should write $P_N(t)$, then ordianry derivative instead?}
+
+\subsection*{Extinction
+$
+\left(
+    \parbox{20mm}{
+    \centering
+    \begin{fmfgraph*}(8,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{fermion,label=$\epsilon$}{i,o}
+        \fmflabel{$A$}{i}
+        \fmflabel{$\emptyset$}{o}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+This process represents one set of particles, labeled $A$, which decays at a constant rate, $\epsilon$, to nothing $(\emptyset)$, as illustrated by the arrow above.
+$N(t)$ then represent the total numbers of particles of type $A$,
+and the transition rates are the decay rate, $\epsilon$, times the number of particles.
+The corresponding master equation is represented the rate at which the system transitions into, minus the rat out of, state $N$,
+%
+\begin{align}
+    \partial_t P(N, t) = 
+    \epsilon
+    \left[
+        (N + 1) P(N+1, t)
+        - 
+        N P(N, t)
+    \right].
+\end{align}
+%
+The steady-state is a probability distribution $P(N, t) = P_S(N, t$ ) so that $\partial_t P(N) = 0$, and the only such state is
+%
+\begin{align}
+    P_S(N) = \delta_{N,0},
+\end{align}
+%
+the ``emtpy state''.
+
+We may derive a differential equation for the expected number of particles, $\E{N(t)}$, by ``applying'' $\sum_N N \cdot$ to  the master equation, which yields
+%
+\begin{align}
+    \partial_t
+    \underbrace{\sum_N N P(N, t)}_{\E{N(t)}}
+    &= 
+    \epsilon
+    \sum_{N}
+    \bigg\{
+        \underbrace{N(N + 1)}_{(N_1)^2-(N+1)}P(N+1,t)
+        - NP(N,t) k
+    \bigg\}\\
+    & = 
+    \epsilon
+    \left\{
+        \E{N(t)^2} - \E{N(t)} - \E{N(t)^2}
+    \right\}
+    =     \epsilon \E{N(t)},
+\end{align}
+%
+This is solved by $\E{N(t)} = N(0) e^{-\epsilon t}$.
+
+
+\subsection*{Spontaneous creation
+$
+\left(
+    \parbox{20mm}{
+    \centering
+    \begin{fmfgraph*}(8,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{fermion,label=$\gamma$}{i,o}
+        \fmflabel{$\emptyset$}{i}
+        \fmflabel{$A$}{o}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+
+This is the converse process, with the master equation
+%
+\begin{align}
+    \partial_t P(N, t)
+    = 
+    \gamma 
+    \left\{
+        P(N - 1, t) - P(N, t)
+    \right\}.
+\end{align}
+%
+One may notice this has no steady state, as this would require $P_S(N) = P_S(N+1)$, a uniform distribution on the natural numbers, which is unnormalizable.
+
+
+\subsection*{Dynamic steady state
+$
+\left(
+    \parbox{34mm}{
+    \centering
+    \begin{fmfgraph*}(22,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{fermion,label=$\gamma$}{i,c1}
+        \fmf{phantom,tension=2}{c1,c2}
+        \fmf{fermion,label=$\epsilon$}{c2,o}
+        \fmflabel{$\emptyset$}{i}
+        \fmflabel{$B$}{o}
+        \fmfv{l=$A$,l.a=0,l.d=.03w}{c1}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+
+A generic property of the processes considered here is that we may always consider the combination of two processes by adding together the right-hand sides of the corresponding master equations.
+The master equation for the spontaneous creation and annihilation process is therefore
+%
+\begin{align}
+    \partial_t P(N, t) = 
+    \epsilon
+    \left[
+        (N + 1) P(N+1, t)
+        - 
+        N P(N, t)
+    \right]
+    +
+    \gamma 
+    \left\{
+        P(N - 1, t) - P(N, t)
+    \right\}.
+\end{align}
+%
+Assuming $P(N<0) = 0$ gives the steady state,
+%
+\begin{align}
+    P_S(N) = \frac{ P_S(0) }{ N! } \left(\frac{ \gamma }{ \epsilon }\right)^N
+    =
+    \frac{ 1 }{ N! } \left(\frac{ \gamma }{ \epsilon }\right)^N e^{-\gamma/\epsilon},
+\end{align}
+%
+which is the Poission distribution.
+
+A couple of other processes, and their rates, are
+
+\subsection*{Coagulation
+$
+\left(\,
+    \parbox{22mm}{
+    \centering
+    \begin{fmfgraph*}(8,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{fermion,label=$\lambda$}{i,o}
+        \fmflabel{$2A$}{i}
+        \fmflabel{$A$}{o}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+
+%
+\begin{align}
+    W(N-1|N) = \lambda N 2
+\end{align}
+%
+
+
+\subsection*{Transmutation
+$
+\left(
+    \parbox{20mm}{
+    \centering
+    \begin{fmfgraph*}(8,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{fermion,label=$\gamma$}{i,o}
+        \fmflabel{$A$}{i}
+        \fmflabel{$B$}{o}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+
+%
+\begin{align}
+    W(N_A-1,N_B+1|N_A,N_B) 
+    = \tau N_A
+\end{align}
+%
+
+\subsection*{Spawning
+$
+\left(
+    \parbox{30mm}{
+    \centering
+    \begin{fmfgraph*}(22,6)
+        \setval
+        \fmfleft{i,i2}
+        \fmfright{o,o2}
+        \fmf{fermion}{i2,c,o2}
+        \fmflabel{$s$}{c}
+        \fmffreeze
+        \fmf{fermion}{c,o}
+        \fmflabel{$A$}{i2}
+        \fmflabel{$A$}{o}
+        \fmflabel{$B$}{o2}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+
+%
+\begin{align}
+    W(N_A,N_B+1|N_A,N_B) 
+    = s N_A
+\end{align}
+%
+
+
+\subsection*{Catalysis
+$
+\left(
+    \parbox{30mm}{
+    \centering
+    \begin{fmfgraph*}(22,6)
+        \setval
+        \fmfleft{i,i2}
+        \fmfright{o,o2}
+        \fmf{fermion}{i2,c,o2}
+        \fmflabel{$t$}{c}
+        \fmffreeze
+        \fmf{fermion,left=1/2}{i,c,o}
+        \fmflabel{$A$}{i2}
+        \fmflabel{$B$}{o2}
+        \fmflabel{$C$}{i1}
+        \fmflabel{$C$}{i2}
+    \end{fmfgraph*}
+    }
+\right)
+$
+}
+
+%
+\begin{align}
+    W(N_A-1,N_B+1, N_C|N_A,N_B, N_C) 
+    = t N_A N_C
+\end{align}
+%
