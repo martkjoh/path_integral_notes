@@ -23,7 +23,7 @@ To recap, the first term is the gain term, while the second is the loss-term.
 The $W$'s are transition rates, infinite dimensional matrices that contain the rates at which one state transition into another.
 The result is an infinite set of ODE's for the probabilities $P(N, t)$.
 Some examples of these processes are
-\note{It is a bit wierd to have partial derivative, then call it ode's. Maybe should write $P_N(t)$, then ordianry derivative instead?}
+\note{Maybe should write $P_N(t)$, then ordianry derivative instead, since its ODEs?}
 
 \subsection*{Extinction
 $
@@ -191,7 +191,7 @@ $
 
 %
 \begin{align}
-    W(N-1|N) = \lambda N 2
+    W(N-1|N) = \lambda \binom{N}{2}
 \end{align}
 %
 
@@ -280,3 +280,65 @@ $
     = t N_A N_C
 \end{align}
 %
+
+\subsection*{General process}
+
+A general process has $k$ species, labeled $A_i$, with $i\in\{1, \dots k\}$, $j_i$ label the number of species $i$ is needed for the process, while $\ell_i$ are the number of $i$ that are left after the reaction (reactants and products), which has rate $r$.
+The corresponding diagram is
+%
+\begin{align}
+    \parbox{30mm}{
+    \centering
+    \begin{fmfgraph*}(22,15)
+        \setval
+        \fmfleft{i0,i1,i2,i3}
+        \fmfright{o0,o1,o2,o3}
+        \fmf{fermion}{i0,c,o0}
+        \fmf{phantom}{i1,c,o1}
+        \fmf{fermion}{i2,c,o2}
+        \fmf{fermion}{i3,c,o3}
+        \fmfv{d.f=empty,d.shape=circle,d.size=5mm,l=$r$,l.d=0cm}{c}
+        \fmflabel{$j_kA_k$}{i0}
+        \fmflabel{$\vdots$}{i1}
+        \fmflabel{$j_2A_2$}{i2}
+        \fmflabel{$j_1A_1$}{i3}
+        \fmflabel{$\ell_kA_k$}{o0}
+        \fmflabel{$\vdots$}{o1}
+        \fmflabel{$\ell_2A_2$}{o2}
+        \fmflabel{$\ell_1A_1$}{o3}
+    \end{fmfgraph*}
+    },
+\end{align}
+%
+and the transition rates are
+%
+\begin{align}
+    W(N_1-\ell_1 + j_1, \dots N_k - \ell_k + J_k| N_1, \dots N_k)
+    = r \binom{N_1}{\ell_1} \cdots \binom{N_k}{\ell_k}
+\end{align}
+%
+
+
+\subsection*{Processes in space}
+
+We can imendiatly generate to processes in space, by considering $A_i$ to be a particle on lattice site $i$.
+If we consider an equal probability of jumping left or right, hopping rate $D / h^2$, where $h$ is the lattice spacing, then the master equation is
+%
+\begin{align}
+    \partial_t P(\bm N, t) 
+    = 
+    \frac{ D }{ h^2 } \sum_{j\in \Z}\sum_{\E{x,j}}
+    \left[ (N_x + 1) P(\bm N + 1_x - 1_j,t) - N_x P(\bm N, t) \right].
+\end{align}
+%
+Here, $\bm N$ is the vector of occupation number at the different sites, and $1_x$ is the vector with only $1$ at site $x$, $0$ elsewhere, and the bracket means sum over nearest neighbourrs.
+Applying $\sum_{\bm N} N_x \cdot$, we get
+%
+\begin{align}
+    \E{N_x(t)} = D \nabla^2_x \E{N_x(t)},
+\end{align}
+%
+the (discrete) diffusion equation.
+
+
+\section{Probability generating function}
