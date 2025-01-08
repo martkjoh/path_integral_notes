@@ -184,7 +184,7 @@ As we consider Markovian processes, these quantities are functions of (equivalen
 If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, then the probability distribution is a multivariate Gaussian
 %
 \begin{align}
-    P(x_{n_1}|x_n)
+    P(x_{n+1}|x_n)
     = 
     \frac{ 1 }{ \sqrt{ 2 \pi \det \Sigma } }
     \exp \left\{ - \frac{1}{2}\sum_{ab} \left[x_a(t_{n+1}) - \bar x_a(t_{n+1})\right] \Sigma_{ab}^{-1} \left[x_b(t_{n+1}) - \bar x_b(t_{n+1})\right] \right\}.
@@ -229,16 +229,16 @@ Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and tak
 \begin{align}\label{eq:om_func}
     P(x_{n+1}|x_{1})
     & =
-    \sum_{x_2\cdots x_{n+1}}
+    \sum_{x_2\cdots x_{n}}
     \Delta x \Pe \left( x_{n+1}| x_{n} \right) \cdots \Delta x \Pe \left( x_{2}| x_{1} \right)\\
     &
-    = \sum_{x_2\cdots x_{n+1}} \Delta x^n \exp \left\{ - \frac{\Delta t}{4 D} \sum_n \left[\dot x_{n + 1} - \mu x_n \right]^2 \right\}\\
+    = \sum_{x_2\cdots x_{n}} \left( \frac{\Delta x}{C_n} \right)^n \exp \left\{ - \frac{\Delta t}{4 D} \sum_n \left[\dot x_{n + 1} - \mu x_n \right]^2 \right\}\\
     & 
     \underset{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} }{ \sim }
     \int \D x(t) \,
     \exp \left\{ 
         - \frac{ 1 }{ 4D } 
-        \int\limits_{t_1}^{t_{n+1}} \dd t \left[\dot x(t) + \mu x(t)\right]^2
+        \int\limits_{t_1}^{t_{n+1}} \dd t \left[\dot x(t) - \mu x(t)\right]^2
         \right\}
     \equiv
     \int \D x(t) \, \Phi[x(t)].
@@ -256,6 +256,7 @@ To performed calculations, we will have re-descritize the path integral, so this
 
 
 \section{Master equation}
+\label{section: master equation}
 
 We will here consider stochastic processes using a different formalism, the master equation. While this formalism will be relevant later on in the course, we introduce it early on to make a point about the equivalence between the path integral representation of stochastic process and other, more common approaches.
 If we consider a discrete stochastic process $N(t)$, and Taylor-expand the conditional probability of $N'$ at $t + \Delta t$ given $N$ at $t$ in small $\Delta t$, we get
@@ -263,7 +264,7 @@ If we consider a discrete stochastic process $N(t)$, and Taylor-expand the condi
 \begin{align}\label{eq: expansion cond prob}
     P(N'(t + \Delta t)| N(t)) = 
     \underbrace{P(N'(t)|N(t))}_{\delta_{N'N}} + \Delta t 
-    \underbrace{\pdv{P(N'(t')|N(t))}{t'}\bigg|_{t'=t}}_{W_t(N'|N)} + \Oh(\Delta t).
+    \underbrace{\pdv{P(N'(t')|N(t))}{t'}\bigg|_{t'=t}}_{W_t(N'|N)} + \Oh(\Delta t ^ 2).
 \end{align}
 %
 Here, we define the \emph{transition rates} $W_t(N'|N)$. The subscript highlights the fact that these may explicitly depend on time: for example, if the stochastic process $N(t)$ describes the number of individuals in the population of a particular species of insects, the transition rates $W_t(N+1|N)$ and $W_t(N-1|N)$ associated with birth and death processes might depend explicitly on time through seasonal variations in temperature.
@@ -444,7 +445,7 @@ the path-internal then discretizes as
     \right\}.
 \end{align}
 %
-We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$. Based on our earlier assumption of symmetry we have that $G^{-1}=G^T$ is a rotation, whence ${\rm det}(G)=1$.
+We now assume $A$ is diagonalizable, so we can write it as $A = G \Lambda G^{-1} $, where $\Lambda = \mathrm{\lambda_1, ... \lambda_N}$ is diagonal, with $\lambda_\alpha$ are the eigenvalues of $A$. Based on our earlier assumption of symmetry we have that $G^{-1}=G^T$ is a rotation, hence ${\rm det}(G)=\pm 1$.
 We can therefore perform a change of variables, $z = G^{-1}\phi$, which comes with a Jacobian of unity and simplifies the integral
 %
 \begin{align}\label{eq: gaussian integral}
@@ -465,7 +466,7 @@ Here, we factored the exponential, used the simple Gaussian integral \autoref{eq
 The next generalization we do, is to introduce a ``source'' $J$, which gives the \emph{moment generating function}
 %
 \begin{align}\label{eq: generating functional}
-    Z[J] = \int \left(\prod_\alpha  \dd \phi_\alpha \right) \exp \left\{ - \sum_{\alpha \beta} \phi_\alpha A_{\alpha \beta} \phi_\beta + \sum_\alpha J_\alpha \phi_\alpha \right\}.
+    Z[J] = \int \left(\prod_\alpha  \dd \phi_\alpha \right) \exp \left\{ - \frac{1}{2} \sum_{\alpha \beta} \phi_\alpha A_{\alpha \beta} \phi_\beta + \sum_\alpha J_\alpha \phi_\alpha \right\}.
 \end{align}
 %
 For $J = 0$, this reduces to the integral above.

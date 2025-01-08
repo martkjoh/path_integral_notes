@@ -125,8 +125,8 @@ However, we may see that this is not the case in stochastic calculus, by expandi
     - f\left(x(t) + \alpha' \Delta x(t)\right) \Delta t
     & = 
     f'(X(t))(\alpha - \alpha') \Delta x \Delta t = \Oh(\Delta t^{3/2})\\
-    g\left(x(t) + \alpha \Delta x(t)\right) \eta t
-    - g\left(x(t) + \alpha' \Delta x(t)\right) \eta t
+    g\left(x(t) + \alpha \Delta x(t)\right) \delta \eta
+    - g\left(x(t) + \alpha' \Delta x(t)\right) \delta \eta
     & = 
     g'(X(t))(\alpha - \alpha') \Delta x \Delta \eta = \Oh(\Delta t).
 \end{align}
@@ -138,7 +138,7 @@ But in this case, a Langevin equation is only well-defined after we specify the 
 We therefore add the discretization above the equality in Langevin equation:
 %
 \begin{align}
-    \odv{  }{ t } x(t) \overset{\alpha}{=} f(x(t)) = g(x(t)) \eta(t).
+    \odv{  }{ t } x(t) \overset{\alpha}{=} f(x(t)) + g(x(t)) \eta(t).
 \end{align}
 %
 This is now a well-defined equation!
@@ -205,11 +205,11 @@ To show this, we expand the increment in $x$, which from \autoref{eq: Delta x} i
     & = 
     f(x_K)\Delta t
     + g(x_K + \alpha' \Delta x_K) \Delta \eta_K 
-    + g'(x_K + \alpha' \Delta x_K) g(x_K + \alpha \Delta x_K)(\alpha - \alpha')\Delta \eta^2
+    + g'(x_K + \alpha' \Delta x_K) g(x_K + \alpha \Delta x_K)(\alpha - \alpha')\Delta \eta^2_K
     + \Oh(\Delta t^{3/2})
 \end{align}
 %
-Again, we use the ``replacement rule'' $\delta \eta^2 \rightarrow \delta t$, which gives
+Again, we use the ``replacement rule'' $\Delta \eta^2 \rightarrow \Delta t$, which gives
 %
 \begin{align}
     \Delta x_K = 
@@ -224,7 +224,7 @@ Again, we use the ``replacement rule'' $\delta \eta^2 \rightarrow \delta t$, whi
     + \Oh(\Delta t^{3/2}). 
 \end{align}
 %
-We get the property (I) by dividing with $\Delta t$.\\
+We get the property (I) by dividing with $\Delta t$, and taking the limit of $\Delta t \rightarrow 0$.\\
 
 \noindent
 (II) If we have a new variable, $u(t)$, which is a smooth invertible function of a stochastic process, $u = U(x)$, then we may derive the Langevin equation for this new variable using the stochastic chain rule,
@@ -243,9 +243,9 @@ Anticipating that we get $\Delta \eta^2$, we expand to second order, yielding
 \begin{align}
     \Delta u_K 
     &= u(x_K + \Delta x_k) -  u(x_K ) \\
-    & = u'(x_k) \Delta x_K + \frac{ 1 }{ 2 } u''(x_K) \delta x_K^2 + \Oh(\Delta t^{3/2})\\
-    & = u'(x_K) \left[f(x_k) \Delta t + g(x_K + \alpha \Delta x_K)\right] 
-    + \frac{ 1 }{ 2 } u''(x_K) g^2(x_K) \delta t
+    & = u'(x_k) \Delta x_K + \frac{ 1 }{ 2 } u''(x_K) \Delta x_K^2 + \Oh(\Delta t^{3/2})\\
+    & = u'(x_K) \left[f(x_k) \Delta t + g(x_K + \alpha \Delta x_K)\Delta \eta_K\right] 
+    + \frac{ 1 }{ 2 } u''(x_K) g^2(x_K) \Delta t
     + \Oh(\Delta t^{3/2}).
 \end{align}
 %
@@ -295,15 +295,15 @@ We assume we have some stochastic process $x(t)$, defined by
     a(x, t) + b(x, t) \eta(t).
 \end{align}
 %
-In that case, we have two may type of integrals.
+In that case, we have two type of integrals.
 Type A is
 %
 \begin{align}
     \Oh_A
     \overset{\alpha}{=}
     \int_0^{t_f} \dd t \, h(x(t)) 
-    &\equiv \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t}h(x_K + \alpha \Delta x_K)\\
-    & = \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t}h(x_K) + \Oh \left(\Delta t^{3/2}\right),
+    &\equiv \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{\Delta t / t_f}h(x_K + \alpha \Delta x_K)\\
+    & = \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{\Delta t / t_f}h(x_K) + \Oh \left(\Delta t^{3/2}\right),
 \end{align}
 %
 where $h(x)$ is some Riemann integrable but otherwise arbitrary function.
@@ -315,8 +315,8 @@ Case $B$ are integrals of the form
     \Oh_B
     \overset{\alpha}{=}
     \int_0^{t_f} \dd t \, \dot x(t) h(x(t)) 
-    &\equiv \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t} \frac{\Delta x_K}{\Delta t} h(x_K + \alpha \Delta x_K)\\
-    & = \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{t_f/\Delta t}
+    &\equiv \lim_{\Delta t \rightarrow \infty} \Delta t \sum_{K = 0}^{\Delta t / t_f} \frac{\Delta x_K}{\Delta t} h(x_K + \alpha \Delta x_K)\\
+    & = \lim_{\Delta t \rightarrow \infty} \sum_{K = 0}^{\Delta t / t_f}
     \Delta x_K \left[h(x_K) + \alpha \Delta x_K h'(x_K)\right]
     + \Oh \left(\Delta t^{3/2}\right).
 \end{align}
@@ -327,9 +327,9 @@ We are left with
 \begin{align}
     \Oh_B
     \overset{\alpha}{=}
-    \lim_{\Delta t \rightarrow \infty} \sum_{K = 0}^{t_f/\Delta t}
+    \lim_{\Delta t \rightarrow \infty} \sum_{K = 0}^{\Delta t / t_f}
     \left[\Delta x_K h(x_K) + \alpha \Delta t h'(x_K) g^2(x_K)\right].
 \end{align}
 %
-Notice that, we do not have to use the same discretization for the stochastic process $x(t)$---we may ``Stratonovich integrate'' an ``Itô procees''.
+Notice that, we do not have to use the same discretization for the stochastic process $x(t)$---we may ``Stratonovich integrate'' an ``Itô process''.
 

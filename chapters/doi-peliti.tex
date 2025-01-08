@@ -2,7 +2,7 @@ The response and Onsager-Machlup formalism is useful for perturbative calculatio
 Most importantly, if we cannot describe the small time-step as a Gaussian process, or/and the random variable in question cannot be modeled as continuous, then it fails.
 Examples of discrete processes are birth and death processes with low population number, or discrete jump processes, automata or reaction-diffusion processes.
 In this case, we can instead use the Doi-Peliti formalism.
-To derive this, we start with the master equation, as we derived in (REF).
+To derive this, we start with the master equation, as we derived in \autoref{section: master equation}.
 
 \section{Discrete master equation}
 
@@ -23,7 +23,7 @@ To recap, the first term is the gain term, while the second is the loss-term.
 The $W$'s are transition rates, infinite dimensional matrices that contain the rates at which one state transition into another.
 The result is an infinite set of ODE's for the probabilities $P(N, t)$.
 Some examples of these processes are
-\note{Maybe should write $P_N(t)$, then ordianry derivative instead, since its ODEs?}
+\note{Maybe should write $P_N(t)$, then ordianry derivative instead, since its ODEs? LC: sure, sounds good!}
 
 \subsection*{Extinction
 $
@@ -45,7 +45,7 @@ $
 This process represents one set of particles, labeled $A$, which decays at a constant rate, $\epsilon$, to nothing $(\emptyset)$, as illustrated by the arrow above.
 $N(t)$ then represent the total numbers of particles of type $A$,
 and the transition rates are the decay rate, $\epsilon$, times the number of particles.
-The corresponding master equation is represented the rate at which the system transitions into, minus the rat out of, state $N$,
+The corresponding master equation is represented the rate at which the system transitions into, minus the rate out of, state $N$,
 %
 \begin{align}
     \partial_t P(N, t) = 
@@ -57,7 +57,7 @@ The corresponding master equation is represented the rate at which the system tr
     \right].
 \end{align}
 %
-The steady-state is a probability distribution $P(N, t) = P_S(N, t$ ) so that $\partial_t P(N) = 0$, and the only such state is
+The steady-state is a probability distribution $P(N, t) = P_S(N, t)$ so that $\partial_t P(N) = 0$, and the only such state is
 %
 \begin{align}
     P_S(N) = \delta_{N,0},
@@ -106,7 +106,7 @@ $
 $
 }
 
-This is the converse process, with the master equation
+This is the converse process, where particles of species A pop into existence at a constant rate $\gamma$ independent of the current occupation, with the master equation
 %
 \begin{align}
     \partial_t P(N, t)
@@ -141,7 +141,7 @@ $
 $
 }
 
-A generic property of the processes considered here is that we may always consider the combination of two processes by adding together the right-hand sides of the corresponding master equations.
+A generic property of the processes considered here is that we may always consider the combination of two (concurrent) processes by adding together the right-hand sides of the corresponding master equations.
 The master equation for the spontaneous creation and annihilation process is therefore
 %
 \begin{align}
@@ -167,7 +167,7 @@ Assuming $P(N<0) = 0$ gives the steady state,
     \frac{ 1 }{ N! } \left(\frac{ \gamma }{ \epsilon }\right)^N e^{-\gamma/\epsilon},
 \end{align}
 %
-which is the Poission distribution.
+which is the Poission distribution. This statistical steady-state may be defined as ``dynamic'' since the occupation number for a given realisation of the process may still vary over time.\\
 
 A couple of other processes, and their rates, are
 
@@ -283,7 +283,7 @@ $
 
 \subsection*{General process}
 
-A general process has $k$ species, labeled $A_i$, with $i\in\{1, \dots k\}$, $j_i$ label the number of species $i$ is needed for the process, while $\ell_i$ are the number of $i$ that are left after the reaction (reactants and products), which has rate $r$.
+A general process has $k$ species, labeled $A_i$, with $i\in\{1, \dots k\}$, $j_i$ label the number of species $i$ that is needed for the process, while $\ell_i$ are the number of $A_i$ that are output by the reaction (reactants and products), which has rate $r$.
 The corresponding diagram is
 %
 \begin{align}
@@ -321,7 +321,7 @@ and the transition rates are
 
 \subsection*{Processes in space}
 
-We can imendiatly generate to processes in space, by considering $A_i$ to be a particle on lattice site $i$.
+We can immediately generalise to processes in space, by considering $A_i$ to be a particle on lattice site $i$ and $N_i(t)$ the instantaneous occupation of said site.
 If we consider an equal probability of jumping left or right, hopping rate $D / h^2$, where $h$ is the lattice spacing, then the master equation is
 %
 \begin{align}
@@ -331,14 +331,14 @@ If we consider an equal probability of jumping left or right, hopping rate $D / 
     \left[ (N_x + 1) P(\bm N + 1_x - 1_j,t) - N_x P(\bm N, t) \right].
 \end{align}
 %
-Here, $\bm N$ is the vector of occupation number at the different sites, and $1_x$ is the vector with only $1$ at site $x$, $0$ elsewhere, and the bracket means sum over nearest neighbourrs.
+Here, $\bm N$ is the vector of occupation number at the different sites, and $1_x$ is the vector with only $1$ at site $x$, $0$ elsewhere, and the bracket means sum over nearest neighbors.
 Applying $\sum_{\bm N} N_x \cdot$, we get
 %
 \begin{align}
-    \E{N_x(t)} = D \nabla^2_x \E{N_x(t)},
+    \partial_t \E{N_x(t)} = D \nabla^2_x \E{N_x(t)},
 \end{align}
 %
-the (discrete) diffusion equation.
+the (discrete) diffusion equation. In this sense, the familiar diffusion equation captures only some of the information contained in the original master equation, namely that about average occupation.
 
 
 \section{Probability generating function}
@@ -349,7 +349,7 @@ We define the function
     \Em(z, t) = \sum_N z^N P(N, t)
 \end{align}
 %
-for a single proces, or for many procesess,
+for a single particle species, or for many species,
 %
 \begin{align}
     \Em(z_1, ... z_K, t) 
@@ -358,13 +358,13 @@ for a single proces, or for many procesess,
     = \sum_{\bm N} z^{N_1}\cdots z^{N_k} P(\bm N, t).
 \end{align}
 %
-This is called the probability generating function because we can obtain the probability of having the state $N = \ell$ by taking derivatives of it,
+This is called the probability generating function (PGF) because we can obtain the probability of having the state $N = \ell$ by taking derivatives of it evaluated at $z=0$,
 %
 \begin{align}
     P(\ell, t) = \frac{ 1 }{ \ell! } \partial_z^\ell \Em(z, t)\big|_{z = 0}.
 \end{align}
 %
-Notice that, for all $t$, $M(z = 1, t) = 1$.
+Notice that, for all $t$, $M(z = 1, t) = 1$, which is an important property stemming from normalisation of $P(N,t)$.
 
 If we again consider the master equation for the birth and death process,
 %
@@ -383,7 +383,7 @@ If we again consider the master equation for the birth and death process,
     \right\},
 \end{align}
 %
-and apply $\sum_N z^N \cdot$, we get an equation for $\Em$,
+and apply $\sum_N z^N \cdot$, we get a single PDE for $\Em$,
 %
 \begin{align}
     \partial_t \Em(z, t) 
@@ -405,7 +405,7 @@ and apply $\sum_N z^N \cdot$, we get an equation for $\Em$,
     + \gamma (z - 1) \Em(z, t).
 \end{align}
 %
-If we consider steady state $\partial_t \Em = 0$, we get 
+If we consider steady state, $\partial_t \Em = 0$, we get 
 %
 \begin{align}
     \Em_S(z) = \Em_0 e^{\gamma /\epsilon z}
@@ -439,7 +439,7 @@ as before.
     %
 \end{framed}
 
-We end this section with a note: although the definition of the generating function is analytic, as it is a power series, the result differential equations may have non-analytic solutions, which must be discarded.
+We end this section with a note: although by definition the generating function is analytic in $z$, as it is a power series, the result differential equations may have non-analytic solutions, which must be discarded.
 We may also obtain moments from the generating functions by exploiting its analytical properties to write
 %
 \begin{align}
@@ -447,17 +447,17 @@ We may also obtain moments from the generating functions by exploiting its analy
     = 
     \sum_N \left(z \odv{  }{ z }\right)^k z^N P(N) \big|_{z=1}
     = 
-    \left(z \odv{  }{ z }\right)^k \Em(z, t).
+    \left. \left(z \odv{  }{ z }\right)^k \Em(z, t) \right|_{z=1}
 \end{align}
-%
+Note that the derivatives are evaluate at $z=1$, not $z=0$ as before.
 
 
 
 \section{Second quantization}
 
 With the definition and properties of the probability generating function clear, we now introduce a new formalism called \emph{second quantization}, due to its close relation to the similarly named formalism of quantum field theory.
-This formalism is a mapping of the objects from the previous chapter to a new notation.
-This mapping has the following dicitionary,
+This formalism is a mapping of the objects from the previous chapter to a new notation (first suggested by Masao Doi in 1976).
+This mapping has the following dictionary,
 
 \begin{table}[h]
     \centering
@@ -471,14 +471,14 @@ This mapping has the following dicitionary,
     \end{tabular}
 \end{table}
 
-If the PGF is $\Em(z, t) = Z^M$, then $P(N, t) = \delta_{N,M}$, so we may write
+If the PGF is $\Em(z, t) = z^M$, then $P(N, t) = \delta_{N,M}$ and $N(t)=M$ with probability one. For a generic statistical superposition of occupations, we may write
 %
 \begin{align}
     \ket{\Em(t)} = \sum_N P(N, t) \ket{N}.
 \end{align}
 %
 This is familiar to anyone who has done some many-particle quantum mechanics---a state is the linear combination of states with different numbers of particles.
-Likewise, we have
+Likewise, we can check directly that
 %
 \begin{align}
     a\ket{N} &= N \ket{N},&
@@ -487,7 +487,7 @@ Likewise, we have
 \end{align}
 %
 The last term is the familiar canonical commutation relation for bosons.
-One may consider fermionic systems, representing exclusion processes where only a finite number of particles can occupy a state, but we will keep to bosons here.
+One may consider fermionic systems, representing exclusion processes where only a finite number of particles can occupy a state, but we will keep to bosons here for the sake of simplicity.
 
 If we have multi species systems, the generalization is straight forward.
 The states, operators and their commutations are denote
@@ -500,7 +500,7 @@ The states, operators and their commutations are denote
     [a_i^\dagger, a_j] & = \delta_{ij}.
 \end{align}
 %
-The equation for the state vector can now be written on a form similar to the Schrödinger equation,
+The equation for the state vector can now be written in a form similar to the Schrödinger equation (in imaginary time),
 %
 \begin{align}
     \odv[]{}{t} \ket{\Em(t)} = \Ell[a^\dagger, a] \ket{\Em(t)},
@@ -519,7 +519,7 @@ which has the formal solution
 
 In addition to the \emph{ket} vectors, $\ket{\cdot}$, we introduce the corresponding \emph{dual vectors}, or \emph{bra}'s, denoted $\bra{\cdot}$.
 Since $\ket{N} = z^N$, we can consider $\ket{\Em(t)} = \sum_N P(N, t)\ket{N}$ as an element of the vector space of analytic functions, $V$, with $P(N, t)$ as the components.
-\note{I guess the vector space is actually $\ell^1$, since $\sum |P(N)| = 1$? So a different space than Fokk space, which is $\ell^2$.}
+\note{I guess the vector space is actually $\ell^1$, since $\sum |P(N)| = 1$? So a different space than Fokk space, which is $\ell^2$. LC: I have seen $V$ being referred to as a (stochastic) Fock space in the literature, e.g. Doi's original 1976 paper.}
 When we have such a vector space, \emph{Riesz representation theorem} says that the space of all linear operators from $V$ to real numbers, $V^*$, is also a vector space, with a basis of elements $\bra{M} \in V^*$ such that
 %
 \begin{align}
@@ -541,18 +541,18 @@ Here, $\delta^{(M)}(z)$ is the M'th derivative of the Dirac delta, defined by pa
     = 
     (-1)^N f^{(N)}(0)
     \implies 
-    \braket{M | \Em{t}} = P(N, t).
+    \braket{M | \Em{(t)}} = P(N, t).
 \end{align}
 %
 
-The action of the operators on the dual vector can be deduced as follows:
+The (leftward) action of the operators on the dual vector can be deduced as follows:
 %
 \begin{align}
     \bra{M} \left(a \ket{N}\right)
     &= N \braket{M|N-1} = N \delta_{M, N-1}
     = (M - 1) \braket{M+1 | N}\\
     \implies 
-    \bra{M}a & = (M + 1)\bra{M + 1}.
+    \bra{M}a & = (M + 1)\bra{M + 1}
 \end{align}
 %
 and
@@ -564,15 +564,15 @@ and
     \bra{M}a^\dagger & = \bra{M - 1}.
 \end{align}
 % 
-From this, we get
+From this, we get a simpler representation of the dual basis in terms of the creation operators and the dual of the `empty' state
 %
 \begin{align}
-    \bra{M} &= \bra{0} \frac{ a^\dagger }{ M! }, &
-    \braket{M|\cdot} &= \bra{0} \frac{ a^\dagger }{ M! }\ket{\cdot}, &
+    \bra{M} &= \bra{0} \frac{ a^M }{ M! }, &
+    \braket{M|\cdot} &= \bra{0} \frac{ a^M }{ M! }\ket{\cdot}, &
     \braket{0|\cdot} = \int \dd z \, \delta(z)\cdot.
 \end{align}
 %
-We may write moments as
+We may then write moments as
 %
 \begin{align}
     \E{N^k(t)} 
@@ -601,18 +601,19 @@ We may Taylor-expand this around $z = 0$, so
 We call
 %
 \begin{align}
-    \bra{0}e^a
+    \bra{0}e^a = \bra{0} + \bra{1} + \bra{2} + ...
     \equiv
     \bra{\star}
 \end{align}
 %
-the \emph{coherent state}, or \emph{abyss}.
+the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ from the right. In practice, it evaluates whatever appears to its right at $z=1$. Thus, it is always the case that $\bra{\star} e^{\mathcal{L}t}\ket{\Em(0)}=1$ by normalisation.
 
-\emph{
+\note{
     Maybe a bit on the differences from QM, this is not quite clear to me.
     The operators are not unitary, right?
+    The correspondence between the vectors and dual vectors is more complicated...
     Is the dagger actually hermitian conjugate?
-    etc...
+    etc... LC: indeed, the operators are not unitary ($\mathcal{L}$ is stochastic rather than self-adjoint). Also, dagger here does not indicate hermitian conjugate, as can be seen by writing the operators explicitly in matrix form, after having represented $\Em$ as a vector of probabilities. This is just borrowing notation from QM but I agree that it is a bit suggestive. Maybe we can discuss this a bit in the next lecture, although I will admit I can only say so much about this before I get confused myself...
     }
-\emph{This might also be interesting in that context:
+\note{This might also be interesting in that context:
 \url{https://arxiv.org/pdf/2302.10778}}
