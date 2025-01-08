@@ -23,7 +23,6 @@ To recap, the first term is the gain term, while the second is the loss-term.
 The $W$'s are transition rates, infinite dimensional matrices that contain the rates at which one state transition into another.
 The result is an infinite set of ODE's for the probabilities $P(N, t)$.
 Some examples of these processes are
-\note{Maybe should write $P_N(t)$, then ordianry derivative instead, since its ODEs? LC: sure, sounds good!}
 
 \subsection*{Extinction
 $
@@ -74,7 +73,7 @@ We may derive a differential equation for the expected number of particles, $\E{
     \epsilon
     \sum_{N}
     \bigg\{
-        \underbrace{N(N + 1)}_{(N_1)^2-(N+1)}P(N+1,t)
+        \underbrace{N(N + 1)}_{(N - 1)^2-(N+1)}P(N+1,t)
         - NP(N,t) k
     \bigg\}\\
     & = 
@@ -519,7 +518,6 @@ which has the formal solution
 
 In addition to the \emph{ket} vectors, $\ket{\cdot}$, we introduce the corresponding \emph{dual vectors}, or \emph{bra}'s, denoted $\bra{\cdot}$.
 Since $\ket{N} = z^N$, we can consider $\ket{\Em(t)} = \sum_N P(N, t)\ket{N}$ as an element of the vector space of analytic functions, $V$, with $P(N, t)$ as the components.
-\note{I guess the vector space is actually $\ell^1$, since $\sum |P(N)| = 1$? So a different space than Fokk space, which is $\ell^2$. LC: I have seen $V$ being referred to as a (stochastic) Fock space in the literature, e.g. Doi's original 1976 paper.}
 When we have such a vector space, \emph{Riesz representation theorem} says that the space of all linear operators from $V$ to real numbers, $V^*$, is also a vector space, with a basis of elements $\bra{M} \in V^*$ such that
 %
 \begin{align}
@@ -608,12 +606,6 @@ We call
 %
 the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ from the right. In practice, it evaluates whatever appears to its right at $z=1$. Thus, it is always the case that $\bra{\star} e^{\mathcal{L}t}\ket{\Em(0)}=1$ by normalisation.
 
-\note{
-    Maybe a bit on the differences from QM, this is not quite clear to me.
-    The operators are not unitary, right?
-    The correspondence between the vectors and dual vectors is more complicated...
-    Is the dagger actually hermitian conjugate?
-    etc... LC: indeed, the operators are not unitary ($\mathcal{L}$ is stochastic rather than self-adjoint). Also, dagger here does not indicate hermitian conjugate, as can be seen by writing the operators explicitly in matrix form, after having represented $\Em$ as a vector of probabilities. This is just borrowing notation from QM but I agree that it is a bit suggestive. Maybe we can discuss this a bit in the next lecture, although I will admit I can only say so much about this before I get confused myself...
-    }
-\note{This might also be interesting in that context:
-\url{https://arxiv.org/pdf/2302.10778}}
+
+\note{This might also be interesting in that context:\url{https://arxiv.org/pdf/2302.10778}}
+
