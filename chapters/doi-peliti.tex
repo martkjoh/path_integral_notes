@@ -607,7 +607,7 @@ We call
 the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ from the right. In practice, it evaluates whatever appears to its right at $z=1$. Thus, it is always the case that $\bra{\star} e^{\mathcal{L}t}\ket{\Em(0)}=1$ by normalisation.
 
 
-\note{This might also be interesting in that context:\url{https://arxiv.org/pdf/2302.10778}}
+\note{If you are interested in the link between stochastic processes and QM, this might be worth a look:\url{https://arxiv.org/pdf/2302.10778}}
 
 
 \subsection*{Identity operators}
@@ -684,7 +684,7 @@ Thus, using the Gaussian integral,
 When inserting this form of the ideas, we will get terms of the form
 %
 \begin{align}
-    \bra{\phi_{j+1}} \left( \one + \delta t \Ell[a^\dagger, a] \right) \ket{\phi_j}
+    \bra{\phi_{j+1}} \left( \one + \Delta t \Ell[a^\dagger, a] \right) \ket{\phi_j}
     = \left(1 + \Delta t \Ell[\phi_{j+1}^*,\phi_j]\right) e^{\phi_j\phi_{j+1}^*}.
 \end{align}
 %
@@ -704,7 +704,7 @@ With all this, we get, denoting $\int \dd \mathrm{Re} \phi \, \dd \mathrm{Im} / 
     \lim_{\Delta t \rightarrow 0} \int 
     \left[\prod_{K = 0}^{N}e^{\phi_K\phi_K^*} \dd \phi_K\right]
     \ket{\phi_N}\bra{\phi_0^*}
-    \Pi_{j=0}^{N-1} 
+    \prod_{j=0}^{N-1} 
     \left[
         e^{-\phi_{j+1}^*\phi_j}\left(1 + \Delta t \Ell[\phi_{j+1}^*,\phi_j]\right) 
     \right].
@@ -773,13 +773,13 @@ This then appears as a term in the exponential,
         - 
         P(\phi(t_1)^*, \phi(t_1))
         -
-        \int_{t_0}^{t_2} \dd t \cdot
+        \int_{t_0}^{t_2} \dd t \cdots
      \right\}.
 \end{align}
 %
 
 Lastly, to measure moments, we found that we must chose $\Oh = (a^\dagger a)^K$.
-Writing $ \ket{\Em(t_2)} = \int \D \phi e^{A} \ket{\phi(t_2)}  $, where $\Em$ is the path integral, but not a Fokk operator, we have
+Writing $ \ket{\Em(t_2)} = \int \D \phi e^{A} \ket{\phi(t_2)}  $ we have
 %
 \begin{align}
     \bra{\star} (a^\dagger a)^K \ket{\Em(t_2)}
@@ -801,7 +801,7 @@ The appears from shuffling the creation and annihilation operators to active nor
 Fork $k = 1$, we get simply $\phi(t_2)e^{\phi(t_2)}$.
 
 The initial conditions $t_0$ can be neglected if we let $t_0\rightarrow - \infty$.
-So, letting a system evolve from $t_0$ to $t_1$, when it is initialized with $\hat I$, the to $t_2$, where it is perturbed, and then finally measure $\hat \Oh$ $t_3$, we get
+So, letting a system evolve from $t_0$ to $t_1$, when it is initialized with $\hat I$, the to $t_2$, where it is perturbed, and then finally measure $\hat \Oh$ at $t_3$, we get
 %
 \begin{align}
     &
@@ -829,8 +829,8 @@ We define $\tilde \phi = \phi^* + 1$, which means a term from the integral in th
 This derivation has given us a recipe for constructing path integrals:
 \begin{itemize}
     \item Write the master equation (ME)
-    \item Rewrite it using the probability generating function (PGF) $\Em(z, t)$, which gives the PDE $\partial_t\Em = \Ell \Em$.
-    \item Use the 2nd quantization (2Q), substituting $z, \fdv{  }{ z }$ for $a^\dagger, a$, and normal order $\Ell[a^\dagger, a]$.
+    \item Rewrite it using the probability generating function (PGF) $\Em(z, t)$, which gives the PDE $\partial_t\Em = \Ell[z, \partial_z] \Em$.
+    \item Use the 2nd quantization (2Q), substituting $z, \pdv{  }{ z }$ for $a^\dagger, a$, and normal order $\Ell[a^\dagger, a]$.
     \item Write the action (A) as $A = \int \dd t \left(\tilde \varphi \odv{  }{ t } \varphi - \Ell[\tilde \phi + 1, \phi]\right)$.
     \item Expectation values are now evaluated using the path integral (PI), $\E{\cdot } = \int \D \phi \, \cdot \,  e^{A} $.
 \end{itemize}
@@ -892,7 +892,7 @@ Consider branching,
     \odv{  }{ t } P_N(t) = \beta (N - 1)P_{N-1}(t ) - \beta N P_N(t).
 \end{align}
 %
-This give $\hat \Ell_I = \beta (a - 1)a^\dagger a \implies \Ell_i \beta \tilde \phi^2\phi + \beta \tilde \phi \phi$, so 
+This give $\hat \Ell_I = \beta (a - 1)a^\dagger a \implies \Ell_I = \beta \tilde \phi^2\phi + \beta \tilde \phi \phi$, so 
 %
 \begin{align}
     e^{A} 
