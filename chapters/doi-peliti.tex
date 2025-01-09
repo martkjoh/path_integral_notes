@@ -14,7 +14,7 @@ The corresponding master equation is
     = 
     \sum_{N'}
     \left\{
-        W_t(N | N') P(N, t)
+        W_t(N | N') P(N', t)
         - W_t(N'|N)P(N, t)
     \right\}.
 \end{align}
@@ -609,3 +609,349 @@ the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ fr
 
 \note{This might also be interesting in that context:\url{https://arxiv.org/pdf/2302.10778}}
 
+
+\subsection*{Identity operators}
+
+We now expand the time evolution of the state vector into small time-intervals, similar to our approach earlier.
+The formal solution of the Schrödinger equations, as we found earlier, is then
+%
+\begin{align}
+    \ket{\Em(t)} &= e^{\Ell[a^\dagger, a](t - t_0)} \ket{\Em(t_0)}
+    \\
+    & = \lim_{\Delta t \rightarrow 0} \left(\one + \Delta t \Ell\right)^n
+    \ket{\Em(t_0)},
+\end{align}
+%
+where $\Delta t = (t - t_0) / n$.
+We then insert an indentiy operator, $\one$, between each ``time step''
+%
+\begin{align}
+    \lim_{\Delta t \rightarrow 0} 
+    \one 
+    \left(\one + \Delta t \Ell\right) \one
+    \left(\one + \Delta t \Ell\right) \one \dots
+    \one
+    \left(\one + \Delta t \Ell\right) \one
+    \ket{\Em(t_0)},
+\end{align}
+%
+One can verify, as $\ket{N}$ is a basis so that $\bra{M}\ket{N} = \delta_{NM}$, that
+%
+\begin{align}
+    \sum_N \ket{N} \bra{M} = \one.
+\end{align}
+%
+In quantum mechanics, relations as these are known as ``completeness relations''.
+If we write this in terms of eigenvalues of the operators, this makes life easier.
+If we have $\hat A \one \hat B$, and can write $\one = \sum_k \ket{e_k}\bra{k}$, where $\hat A \ket{e_k} = \mu_k^{(A)}\ket{e_k}$ and $\bra{e_k} \hat B = \mu_k^{(B)}\ket{e_k}$, then we can get rid of the operators, and instead just be left with complex numbers, which are easier to deal with.
+We first need to normal order $\Ell$. This means to write all distraction operators to the right, and creation to the left.
+For example, using $[a^\dagger, a] = 1$, we can rearrange
+%
+\begin{align}
+    a a^\dagger a = a^\dagger a^2 + a.
+\end{align}
+%
+With this, if we find the right eigenvectors of $a$ and left eigenvectors of $a^\dagger$, we have what we need.
+If we define $\ket{\phi} = e^{\phi a} \ket{0}$ and $\bra{\psi} = \bra{0}e^{\phi a^\dagger}$ where $\phi$ and $\psi$ are complex numbers, then one can verify that
+%
+\begin{align}
+    a \ket{\phi} &=  \phi \ket{\phi}, &
+    \bra{\psi} a^\dagger & = \psi \bra{\psi}.
+\end{align}
+%
+Furthermore,
+%
+\begin{align}
+    \ket{\phi} \bra{\phi} = e^{\phi a^\dagger} \ket{0}\bra{0} e^{\phi^* a}
+    = \sum_{NM} \frac{ 1 }{ N! } \phi^N {\phi^*}^M \ket{N}\bra{M}.
+\end{align}
+%
+Thus, using the Gaussian integral, 
+%
+\begin{align}
+    \frac{1}{\pi}
+    \int \dd \mathrm{Re} \phi \, \dd \mathrm{Im} \phi \,
+    e^{- \phi^* \phi} \ket{\phi} \bra{\phi}
+    &=
+    \sum_{NM} \ket{N}\bra{M} \frac{ 1 }{ N! } 
+    \int \dd \mathrm{Re} \phi\, \dd \mathrm{Im} \phi \,
+    \phi^N {\phi^*}^M\\
+    & = \sum_{NM} \ket{N}\bra{M} \frac{ 1 }{ N! } 
+    \int \dd \rho \dd \theta e^{-\rho^2} \rho^{N+M+1} e^{i\theta(N-M)}
+    =  \sum_{NM} \ket{N}\bra{M}  = \one.
+\end{align}
+%
+When inserting this form of the ideas, we will get terms of the form
+%
+\begin{align}
+    \bra{\phi_{j+1}} \left( \one + \delta t \Ell[a^\dagger, a] \right) \ket{\phi_j}
+    = \left(1 + \Delta t \Ell[\phi_{j+1}^*,\phi_j]\right) e^{\phi_j\phi_{j+1}^*}.
+\end{align}
+%
+Here, $j$ indexes the time step where the identity was inserted, $t_j = t_0 + j \Delta t$.
+With all this, we get, denoting $\int \dd \mathrm{Re} \phi \, \dd \mathrm{Im} / \pi = \dd \phi$,
+%
+\begin{align}
+    e^{\Ell[a^\dagger, a](t - t_0)} 
+    & = 
+    \lim_{\Delta t \rightarrow 0} 
+    \one_{N}
+    \left(\one + \Delta t \Ell\right) \one_{N-1}
+    \left(\one + \Delta t \Ell\right) \one_{N-2} \dots
+    \one_1
+    \left(\one + \Delta t \Ell\right) \one_0\\
+    &= 
+    \lim_{\Delta t \rightarrow 0} \int 
+    \left[\prod_{K = 0}^{N}e^{\phi_K\phi_K^*} \dd \phi_K\right]
+    \ket{\phi_N}\bra{\phi_0^*}
+    \Pi_{j=0}^{N-1} 
+    \left[
+        e^{-\phi_{j+1}^*\phi_j}\left(1 + \Delta t \Ell[\phi_{j+1}^*,\phi_j]\right) 
+    \right].
+\end{align}
+%
+In the continuum limit, we get a path integral,
+%
+\begin{align}
+    e^{\Ell[a^\dagger, a](t - t_0)} 
+    = 
+    \int \D \phi \, 
+    \ket{\phi(t)}\bra{\phi(t_0)^*}
+    \exp \left\{ - \phi(t_0)\phi(t_0)^* 
+    - \int \dd t \left[
+        \phi(t)^* \odv{  }{ t } \phi(t) - \Ell[\phi(t)^*, \phi(t)]
+    \right]\right\}.
+\end{align}
+%
+
+\subsection*{Measurement}
+
+In general, we are interested in evaluate expression of the form
+%
+\begin{align}
+    \bra{\star} \hat O e^{\Ell(t_2 - t_1)} \hat P e^{\Ell(t_1 - t_0)} \ket{\Em(t_0)}.
+\end{align}
+%
+Here, the process is initialized at $t_0$, then evolved to $t_1$, where it is perturbed by $\hat P$, evolves to $t_2$, where an observable $\hat O$ is measured.
+Starting with the initialization, this has the form
+%
+\begin{align}
+    \braket{\phi(t_0)^*|\Em(t_0)}
+    =
+    \bra{\phi(t_0)^*} \hat I[a^\dagger] \ket{0}
+    =
+    I[\phi^*(t_0)],
+\end{align}
+%
+where $I$ is the initialization operator, which states which particles are in the state at $t = t_0$.
+
+\begin{framed}
+    \textit{Exercise:}
+    What is $\hat I$ for a state initiated with a Poisson distribution of mean $\lambda$? What is $    \braket{\phi(t_0)^*|\Em(t_0)}$?
+\end{framed}
+
+
+Next, the perturbation takes the form
+%
+\begin{align}
+    \ket{\Em(t_2)} 
+    =
+    e^{\Ell(t_2 - t_1)} \hat P[a^\dagger, a] e^{\Ell(t_1 - t_0) }
+    \ket{\Em(t_0)},
+\end{align}
+%
+where $\hat P$ is assumed normal ordered.
+This then appears as a term in the exponential,
+%
+\begin{align}
+    \ket{\Em(t_2)} 
+    =
+    \int \D \phi \, 
+    \ket{\phi(t_1)}\braket{\phi(t_0)^*| \Em(t_0)}
+    \exp \left\{ 
+        - \phi(t_0)\phi(t_0)^*
+        - 
+        P(\phi(t_1)^*, \phi(t_1))
+        -
+        \int_{t_0}^{t_2} \dd t \cdot
+     \right\}.
+\end{align}
+%
+
+Lastly, to measure moments, we found that we must chose $\Oh = (a^\dagger a)^K$.
+Writing $ \ket{\Em(t_2)} = \int \D \phi e^{A} \ket{\phi(t_2)}  $, where $\Em$ is the path integral, but not a Fokk operator, we have
+%
+\begin{align}
+    \bra{\star} (a^\dagger a)^K \ket{\Em(t_2)}
+    = 
+    \int \D \phi e^{A} \bra{\star} (a^\dagger a)^K  \ket{\phi(t_2)}.
+\end{align}
+%
+Then, to evaluate the operators, we must normal order them.
+We have
+%
+\begin{align}
+    \bra{\star} (a^\dagger a)^K  \ket{\phi(t_2)}
+    = 
+    \sum_\ell \left\{ \ell \atop K \right\} \phi(t_2)^{\ell} e^{\phi(t_2)}.
+\end{align}
+%
+The brackets indicate Stirling numbers of the second kind. 
+The appears from shuffling the creation and annihilation operators to active normal ordering~\footnote{See \url{https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind}}.
+Fork $k = 1$, we get simply $\phi(t_2)e^{\phi(t_2)}$.
+
+The initial conditions $t_0$ can be neglected if we let $t_0\rightarrow - \infty$.
+So, letting a system evolve from $t_0$ to $t_1$, when it is initialized with $\hat I$, the to $t_2$, where it is perturbed, and then finally measure $\hat \Oh$ $t_3$, we get
+%
+\begin{align}
+    &
+    \bra{\star} \hat O e^{\Ell(t_3 - t_2)}  \hat P e^{\Ell(t_2 - t_1)} \hat I e^{\Ell(t_1 - t_0)} \ket{\Em(t_0)}\\
+    & \equiv
+    \left(
+        \sum_{\ell = 0}^K \left\{ \ell \atop K \right\} \phi(t_3)^{\ell} e^{\phi(t_3)}
+    \right)
+    P[\phi(t_2)^*,\phi(t_2)] I[\phi(t_1)^*,\phi(t_1)]\\
+    & = \int \D \phi \D \phi^* \,
+    P[\phi(t_2)^*,\phi(t_2)] I[\phi(t_1)^*,\phi(t_1)]
+    \left(
+        \sum_{\ell = 0}^K \left\{ \ell \atop K \right\} \phi(t_3)^{\ell} e^{\phi(t_3)}
+    \right)
+    \exp \left\{ -\int \dd t \, 
+    \left(\phi(t)^*\odv{  }{ t }\phi^* - \Ell[\phi^*(t'), \phi(t)]\right)
+    \right\}.
+\end{align}
+%
+Finally, we can remove the $\phi(t_3)$ factor by using a ``Doi-shift''.
+We define $\tilde \phi = \phi^* + 1$, which means a term from the integral in the exponential absorb it.
+
+\section{The shortcut}
+
+This derivation has given us a recipe for constructing path integrals:
+\begin{itemize}
+    \item Write the master equation (ME)
+    \item Rewrite it using the probability generating function (PGF) $\Em(z, t)$, which gives the PDE $\partial_t\Em = \Ell \Em$.
+    \item Use the 2nd quantization (2Q), substituting $z, \fdv{  }{ z }$ for $a^\dagger, a$, and normal order $\Ell[a^\dagger, a]$.
+    \item Write the action (A) as $A = \int \dd t \left(\tilde \varphi \odv{  }{ t } \varphi - \Ell[\tilde \phi + 1, \phi]\right)$.
+    \item Expectation values are now evaluated using the path integral (PI), $\E{\cdot } = \int \D \phi \, \cdot \,  e^{A} $.
+\end{itemize}
+%
+Now, we can replace $\cdot$ by operators such as $\Oh$ or $I$.
+This can be calculated, as we have seen earlier for other path integrals, by isolating the Gaussian part using perturbation theory.
+Computations are then done with Wicks theorem and Feynman diagrams.
+
+As and example, consider spontaneous decay
+\begin{itemize}
+    \item ME: $\odv{  }{ t }P_N(t) = r(N+1)P_{N+1}(t) - r NP_N(t)$.
+    \item PGF: $\partial_t \Em(z, t) = r (1 - z)\partial_z \Em(z, t)$.
+    \item 2Q: $\Ell[\hat a, a] = r (1 - a^\dagger)a $.
+    \item A: $A = \int \dd t \left(\tilde \phi \odv{  }{ t }\phi - r\tilde \phi \phi\right) = \int \dd \omega \tilde \phi(-i\omega + r)\phi$.
+\end{itemize}
+Consider the expectation value of a single particle, so $\Oh = \phi(t_1)$, given that we inject one at $t_0$, $I = \phi(t_0)^* = \tilde \phi(t_0) + 1$.
+%
+\begin{align}
+    \E{\phi(t_1) ( \tilde \phi(t_0) + 1) }
+    =
+    \E{\phi(t_1) \tilde \phi(t_0) } + \E{\phi(t_1)}.
+\end{align}
+%
+Here, the second term is zero, while the first is the ``propagator'', 
+%
+\begin{align}
+    \E{\phi(t_1)\tilde \phi(t_0)}
+    =
+    \parbox{32mm}{
+    \centering
+    \begin{fmfgraph*}(12,2)
+        \setval
+        \fmfleft{i}
+        \fmfright{o}
+        \fmf{fermion}{o,i}
+        \fmflabel{$\tilde \phi(t_0)$}{i}
+        \fmflabel{$\phi(t_1)$}{o}
+    \end{fmfgraph*}
+    }
+    = 
+    e^{- r(t_1 - t_0)}\theta(t_1 - t_0).
+\end{align}
+%
+
+A few remarks is in order
+\begin{itemize}
+    \item The normalization condition $\Em(z = 1, t) = 1$ implies that $\Ell(\tilde \phi = 0, \phi) = 0$.
+    \item The field $\phi$ is always evaluated at $t + \Delta t$, while $\phi$ is at $t$ in $\Ell$, and causality impies $\E{\phi(t) \tilde \phi(t + \Delta t)} = 0$.
+    \item In Fourier space, $\E{\phi(\omega)\tilde \phi(\omega')} = \frac{ 2 \pi \delta(\omega + \omega) }{ -i \omega + r }$.
+\end{itemize}
+
+
+\section{Non-linearities}
+
+As we have seen, we can add new processes to the master equation.
+Consider branching, 
+%
+\begin{align}
+    \odv{  }{ t } P_N(t) = \beta (N - 1)P_{N-1}(t ) - \beta N P_N(t).
+\end{align}
+%
+This give $\hat \Ell_I = \beta (a - 1)a^\dagger a \implies \Ell_i \beta \tilde \phi^2\phi + \beta \tilde \phi \phi$, so 
+%
+\begin{align}
+    e^{A} 
+    &= \exp \left\{ 
+        \int\dd t
+        \left[
+            \tilde \phi \left(\odv{  }{ t } + r - \beta\right)\phi
+        \right]
+        - \beta \tilde \phi^2 \phi
+     \right\}  \\
+     &= \exp \left\{ 
+        \int\dd t
+        \left[
+            \tilde \phi \left(\odv{  }{ t } + r - \beta\right)\phi
+        \right]
+     \right\}  
+     \sum_n \frac{ \beta^n }{ n! }
+     \left(- \int \dd t \beta \tilde \phi^2 \phi\right)^n.
+\end{align}
+%
+We see this process affects the decay rate.
+We also get a non-linear term, whcih we note by a vertex,
+%
+\begin{align}
+    - \int \dd t \beta \tilde \phi^2 \phi
+    =
+    \parbox{35mm}{
+    \centering
+    \begin{fmfgraph*}(20,6)
+        \setval
+        \fmfleft{i1,i2}
+        \fmfright{o}
+        \fmf{fermion, tension=2}{o,c}
+        \fmf{fermion}{c,i1}
+        \fmf{fermion}{c,i2}
+        \fmflabel{$\phi(t)$}{o}
+        \fmflabel{$\tilde \phi(t)$}{i1}
+        \fmflabel{$\tilde \phi(t)$}{i2}
+    \end{fmfgraph*}
+    }
+\end{align}
+%
+Perturbation calculations, for example of the second moments, given by
+%
+\begin{align}
+    \E{\phi(t_1)^2 \tilde \phi(t_0) }_A
+    &= 
+    \int \dd t \E{\phi(t_1)^2 \tilde \phi(t)^2 \phi(t) \tilde \phi(t_0)}_0+\dots\\
+    & =
+    \parbox{25mm}{
+    \centering
+    \begin{fmfgraph*}(20,6)
+        \setval
+        \fmfleft{i1,i2}
+        \fmfright{o}
+        \fmf{fermion, tension=2}{o,c}
+        \fmf{fermion}{c,i1}
+        \fmf{fermion}{c,i2}
+    \end{fmfgraph*}
+    } + \dots
+\end{align}
+%
