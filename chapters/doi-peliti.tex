@@ -73,7 +73,7 @@ We may derive a differential equation for the expected number of particles, $\E{
     \epsilon
     \sum_{N}
     \bigg\{
-        \underbrace{N(N + 1)}_{(N - 1)^2-(N+1)}P(N+1,t)
+        \underbrace{N(N + 1)}_{(N + 1)^2-(N+1)}P(N+1,t)
         - NP(N,t) k
     \bigg\}\\
     & = 
@@ -508,6 +508,7 @@ The equation for the state vector can now be written in a form similar to the Sc
 which has the formal solution
 %
 \begin{align}
+    \label{eq: shrodinger}
     \ket{\Em(t)}
     = 
     e^{\Ell[a^\dagger, a](t-t_0)}
@@ -521,7 +522,7 @@ Since $\ket{N} = z^N$, we can consider $\ket{\Em(t)} = \sum_N P(N, t)\ket{N}$ as
 When we have such a vector space, \emph{Riesz representation theorem} says that the space of all linear operators from $V$ to real numbers, $V^*$, is also a vector space, with a basis of elements $\bra{M} \in V^*$ such that
 %
 \begin{align}
-    \braket{M|N} = \delta_{M,N}.
+    \braket{M|N} = \delta_{M N}.
 \end{align}
 %
 This is the dual space, and $\bra{M}$ is the basis for dual vectors.
@@ -532,7 +533,7 @@ The inner product is defined as
     \braket{M| \cdot} & = \int \dd z \, \frac{ (-1)^M }{ M! } \delta^{(M)}(z) \cdot.
 \end{align}
 %
-Here, $\delta^{(M)}(z)$ is the M'th derivative of the Dirac delta, defined by partial integration,
+Here, $\delta^{(M)}(z)$ is the $M^\text{th}$ derivative of the Dirac delta, defined by partial integration,
 %
 \begin{align}
     \int \dd z \, \delta^{(N)} f(z)
@@ -613,7 +614,7 @@ the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ fr
 \subsection*{Identity operators}
 
 We now expand the time evolution of the state vector into small time-intervals, similar to our approach earlier.
-The formal solution of the Schrödinger equations, as we found earlier, is then
+The formal solution of the Schrodinger equations, \autoref{eq: shrodinger}, is then
 %
 \begin{align}
     \ket{\Em(t)} &= e^{\Ell[a^\dagger, a](t - t_0)} \ket{\Em(t_0)}
@@ -643,8 +644,8 @@ One can verify, as $\ket{N}$ is a basis so that $\bra{M}\ket{N} = \delta_{NM}$, 
 %
 In quantum mechanics, relations as these are known as ``completeness relations''.
 If we write this in terms of eigenvalues of the operators, this makes life easier.
-If we have $\hat A \one \hat B$, and can write $\one = \sum_k \ket{e_k}\bra{k}$, where $\hat A \ket{e_k} = \mu_k^{(A)}\ket{e_k}$ and $\bra{e_k} \hat B = \mu_k^{(B)}\ket{e_k}$, then we can get rid of the operators, and instead just be left with complex numbers, which are easier to deal with.
-We first need to normal order $\Ell$. This means to write all distraction operators to the right, and creation to the left.
+If we have $\hat A \one \hat B$, and can write $\one = \sum_k \ket{e_k}\bra{e_k}$, where $\hat A \ket{e_k} = \mu_k^{(A)}\ket{e_k}$ and $\bra{e_k} \hat B = \mu_k^{(B)}\ket{e_k}$, then we can get rid of the operators, and instead just be left with complex numbers, which are easier to deal with.
+We first need to normal order $\Ell$. This means to write all annihilation operators to the right, and creation to the left.
 For example, using $[a^\dagger, a] = 1$, we can rearrange
 %
 \begin{align}
@@ -671,7 +672,7 @@ Thus, using the Gaussian integral,
 \begin{align}
     \frac{1}{\pi}
     \int \dd \mathrm{Re} \phi \, \dd \mathrm{Im} \phi \,
-    e^{- \phi^* \phi} \ket{\phi} \bra{\phi}
+    e^{- \phi \phi^*} \ket{\phi} \bra{\phi}
     &=
     \sum_{NM} \ket{N}\bra{M} \frac{ 1 }{ N! } 
     \int \dd \mathrm{Re} \phi\, \dd \mathrm{Im} \phi \,
@@ -706,7 +707,7 @@ With all this, we get, denoting $\int \dd \mathrm{Re} \phi \, \dd \mathrm{Im} / 
     \ket{\phi_N}\bra{\phi_0^*}
     \prod_{j=0}^{N-1} 
     \left[
-        e^{-\phi_{j+1}^*\phi_j}\left(1 + \Delta t \Ell[\phi_{j+1}^*,\phi_j]\right) 
+        e^{-\phi_j \phi_{j+1}^*}\left(1 + \Delta t \Ell[\phi_{j+1}^*,\phi_j]\right) 
     \right].
 \end{align}
 %
@@ -716,10 +717,10 @@ In the continuum limit, we get a path integral,
     e^{\Ell[a^\dagger, a](t - t_0)} 
     = 
     \int \D \phi \, 
-    \ket{\phi(t)}\bra{\phi(t_0)^*}
-    \exp \left\{ - \phi(t_0)\phi(t_0)^* 
+    \ket{\phi(t)}\bra{\phi^*(t_0)}
+    \exp \left\{ - \phi(t_0)\phi^*(t_0) 
     - \int \dd t \left[
-        \phi(t)^* \odv{  }{ t } \phi(t) - \Ell[\phi(t)^*, \phi(t)]
+        \phi^*(t) \odv{  }{ t } \phi(t) - \Ell[\phi^*(t), \phi(t)]
     \right]\right\}.
 \end{align}
 %
@@ -736,9 +737,9 @@ Here, the process is initialized at $t_0$, then evolved to $t_1$, where it is pe
 Starting with the initialization, this has the form
 %
 \begin{align}
-    \braket{\phi(t_0)^*|\Em(t_0)}
+    \braket{\phi^*(t_0)|\Em(t_0)}
     =
-    \bra{\phi(t_0)^*} \hat I[a^\dagger] \ket{0}
+    \bra{\phi^*(t_0)} \hat I[a^\dagger] \ket{0}
     =
     I[\phi^*(t_0)],
 \end{align}
@@ -747,7 +748,7 @@ where $I$ is the initialization operator, which states which particles are in th
 
 \begin{framed}
     \textit{Exercise:}
-    What is $\hat I$ for a state initiated with a Poisson distribution of mean $\lambda$? What is $    \braket{\phi(t_0)^*|\Em(t_0)}$?
+    What is $\hat I$ for a state initiated with a Poisson distribution of mean $\lambda$? What is $    \braket{\phi^*(t_0)|\Em(t_0)}$?
 \end{framed}
 
 
@@ -767,9 +768,9 @@ This then appears as a term in the exponential,
     \ket{\Em(t_2)} 
     =
     \int \D \phi \, 
-    \ket{\phi(t_1)}\braket{\phi(t_0)^*| \Em(t_0)}
+    \ket{\phi(t_1)}\braket{\phi^*(t_0)| \Em(t_0)}
     \exp \left\{ 
-        - \phi(t_0)\phi(t_0)^*
+        - \phi(t_0)\phi^*(t_0)
         - 
         P(\phi(t_1)^*, \phi(t_1))
         -
@@ -793,12 +794,12 @@ We have
 \begin{align}
     \bra{\star} (a^\dagger a)^K  \ket{\phi(t_2)}
     = 
-    \sum_\ell \left\{ \ell \atop K \right\} \phi(t_2)^{\ell} e^{\phi(t_2)}.
+    \sum_{\ell=0}^K \left\{ K \atop \ell \right\} \phi(t_2)^{\ell} e^{\phi(t_2)}.
 \end{align}
 %
 The brackets indicate Stirling numbers of the second kind. 
 The appears from shuffling the creation and annihilation operators to active normal ordering~\footnote{See \url{https://en.wikipedia.org/wiki/Stirling_numbers_of_the_second_kind}}.
-Fork $k = 1$, we get simply $\phi(t_2)e^{\phi(t_2)}$.
+Fork $K = 1$, we get simply $\phi(t_2)e^{\phi(t_2)}$.
 
 The initial conditions $t_0$ can be neglected if we let $t_0\rightarrow - \infty$.
 So, letting a system evolve from $t_0$ to $t_1$, when it is initialized with $\hat I$, the to $t_2$, where it is perturbed, and then finally measure $\hat \Oh$ at $t_3$, we get
@@ -807,22 +808,26 @@ So, letting a system evolve from $t_0$ to $t_1$, when it is initialized with $\h
     &
     \bra{\star} \hat O e^{\Ell(t_3 - t_2)}  \hat P e^{\Ell(t_2 - t_1)} \hat I e^{\Ell(t_1 - t_0)} \ket{\Em(t_0)}\\
     & \equiv
+    \E{
     \left(
-        \sum_{\ell = 0}^K \left\{ \ell \atop K \right\} \phi(t_3)^{\ell} e^{\phi(t_3)}
+        \sum_{\ell = 0}^K \left\{ K \atop \ell \right\} \phi(t_3)^{\ell} e^{\phi(t_3)}
     \right)
-    P[\phi(t_2)^*,\phi(t_2)] I[\phi(t_1)^*,\phi(t_1)]\\
+    P[\phi^*(t_2),\phi(t_2)] I[\phi^*(t_1),\phi(t_1)]
+    }
+    \\\nonumber
     & = \int \D \phi \D \phi^* \,
-    P[\phi(t_2)^*,\phi(t_2)] I[\phi(t_1)^*,\phi(t_1)]
+    P[\phi^*(t_2),\phi(t_2)] I[\phi^*(t_1),\phi(t_1)]
     \left(
         \sum_{\ell = 0}^K \left\{ \ell \atop K \right\} \phi(t_3)^{\ell} e^{\phi(t_3)}
     \right)
-    \exp \left\{ -\int \dd t \, 
-    \left(\phi(t)^*\odv{  }{ t }\phi^* - \Ell[\phi^*(t'), \phi(t)]\right)
+    \exp \left\{ 
+    -\int_{-\infty}^{t_3} \dd t \, 
+    \left(\phi^*(t)\odv{  }{ t }\phi(t) - \Ell[\phi^*(t), \phi(t)]\right)
     \right\}.
 \end{align}
 %
 Finally, we can remove the $\phi(t_3)$ factor by using a ``Doi-shift''.
-We define $\tilde \phi = \phi^* + 1$, which means a term from the integral in the exponential absorb it.
+We define $\phi^* = \tilde \phi + 1$, which means a term from the integral in the exponential absorb it.
 
 \section{The shortcut}
 
@@ -846,7 +851,7 @@ As and example, consider spontaneous decay
     \item 2Q: $\Ell[\hat a, a] = r (1 - a^\dagger)a $.
     \item A: $A = \int \dd t \left(\tilde \phi \odv{  }{ t }\phi - r\tilde \phi \phi\right) = \int \dd \omega \tilde \phi(-i\omega + r)\phi$.
 \end{itemize}
-Consider the expectation value of a single particle, so $\Oh = \phi(t_1)$, given that we inject one at $t_0$, $I = \phi(t_0)^* = \tilde \phi(t_0) + 1$.
+Consider the expectation value of a single particle, so $\Oh = \phi(t_1)$, given that we inject one at $t_0$, $I = \phi^*(t_0) = \tilde \phi(t_0) + 1$.
 %
 \begin{align}
     \E{\phi(t_1) ( \tilde \phi(t_0) + 1) }
@@ -866,8 +871,8 @@ Here, the second term is zero, while the first is the ``propagator'',
         \fmfleft{i}
         \fmfright{o}
         \fmf{fermion}{o,i}
-        \fmflabel{$\tilde \phi(t_0)$}{i}
-        \fmflabel{$\phi(t_1)$}{o}
+        \fmflabel{$\tilde \phi(t_0)$}{o}
+        \fmflabel{$\phi(t_1)$}{i}
     \end{fmfgraph*}
     }
     = 
@@ -875,7 +880,7 @@ Here, the second term is zero, while the first is the ``propagator'',
 \end{align}
 %
 
-A few remarks is in order
+A few remarks are in order
 \begin{itemize}
     \item The normalization condition $\Em(z = 1, t) = 1$ implies that $\Ell(\tilde \phi = 0, \phi) = 0$.
     \item The field $\phi$ is always evaluated at $t + \Delta t$, while $\phi$ is at $t$ in $\Ell$, and causality impies $\E{\phi(t) \tilde \phi(t + \Delta t)} = 0$.
@@ -900,24 +905,22 @@ This give $\hat \Ell_I = \beta (a - 1)a^\dagger a \implies \Ell_I = \beta \tilde
         \int\dd t
         \left[
             \tilde \phi \left(\odv{  }{ t } + r - \beta\right)\phi
+            - \beta \tilde \phi^2 \phi
         \right]
-        - \beta \tilde \phi^2 \phi
      \right\}  \\
      &= \exp \left\{ 
         \int\dd t
-        \left[
             \tilde \phi \left(\odv{  }{ t } + r - \beta\right)\phi
-        \right]
      \right\}  
      \sum_n \frac{ \beta^n }{ n! }
-     \left(- \int \dd t \beta \tilde \phi^2 \phi\right)^n.
+     \left(- \int \dd t \tilde \phi^2 \phi\right)^n.
 \end{align}
 %
 We see this process affects the decay rate.
 We also get a non-linear term, whcih we note by a vertex,
 %
 \begin{align}
-    - \int \dd t \beta \tilde \phi^2 \phi
+    - \beta \int \dd t \tilde \phi^2 \phi
     =
     \parbox{35mm}{
     \centering
