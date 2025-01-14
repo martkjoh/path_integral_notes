@@ -639,7 +639,7 @@ We then insert an indentiy operator, $\one$, between each ``time step''
 One can verify, as $\ket{N}$ is a basis so that $\bra{M}\ket{N} = \delta_{NM}$, that
 %
 \begin{align}
-    \sum_N \ket{N} \bra{M} = \one.
+    \sum_N \ket{N} \bra{N} = \one.
 \end{align}
 %
 In quantum mechanics, relations as these are known as ``completeness relations''.
@@ -679,10 +679,10 @@ Thus, using the Gaussian integral,
     \phi^N {\phi^*}^M\\
     & = \sum_{NM} \ket{N}\bra{M} \frac{ 1 }{ N! } 
     \int \dd \rho \dd \theta e^{-\rho^2} \rho^{N+M+1} e^{i\theta(N-M)}
-    =  \sum_{NM} \ket{N}\bra{M}  = \one.
+    =  \sum_{N} \ket{N}\bra{N}  = \one.
 \end{align}
 %
-When inserting this form of the ideas, we will get terms of the form
+When inserting this form of the identities, we will get terms of the form
 %
 \begin{align}
     \bra{\phi_{j+1}} \left( \one + \Delta t \Ell[a^\dagger, a] \right) \ket{\phi_j}
