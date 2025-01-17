@@ -331,7 +331,7 @@ If we consider an equal probability of jumping left or right, hopping rate $D / 
 \end{align}
 %
 Here, $\bm N$ is the vector of occupation number at the different sites, and $1_x$ is the vector with only $1$ at site $x$, $0$ elsewhere, and the bracket means sum over nearest neighbors.
-Applying $\sum_{\bm N} N_x \cdot$, we get
+Applying $\sum_{\bm N} N_x \bullet$, we get
 %
 \begin{align}
     \partial_t \E{N_x(t)} = D \nabla^2_x \E{N_x(t)},
@@ -517,7 +517,7 @@ which has the formal solution
 %
 
 
-In addition to the \emph{ket} vectors, $\ket{\cdot}$, we introduce the corresponding \emph{dual vectors}, or \emph{bra}'s, denoted $\bra{\cdot}$.
+In addition to the \emph{ket} vectors, $\ket{\bullet}$, we introduce the corresponding \emph{dual vectors}, or \emph{bra}'s, denoted $\bra{\bullet}$.
 Since $\ket{N} = z^N$, we can consider $\ket{\Em(t)} = \sum_N P(N, t)\ket{N}$ as an element of the vector space of analytic functions, $V$, with $P(N, t)$ as the components.
 When we have such a vector space, \emph{Riesz representation theorem} says that the space of all linear operators from $V$ to real numbers, $V^*$, is also a vector space, with a basis of elements $\bra{M} \in V^*$ such that
 %
@@ -529,8 +529,8 @@ This is the dual space, and $\bra{M}$ is the basis for dual vectors.
 The inner product is defined as
 %
 \begin{align}
-    \braket{\cdot| N} &= \int \dd z \, \cdot z^N, \\
-    \braket{M| \cdot} & = \int \dd z \, \frac{ (-1)^M }{ M! } \delta^{(M)}(z) \cdot.
+    \braket{\bullet| N} &= \int \dd z \, \bullet z^N, \\
+    \braket{M| \bullet} & = \int \dd z \, \frac{ (-1)^M }{ M! } \delta^{(M)}(z) \bullet.
 \end{align}
 %
 Here, $\delta^{(M)}(z)$ is the $M^\text{th}$ derivative of the Dirac delta, defined by partial integration,
@@ -567,8 +567,8 @@ From this, we get a simpler representation of the dual basis in terms of the cre
 %
 \begin{align}
     \bra{M} &= \bra{0} \frac{ a^M }{ M! }, &
-    \braket{M|\cdot} &= \bra{0} \frac{ a^M }{ M! }\ket{\cdot}, &
-    \braket{0|\cdot} = \int \dd z \, \delta(z)\cdot.
+    \braket{M|\bullet} &= \bra{0} \frac{ a^M }{ M! }\ket{\bullet}, &
+    \braket{0|\bullet} = \int \dd z \, \delta(z)\bullet.
 \end{align}
 %
 We may then write moments as
@@ -769,10 +769,9 @@ This then appears as a term in the exponential,
     =
     \int \D \phi \, 
     \ket{\phi(t_1)}\braket{\phi^*(t_0)| \Em(t_0)}
+    P[\phi(t_1)^*, \phi(t_1)]
     \exp \left\{ 
         - \phi(t_0)\phi^*(t_0)
-        - 
-        P(\phi(t_1)^*, \phi(t_1))
         -
         \int_{t_0}^{t_2} \dd t \cdots
      \right\}.
@@ -837,7 +836,7 @@ This derivation has given us a recipe for constructing path integrals:
     \item Rewrite it using the probability generating function (PGF) $\Em(z, t)$, which gives the PDE $\partial_t\Em = \Ell[z, \partial_z] \Em$.
     \item Use the 2nd quantization (2Q), substituting $z, \pdv{  }{ z }$ for $a^\dagger, a$, and normal order $\Ell[a^\dagger, a]$.
     \item Write the action (A) as $A = \int \dd t \left(\tilde \varphi \odv{  }{ t } \varphi - \Ell[\tilde \phi + 1, \phi]\right)$.
-    \item Expectation values are now evaluated using the path integral (PI), $\E{\cdot } = \int \D \phi \, \cdot \,  e^{A} $.
+    \item Expectation values are now evaluated using the path integral (PI), $\E{\bullet} = \int \D \phi \bullet  e^{A} $.
 \end{itemize}
 %
 Now, we can replace $\cdot$ by operators such as $\Oh$ or $I$.
@@ -958,3 +957,375 @@ Perturbation calculations, for example of the second moments, given by
     } + \dots
 \end{align}
 %
+
+
+\section{The coupon collector problem}
+
+The coupon collector problem is stated as 
+%
+\begin{framed}\noindent
+    {\textit Coupon Collector Problem} $N$ distinct object are sampled uniformly at random, with replacement, from an urn.
+    How many attempts, on average, are required to sample every object at least once?
+\end{framed}
+%
+We assume that the sampling happens as a Poisson process, with rate $s$.
+To map this process to something more resembling a chemical process, think of it as a process where $N_C$ coupons, $\circ$ interact with $N_A$ ``agents'', $\bullet$, and undergo the reaction
+%
+\begin{align}
+    \circ + \bullet \overset{s}{\longrightarrow} \circ.
+\end{align}
+%
+This represents sampling an unsampled coupon.
+The results of this process will be the same as the coupon collector, with a rate $s/N_A$.
+
+\begin{framed}
+    {\textit Exercise:}
+    Use classical probabilistic arguments to show that the completion time, $C_N$ is given by the distribution
+    %
+    \begin{align}
+        P(C_n \leq t) = [1 - e^{-St/N}]^N \underset{N\rightarrow \infty}{\sim} \exp \left\{ - \frac{ N }{ S } e^{-St/N} \right\}, 
+        \quad \text{or} \quad
+        P\left(\frac{ S }{ N } \left[C_n - \frac{ N }{ S } \ln \frac{ N }{ S }\right] \leq t\right) = e^{-e^{-t}}.
+    \end{align}
+    %
+    Tip : use $P(\mathrm{max}\{H_1, H_2\} \leq t) = P(H_1\leq t) \dots P(H_N\leq t)$, where $H_K$ is the time of sampling the $K^\text{th}$ coupon. (arrival time)
+\end{framed}
+
+
+\subsection*{Field theory}
+
+The master equation corresponding to the process described above is
+%
+\begin{align}
+    \partial_t P(N_C, N_A) = sN_A (N_C + 1) P(N_C + 1, N_A, t) - sN_A N_C P(N_C, N_A, t),
+\end{align}
+%
+which gives the corresponding PGF equation
+%
+\begin{align}
+    \Em(z_C, z_A, t) = s \left[ \partial_C z_A \partial_A - z_C \partial_C z_A \partial_A \right] \Em(z_C, z_A, t),
+\end{align}
+%
+whre $\partial_{C/A} = \pdv{  }{ Z_{C/A} }$.
+The corresponding $2^\text{nd}$ quantized version is
+%
+\begin{align}
+    \partial_t \ket{\Em(t)} = s \big(\underbrace{a^\dagger_A a_A a_C - a^\dagger_A a^\dagger_C a_A a_C }_{\hat \Ell}\big) \ket{\Em(t)}.
+\end{align}
+%
+Here, we have normal order the operators, using that $[a^\dagger_A, a_C] = [a^\dagger_C, a_A]  =  0$, while $[a^\dagger_A, a_A] = [a^\dagger_C, a_C] = 1$.
+With this, using adding the regularization terms (or masses) $r_A$ and $r_C$, which we will set to zero subsequently, we get the action
+%
+\begin{align}
+    A = - \int \dd t \left(
+        \tilde\phi_A \left[\odv{  }{ t } + r_A\right] \phi_A + \tilde\phi_C \left[\odv{  }{ t }  + r_C\right]\phi_C + s \tilde \phi_A \tilde \phi_C \phi_A \phi_C + s \tilde \phi_C \phi_C\phi_A
+    \right).
+\end{align}
+%
+We split this into the bare and interaction action, $A = A_0 + A_I$.
+Then, 
+%
+\begin{align}
+    \E{\bullet}_0 &= \int \D \phi_A \D\phi_C \bullet e^{A_0} , &
+    \E{\bullet} = \E{\bullet e^{A_I}}_0 = \sum_n \E{ \frac{ A_I^n }{ n! } }_0.
+\end{align}
+%
+The bare propagators are
+%
+\begin{align}
+    \E{\phi_A(t) \tilde \phi_A(t')} 
+    &= \theta(t - t') e^{-r_A(t - t')}
+    =
+    \parbox{18mm}{
+        \centering
+        \begin{fmfgraph*}(10,4)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{wiggly}{i,o}
+            \fmflabel{$t$}{i}
+            \fmflabel{$t'$}{o}
+        \end{fmfgraph*}
+    },\\
+    \E{\phi_C(t) \tilde \phi_C(t')} 
+    &= \theta(t - t') e^{-r_C(t - t')}
+    =
+    \parbox{18mm}{
+        \centering
+        \begin{fmfgraph*}(10,4)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,o}
+            \fmflabel{$t$}{i}
+            \fmflabel{$t'$}{o}
+        \end{fmfgraph*}
+    },\\
+    \E{\phi_A(t) \tilde \phi_C(t')} 
+    & = \E{\phi_C(t) \tilde \phi_A(t')}  = 0.
+\end{align}
+%
+The interaction vertices are
+%
+\begin{align}
+    A_I: \quad
+    \parbox{14mm}{
+        \centering
+        \begin{fmfgraph*}(14,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c,o2}
+            \fmffreeze
+            \fmf{wiggly}{c,o1}
+        \end{fmfgraph*}
+    },
+    \quad
+    \parbox{14mm}{
+        \centering
+        \begin{fmfgraph*}(14,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c,o2}
+            \fmffreeze
+            \fmf{wiggly}{c,o1}
+            \fmf{wiggly}{c,i1}
+        \end{fmfgraph*}
+    }.
+\end{align}
+%
+With this, we can calculate the effective decay rate for $c$:
+%
+\begin{align}
+    \E{\phi_C(t)\phi^\dagger_C(0)\phi_A^\dagger(0)}
+    =
+    \E{\phi_C(t)\tilde\phi_C(0)\tilde\phi_A(0)}
+    +
+    \underbrace{\E{\phi_C(t)\tilde\phi_C(0)}}_{e^{-r_Ct}}
+    +
+    \underbrace{\E{\phi_C(t)\tilde\phi_A(0)}}_{ = 0}
+    +
+    \underbrace{\E{\phi_C(t)}}_{ = 0}.
+\end{align}
+%
+We are left with
+%
+\begin{align}
+    \E{\phi_C(t)\tilde\phi_C(0)\tilde \phi_A(0)}
+    =
+    \parbox{14mm}{
+        \centering
+        \begin{fmfgraph*}(14,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c,o2}
+            \fmffreeze
+            \fmf{wiggly}{c,o1}
+            \fmfblob{.25w}{c}
+        \end{fmfgraph*}
+    }
+    =
+    \parbox{14mm}{
+        \centering
+        \begin{fmfgraph*}(14,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c,o2}
+            \fmffreeze
+            \fmf{wiggly}{c,o1}
+        \end{fmfgraph*}
+    }
+    +
+    \parbox{18mm}{
+        \centering
+        \begin{fmfgraph*}(18,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c1,c2,o2}
+            \fmffreeze
+            \fmf{wiggly,right}{c1,c2}
+            \fmf{wiggly}{c2,o1}
+        \end{fmfgraph*}
+    }
+    +
+    \parbox{22mm}{
+        \centering
+        \begin{fmfgraph*}(22,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c1,c2,c3,o2}
+            \fmffreeze
+            \fmf{wiggly,right}{c1,c2,c3}
+            \fmf{wiggly}{c3,o1}
+        \end{fmfgraph*}
+    }
+    + \dots.
+\end{align}
+%
+Here, we have used the fact that we cannot have closed loops from the four-point vertex, due to causality.
+This can be rearranged to give
+%
+\begin{align}
+    \parbox{14mm}{
+        \centering
+        \begin{fmfgraph*}(14,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i2,c,o2}
+            \fmffreeze
+            \fmf{wiggly}{c,o1}
+            \fmfblob{.25w}{c}
+        \end{fmfgraph*}
+    }
+    =
+    e^{-r_Ct} \sum_n (-s)^n \int_0^t \dd t_1  e^{-r_A t_1} \int_0^{t_1} \dd t_2  e^{-r_A (t_2 - t_1)} \dots \int_0^{t_{n-1}} \dd t_n  e^{-r_A (t_{n} - t_{n-1})} 
+    \underset{r_A=r_C = 0}{\longrightarrow} e ^{-st} - 1,
+\end{align}
+%
+Thus, altogether,
+%
+\begin{align}
+    \lim_{r_A,r_C\rightarrow 0}
+    \E{\phi_C(t)\phi^\dagger_C(0)\phi_A^\dagger(0)}
+    = e^{-st}.
+\end{align}
+%
+\begin{framed}
+    \textit{Exercise:} Consider what happens if we have $K$ agents looking for coupons. Show that
+    %
+    \begin{align}
+        \lim_{r_A,r_C\rightarrow 0}
+        \E{\phi_C(t)\phi^\dagger_C(0)\left(\phi_A^\dagger(0)\right)^K}
+        = e^{-Kst}.
+    \end{align}
+    %
+\end{framed}
+
+We could compute more moments, but that's not what we are after.
+We want the probability that there are exactly zero particles of type $C$ at some time $t$ after initialization.
+Consider the Abyss $\bra{\star} = \bra{\star}_A\otimes\bra{\star}_C$.
+Since $\bra{\star}_C = \bra{0}_C e^{a_c}$, if we choose $\hat \Oh = e^{-a_c}\frac{ a^m }{ M! }$, then
+%
+\begin{align}
+    \E{\Oh(t)} = \bra{\star} \hat \Oh \ket{\Em(t)} 
+    = \bra{0}e^{a_C} e^{-a_C} \frac{ a_C^M }{ M! }\ket{\Em(t)}
+    = \braket{M|\Em(t)} = P({M_c})(t),
+\end{align}
+%
+where $P({M_c})(t)$ is the probability that we have $M_C$ of particle $M$ at time $C$.
+The object $\Oh$ thus projects down on the desired number state.
+
+\todo[inline]{Why do we do this? And should it be $e^{\rho a^\dagger}$?}
+We assume the initialization is a Poisson distribution with mean $\rho$,
+%
+\begin{align}
+    \ket{\Em(0)} = e^{\rho \tilde \phi_c(0)}\ket{0}.
+\end{align}
+%
+Then, 
+%
+\begin{align}
+    P_M(t) = \frac{ 1 }{ M! } \E{e^{-\phi_C(t)}\phi_C(t)^M e^{\rho \tilde \phi_C(0)}}
+    &=
+    \sum \frac{ 1 }{ M! } \sum_{n,m} \frac{ (-1)^n \rho^m }{ n! m! } 
+    \underbrace{ \E{\phi_c(t)^{n+M}\tilde \phi_C(0)^m}}_{m! \E{\phi_C(t)\tilde \phi_C(0)}\delta_{m,M+n}}\\
+    & = \frac{ 1 }{ M! } \rho^M e^{-Mst - \rho e^{-st}}.
+\end{align}
+%
+We find the expectation value by considering
+%
+\begin{align}
+    \E{\phi_c(t)^{n+M}\tilde \phi_C(0)^m} = 
+    n + M
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(14,10)
+            \setval
+            \fmfleft{i1,i2,i3}
+            \fmfright{o1,o2,o3}
+            \fmf{plain}{i1,c,o1}
+            \fmf{phantom}{i2,c,o2}
+            \fmf{plain}{i3,c,o3}
+            \fmfv{l=$\vdots$,l.a=20,l.d=.1w}{i2}
+            \fmfv{l=$\vdots$,l.a=160,l.d=.1w}{o2}
+            \fmfblob{.4w}{c}
+        \end{fmfgraph*}
+    } m
+\end{align}
+%
+By using that the propagator is $e^{-st}$, and that we can only connect uninterrupted straight lines, and there must be equal many straight lines on each side, as they cannot terminate, we get the result above when considering the combinatorics.
+
+\todo[inline]{Can we not have $     
+\parbox{15mm}{
+    \centering
+    \begin{fmfgraph*}(15,3)
+        \setval
+        \fmfleft{i1,i2}
+        \fmfright{o1,o2}
+        \fmf{plain}{i1,c1,c2,o1}
+        \fmf{plain}{i2,d1,d2,o2}
+        \fmffreeze
+        \fmf{wiggly}{c1,d2}
+    \end{fmfgraph*}
+} $?}
+
+Finally, for $\rho = 1$\todo{why?}, the chance that we complete the coupons at time $t$ is
+%
+\begin{align}
+    R_0(t) = \odv{  }{ t } P_{M=0}(t) = e^{-st - e^{-st}}.
+\end{align}
+%
+This is the ``Gumbal distribution''.
+
+
+\section{Doi-Peliti process in space}
+
+Consider biased hopping in on the lattice $i\in \Z$, with rates $\ell$ to the left and $r$ to the right.
+This follows the master equation\todo{the sum over $i$ is right?}
+%
+\begin{align}
+    &\odv{  }{ t } P(\{n_i\}, t) 
+    = \\\nonumber &
+    \sum_i \left[
+        -(\ell + r) n_i P(\{n_i\}, t)
+        + r (n_i + 1) P(\{..., n_i +1, n_{i+1}-1\}, t)
+        + \ell (n_i + 1) P(\{..., n_{i-1} + 1, n_{i}+1, ... \}, t)
+    \right].
+\end{align}
+%
+
+
+\todo[inline]{Finish this...}
+
+
+\section{Deans equation}
+
+Another way of getting a field theory for point particles is to derive Dean's equatoin.
+In this case, we begin with a Langevin equation for point-particles, $x_i$, which interact via a potential $V()$
+%
+\begin{align}
+    \odv{ x_i(t) }{ t } = - \sum_{j=1}^N \nabla V\left(x_i(t)- x_j(t)\right) + \eta_i(t).
+\end{align}
+%
+Here, $\nabla V(0) = 0$ and $\eta$ is white noise with strength $T$.
+We then consider the density function, $\rho(x, t) = \sum_i \delta(x - x_i(t))$.
+We leave the derivation to the original publication~\cite{deanLangevinEquationDensity1996}\footnote{Pre-print: \url{https://arxiv.org/abs/cond-mat/9611104}}, but using Itô calculus, we can find \emph{exactly} that
+%
+\begin{align}
+    \partial_t \rho(x, t)
+    = \bm \nabla \cdot
+    \left[
+        T \bm \nabla \rho(x, t) + \rho(x, t) \int \dd y \rho(y, t) \bm \nabla V(x-y) + \sqrt{ 2 T \rho(x, t)} \bm\eta(x, t)
+    \right],
+\end{align}
+%
+where $\eta(x,t)$ is unit white noise.
+
+
+
