@@ -1536,7 +1536,7 @@ In this case, we begin with a Langevin equation for point-particles, $x_i$, whic
 %
 Here, $\nabla V(0) = 0$ and $\eta$ is white noise with strength $T$.
 We then consider the density function, $\rho(x, t) = \sum_i \delta(x - x_i(t))$.
-We leave the derivation to the original publication~\cite{deanLangevinEquationDensity1996}\footnote{Pre-print: \url{https://arxiv.org/abs/cond-mat/9611104}}, but using Itô calculus, we can find \emph{exactly} that
+We leave the derivation to the original publication~\cite{deanLangevinEquationDensity1996}\footnote{Pre-print: \url{https://arxiv.org/abs/cond-mat/9611104}}, but using Itô calculus, we can find
 %
 \begin{align}
     \partial_t \rho(x, t)
@@ -1547,6 +1547,10 @@ We leave the derivation to the original publication~\cite{deanLangevinEquationDe
 \end{align}
 %
 where $\eta(x,t)$ is unit white noise.
+
+This equation is derived without any approximations, and is thus equivalent with the original Langevin particle equations.
+This means that, if the density $\rho$ is initialized as a set of Dirac-deltas, it will remain so, even though there is a diffusion term.
+Of course, one may also apply approximations, such as $\rho(x, t) = \bar \rho + \delta \rho$ to get a more familiar Langeivn equation with additive noise.
 
 
 
