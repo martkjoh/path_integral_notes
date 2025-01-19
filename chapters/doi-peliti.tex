@@ -1210,7 +1210,7 @@ Thus, altogether,
 We could compute more moments, but that's not what we are after.
 We want the probability that there are exactly zero particles of type $C$ at some time $t$ after initialization.
 Consider the Abyss $\bra{\star} = \bra{\star}_A\otimes\bra{\star}_C$.
-Since $\bra{\star}_C = \bra{0}_C e^{a_c}$, if we choose $\hat \Oh = e^{-a_c}\frac{ a^m }{ M! }$, then
+Since $\bra{\star}_C = \bra{0}_C e^{a_c}$, if we binom $\hat \Oh = e^{-a_c}\frac{ a^m }{ M! }$, then
 %
 \begin{align}
     \E{\Oh(t)} = \bra{\star} \hat \Oh \ket{\Em(t)} 
@@ -1234,14 +1234,14 @@ Then,
     P_M(t) = \frac{ 1 }{ M! } \E{e^{-\phi_C(t)}\phi_C(t)^M e^{\rho \tilde \phi_C(0)}}
     &=
     \sum \frac{ 1 }{ M! } \sum_{n,m} \frac{ (-1)^n \rho^m }{ n! m! } 
-    \underbrace{ \E{\phi_c(t)^{n+M}\tilde \phi_C(0)^m}}_{m! \E{\phi_C(t)\tilde \phi_C(0)}\delta_{m,M+n}}\\
+    \underbrace{ \E{\phi_C(t)^{n+M}\tilde \phi_C(0)^m}}_{m! \E{\phi_C(t)\tilde \phi_C(0)}\delta_{m,M+n}}\\
     & = \frac{ 1 }{ M! } \rho^M e^{-Mst - \rho e^{-st}}.
 \end{align}
 %
 We find the expectation value by considering
 %
 \begin{align}
-    \E{\phi_c(t)^{n+M}\tilde \phi_C(0)^m} = 
+    \E{\phi_C(t)^{n+M}\tilde \phi_C(0)^m} = 
     n + M
     \parbox{15mm}{
         \centering
@@ -1299,9 +1299,147 @@ This follows the master equation\todo{the sum over $i$ is right?}
     \right].
 \end{align}
 %
+This is similar to our earlier master equations, only now, the species index indicate spatial location.
+The corresponding $2^\text{nd}$ quantized equation is
+%
+\begin{align}
+    \partial_t \ket{\Em(t)}
+    &=
+    \sum_{i\in\Z} \left[
+        -(\ell + r)a_i^\dagger a_i + r a_i a_{i+1}^\dagger + \ell r a_i a_{i-1}^\dagger 
+    \right]\\
+    & = 
+    \sum_{i\in\Z} \left[
+        \frac{ \ell +  }{ 2 } (a_{i + 1}^\dagger + a_{i - 1}^\dagger - 2 a_{i}^\dagger)
+         + \frac{ r - \ell }{ 2 } (a_{i + 1}^\dagger - a_{i - 1}^\dagger)
+        \right],
+\end{align}
+%
+and the Doi-Peliti action is
+%
+\begin{align}
+    A = 
+    - \int \dd t \sum_{i}
+    \left[
+        \tilde \phi_i(t) \odv{  }{ t } \phi_i(t)
+        - \frac{ \ell + r }{ 2 } \left(\tilde \phi_{i + 1}(t) + \tilde \phi_{i - 1}(t)
+        - 2 \tilde \phi_{i}(t)
+        \right)\phi_i(t)
+        - (r - \ell ) \frac{ \tilde \phi_{i + 1}(t) - \tilde \phi_{i - 1}(t)}{ 2 }
+        \phi_i(t)
+    \right].
+\end{align}
+%
+We see the term showing up here are finite-difference derivatives.
+If we introduce the lattice spacing $h$, then take the limit $h\rightarrow 0$ while $hr, h\ell \rightarrow \const$, we get
+%
+\begin{align}
+    A 
+    & = - \int \dd t \dd x\left[
+        \tilde \phi(t, x) \odv{  }{ t } \phi(t, x)
+        - \frac{ 1 }{ 2 } h(\ell + r) \left(\partial_x^2 \tilde \phi(t, x)\right)\phi(t, x)
+        - (r - \ell) \left(\partial_x \tilde \phi(t, x)\right)\phi(t, x)
+    \right]\\
+    & = 
+    - \int \dd t \dd x\left[
+        \tilde \phi(t, x) 
+        \left(
+            \odv{  }{ t } \phi(t, x)
+            + D \partial_x^2 \phi(t, x)
+            - v \partial_x \phi(t, x)
+        \right)
+    \right].
+\end{align}
+%
+In the last line, we integrated by parts and defined the mean velocity and diffusion constants, $v$ and $D$.
+This is a quadratic action, and we can therefor find expectation values exactly.
+For example, the mean occupation at position $x$ after initializing a particle at time $t_0$ and position $x_0$ is
+%
+\begin{align}
+    \E{\phi(t, x)\tilde\phi(t_0, x_0)}
+    = \frac{ 1}{ \sqrt{ 2 \pi D (t - t_0)   } }
+    \exp \left\{ - \frac{ (x - x_0 - v[t - t_0])^2 }{ 2 D (t - t_0) } \right\}.
+\end{align}
+%
+Or, in Fourier space,
+%a
+\begin{align}
+    \E{\phi(\omega, k)\tilde \phi(\omega', k')}
+    = \frac{ 2\pi \delta(\omega + \omega')2\pi\delta(k+k') }{ -i\omega + Dk^2 -iv\omega }.
+\end{align}
+%$
+\todo[inline]{Its a it unclear here why you chose $\tilde\phi$ or $\phi^\dagger$...}
 
-
-\todo[inline]{Finish this...}
+Next, if we consider the correlation between two points, if we put down $n_0$ particle at $t_0, x_0$, we have
+%
+\begin{align}
+    &C(x_1,x_2,t_1,t_2)\\
+    &=
+    \left\langle
+        \phi^\dagger(t_2, x_2)\phi(t_2, x_2)
+        \phi^\dagger(t_1, x_1)\phi(t_1, x_1)
+        \left[
+            \phi^\dagger(t_0, x_0)
+        \right]^{n_0}
+    \right\rangle\\
+    & 
+    \binom{n_0}{1}
+    \parbox{35mm}{
+        \centering
+        \begin{fmfgraph*}(15,8)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,c,o}
+            \fmflabel{$x_2\comma t_2$}{i}
+            \fmfv{l=$x_1\comma t_1$,l.a=90}{c}
+            \fmflabel{$x_0\comma t_0$}{o}
+            \fmfdot{c}
+        \end{fmfgraph*}
+    }
+    +
+    \binom{n_0}{1}
+    \parbox{35mm}{
+        \centering
+        \begin{fmfgraph*}(15,8)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,c,o}
+            \fmflabel{$x_2\comma t_2$}{i}
+            \fmfv{l=$x_1\comma t_1$,l.a=90}{c}
+            \fmflabel{$x_0\comma t_0$}{o}
+            \fmfdot{c}
+        \end{fmfgraph*}
+    }
+    +
+    2
+    \binom{n_0}{2}
+    \parbox{30mm}{
+        \centering
+        \begin{fmfgraph*}(10,8)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,o}
+            \fmflabel{$x_1\comma t_1$}{i}
+            \fmflabel{$x_0\comma t_0$}{o}
+            \fmfdot{c}
+        \end{fmfgraph*}
+        \begin{fmfgraph*}(10,8)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,o}
+            \fmflabel{$x_2\comma t_2$}{i}
+            \fmflabel{$x_0\comma t_0$}{o}
+            \fmfdot{c}
+        \end{fmfgraph*}
+    }
+\end{align}
+%
+In the last line, we usd that $(\phi^\dagger)^{n_0} = \sum_k \binom{n_0}{k}\tilde \phi^k$.
+Either of the two first diagrams vanish, depending on $t_1>t_2$ or $t_1<t_2$.
 
 
 \section{Deans equation}
