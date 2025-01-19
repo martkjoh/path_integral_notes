@@ -1373,7 +1373,7 @@ Or, in Fourier space,
 Next, if we consider the correlation between two points, if we put down $n_0$ particle at $t_0, x_0$, we have
 %
 \begin{align}
-    &C(x_1,x_2,t_1,t_2)\\
+    &C(x_0x_1,x_2,t_0,t_1,t_2)\\
     &=
     \left\langle
         \phi^\dagger(t_2, x_2)\phi(t_2, x_2)
@@ -1382,7 +1382,7 @@ Next, if we consider the correlation between two points, if we put down $n_0$ pa
             \phi^\dagger(t_0, x_0)
         \right]^{n_0}
     \right\rangle\\
-    & 
+    & =
     \binom{n_0}{1}
     \parbox{35mm}{
         \centering
@@ -1417,15 +1417,14 @@ Next, if we consider the correlation between two points, if we put down $n_0$ pa
     \binom{n_0}{2}
     \parbox{30mm}{
         \centering
-        \begin{fmfgraph*}(10,8)
+        \begin{fmfgraph*}(10,4)
             \setval
             \fmfleft{i}
             \fmfright{o}
             \fmf{plain}{i,o}
             \fmflabel{$x_1\comma t_1$}{i}
             \fmflabel{$x_0\comma t_0$}{o}
-            \fmfdot{c}
-        \end{fmfgraph*}
+        \end{fmfgraph*}\\
         \begin{fmfgraph*}(10,8)
             \setval
             \fmfleft{i}
@@ -1433,13 +1432,97 @@ Next, if we consider the correlation between two points, if we put down $n_0$ pa
             \fmf{plain}{i,o}
             \fmflabel{$x_2\comma t_2$}{i}
             \fmflabel{$x_0\comma t_0$}{o}
-            \fmfdot{c}
         \end{fmfgraph*}
     }
 \end{align}
 %
 In the last line, we usd that $(\phi^\dagger)^{n_0} = \sum_k \binom{n_0}{k}\tilde \phi^k$.
 Either of the two first diagrams vanish, depending on $t_1>t_2$ or $t_1<t_2$.
+This gives, assuming the latter is true,
+%
+\begin{align}
+    C(x_0x_1,x_2,t_0,t_1,t_2)
+    =
+    &\binom{n_0}{1} \E{\phi(t_2,x_2)\tilde \phi(t_1,x_1)}\E{\phi(t_1,x_1)\tilde \phi(t_0,x_0)}\\
+    &+ 2\binom{n_0}{2} \E{\phi(t_2,x_2)\tilde \phi(t_0,x_0)}\E{\phi(t_1,x_1)\tilde \phi(t_0,x_0)}.
+\end{align}
+%
+The two different terms represent two different physical scenarios---a sensational visit by one particle, or independent visits by different particles.
+
+
+\subsection*{Run and tumble}
+
+We now consider RoT dynamics by introducing a second species $\psi$ with $v' = - v$.
+A particle ``tumbles'' by shifting from the right to the left moving, or opposite at rate $\tau$.
+We asusme the also decays at the same rate.
+This gives the following action
+%
+\begin{align}
+    A = 
+    - \int \dd t \dd x\bigg[
+        &
+        \tilde \phi(t, x) 
+        \left(
+            \odv{  }{ t }
+            + D \partial_x^2
+            - v \partial_x 
+        \right)\phi(t, x)
+        +
+        \tilde \psi(t, x) 
+        \left(
+            \odv{  }{ t }
+            + D \partial_x^2
+            - v \partial_x 
+        \right)\psi(t, x)\\
+        &+ \tau
+        \left\{
+            \tilde\phi(t, x) \psi(t, x)
+            + \tilde \psi(t, x) \phi(t, x)
+            + \tilde \phi(t, x) \phi(t, x)
+            + \tilde \psi(t, x)\psi(t, x)
+        \right\}
+    \bigg].
+\end{align}
+%
+If we initialize a particle as a left-mover, $\psi$ at $x_0,t_0$, we find
+%
+\begin{align}
+    \E{\phi(t, x) \tilde \psi(t_0, x_0)}
+    =
+    0 
+    + 
+    \parbox{12mm}{
+        \centering
+        \begin{fmfgraph*}(12,8)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,c}
+            \fmf{wiggly}{c,o}
+            \fmfv{l=$\tau$,l.a=90}{c}
+        \end{fmfgraph*}
+    }
+    +
+    \parbox{20mm}{
+        \centering
+        \begin{fmfgraph*}(20,8)
+            \setval
+            \fmfleft{i}
+            \fmfright{o}
+            \fmf{plain}{i,c1}
+            \fmf{wiggly}{c1,c2}
+            \fmf{plain}{c2,c3}
+            \fmf{wiggly}{c3,o}
+            \fmfv{l=$\tau$,l.a=90}{c1}
+            \fmfv{l=$\tau$,l.a=90}{c2}
+            \fmfv{l=$\tau$,l.a=90}{c3}
+        \end{fmfgraph*}
+    }+\dots.
+\end{align}
+%
+See~\cite{garcia-millanRunandtumbleMotionHarmonic2021} for more on this system.
+
+
 
 
 \section{Deans equation}
