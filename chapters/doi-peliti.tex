@@ -964,7 +964,7 @@ Perturbation calculations, for example of the second moments, given by
 The coupon collector problem is stated as 
 %
 \begin{framed}\noindent
-    {\textit Coupon Collector Problem} $N$ distinct object are sampled uniformly at random, with replacement, from an urn.
+    \textit{Coupon Collector Problem} $N$ distinct object are sampled uniformly at random, with replacement, from an urn.
     How many attempts, on average, are required to sample every object at least once?
 \end{framed}
 %
@@ -979,7 +979,7 @@ This represents sampling an unsampled coupon.
 The results of this process will be the same as the coupon collector, with a rate $s/N_A$.
 
 \begin{framed}
-    {\textit Exercise:}
+    \textit{Exercise:}
     Use classical probabilistic arguments to show that the completion time, $C_N$ is given by the distribution
     %
     \begin{align}
@@ -988,7 +988,7 @@ The results of this process will be the same as the coupon collector, with a rat
         P\left(\frac{ S }{ N } \left[C_n - \frac{ N }{ S } \ln \frac{ N }{ S }\right] \leq t\right) = e^{-e^{-t}}.
     \end{align}
     %
-    Tip : use $P(\mathrm{max}\{H_1, H_2\} \leq t) = P(H_1\leq t) \dots P(H_N\leq t)$, where $H_K$ is the time of sampling the $K^\text{th}$ coupon. (arrival time)
+    Tip : use statistical independence $P(\mathrm{max}\{H_1, H_2\} \leq t) = P(H_1\leq t) \dots P(H_N\leq t)$, where $H_K$ is the time of sampling the $K^\text{th}$ coupon. (arrival time)
 \end{framed}
 
 
@@ -1197,7 +1197,7 @@ Thus, altogether,
 \end{align}
 %
 \begin{framed}
-    \textit{Exercise:} Consider what happens if we have $K$ agents looking for coupons. Show that
+    \textit{Exercise:} Consider what happens if we have $K$ agents looking for coupons. Convince yourself that
     %
     \begin{align}
         \lim_{r_A,r_C\rightarrow 0}
@@ -1221,13 +1221,18 @@ Since $\bra{\star}_C = \bra{0}_C e^{a_c}$, if we binom $\hat \Oh = e^{-a_c}\frac
 where $P({M_c})(t)$ is the probability that we have $M_C$ of particle $M$ at time $C$.
 The object $\Oh$ thus projects down on the desired number state.
 
-\todo[inline]{Why do we do this? And should it be $e^{\rho a^\dagger}$?}
+%\todo[inline]{Why do we do this? And should it be $e^{\rho a^\dagger}$?}
 We assume the initialization is a Poisson distribution with mean $\rho$,
 %
 \begin{align}
-    \ket{\Em(0)} = e^{\rho \tilde \phi_c(0)}\ket{0}.
+    \ket{\Em(0)} = 
+    \sum_{M=0}^\infty \frac{e^{-\rho} \rho^M}{M!} (\phi_c^\dagger(0))^M | 0 \rangle 
+    &= e^{-\rho} e^{\rho \phi_c^\dagger(0)} |0\rangle = 
+    e^{\rho \tilde \phi_c(0)}\ket{0}.
 \end{align}
 %
+This choice is motivated by the fact that the resulting expression for the probability density of the completion time is directly found to be Gumbel. We might also initialise with a specific number $N$ of initial coupons, however in that case we would need to take a limit $N \to \infty$ and rescale/recenter the distribution to obtain Gumbel (see Chapter 6 of \href{https://spiral.imperial.ac.uk/handle/10044/1/104386}{this thesis}).
+From now on we leave the spawning of an A particle implicit, keeping in mind that this amounts to all C particles acquiring an effective decay rate $s$.
 Then, 
 %
 \begin{align}
@@ -1260,8 +1265,8 @@ We find the expectation value by considering
 \end{align}
 %
 By using that the propagator is $e^{-st}$, and that we can only connect uninterrupted straight lines, and there must be equal many straight lines on each side, as they cannot terminate, we get the result above when considering the combinatorics.
-
-\todo[inline]{Can we not have $     
+%
+Note that, even if we had kept the presence of an $A$ particle explicit, diagrams involving the component
 \parbox{15mm}{
     \centering
     \begin{fmfgraph*}(15,3)
@@ -1273,21 +1278,22 @@ By using that the propagator is $e^{-st}$, and that we can only connect uninterr
         \fmffreeze
         \fmf{wiggly}{c1,d2}
     \end{fmfgraph*}
-} $?}
+}
+with no incoming or outgoing $A$-species propagators would not contribute since $\langle \phi_A(t)\phi_A(t')\rangle$ has no connected component.
 
-Finally, for $\rho = 1$\todo{why?}, the chance that we complete the coupons at time $t$ is
+Finally, the chance that we complete the coupons exactly at time $t$ is equal to the probability flux into the empty state, which in turn equals the time derivative of the state probability (since there is no outflux)
 %
 \begin{align}
-    R_0(t) = \odv{  }{ t } P_{M=0}(t) = e^{-st - e^{-st}}.
+    R_0(t) = \odv{  }{ t } P_{M=0}(t) = s \rho e^{-st - \rho e^{-st}}.
 \end{align}
 %
-This is the ``Gumbal distribution''.
+This is the ``Gumbel distribution'', which you will often find in the form obtained after rescaling time such that $s=1$ and setting $\rho=1$.
 
 
 \section{Doi-Peliti process in space}
 
 Consider biased hopping in on the lattice $i\in \Z$, with rates $\ell$ to the left and $r$ to the right.
-This follows the master equation\todo{the sum over $i$ is right?}
+This follows the master equation %\todo{the sum over $i$ is right?}
 %
 \begin{align}
     &\odv{  }{ t } P(\{n_i\}, t) 
@@ -1368,7 +1374,7 @@ Or, in Fourier space,
     = \frac{ 2\pi \delta(\omega + \omega')2\pi\delta(k+k') }{ -i\omega + Dk^2 -iv\omega }.
 \end{align}
 %$
-\todo[inline]{Its a it unclear here why you chose $\tilde\phi$ or $\phi^\dagger$...}
+A quick comment: upon performing the Doi shift we have effectively gotten rid of the daggered (creator) fields, so the relevant propagator for our field theory is now $\E{\phi(t, x)\tilde\phi(t_0, x_0)}$. Strictly speaking, this is not quite the same as $\E{\phi(t, x)\phi^\dagger(t_0, x_0)}$, which answers the question ``how many particles do I expect to see at $(x,t)$ given that I put down a single particle at $(x_0,t_0)$''. In fact the two differ by the factor $\E{\phi(t, x)}$ corresponding to the mean particle number in the absence of explicit initialisation, which vanishes whenever particles cannot simply spontaneously come into existence (e.g.\ in this example). To avoid confusion, one should always construct observables of interest using the full $\phi^\dagger$, then perform the Doi-shift and finally evaluate the ensuing expectations (typically a sum of products of fields) based on particular form of the ``shifted'' propagator $\E{\phi(t, x)\tilde\phi(t_0, x_0)}$.
 
 Next, if we consider the correlation between two points, if we put down $n_0$ particle at $t_0, x_0$, we have
 %
@@ -1447,14 +1453,14 @@ This gives, assuming the latter is true,
     &+ 2\binom{n_0}{2} \E{\phi(t_2,x_2)\tilde \phi(t_0,x_0)}\E{\phi(t_1,x_1)\tilde \phi(t_0,x_0)}.
 \end{align}
 %
-The two different terms represent two different physical scenarios---a sensational visit by one particle, or independent visits by different particles.
-
+The two different terms represent two different physical scenarios--- sequential visits by one particle, or independent visits by different particles. Note in particular that, when $n_0=1$ meaning that a single particle is initialised into the system, only the first term survives. This term also vanishes if we evaluate the expression at $t_2=t_1$ but $x_2 \neq x_1$, consistent with the intuition that point particles can 
+only be in one place at any given time (and are not ``spread out'').
 
 \subsection*{Run and tumble}
 
-We now consider RoT dynamics by introducing a second species $\psi$ with $v' = - v$.
+We now consider RnT dynamics by introducing a second species $\psi$ with $v' = - v$.
 A particle ``tumbles'' by shifting from the right to the left moving, or opposite at rate $\tau$.
-We asusme the also decays at the same rate.
+We assume they also decays at the same rate.
 This gives the following action
 %
 \begin{align}
@@ -1550,7 +1556,7 @@ where $\eta(x,t)$ is unit white noise.
 
 This equation is derived without any approximations, and is thus equivalent with the original Langevin particle equations.
 This means that, if the density $\rho$ is initialized as a set of Dirac-deltas, it will remain so, even though there is a diffusion term.
-Of course, one may also apply approximations, such as $\rho(x, t) = \bar \rho + \delta \rho$ to get a more familiar Langeivn equation with additive noise.
+Of course, one may also apply approximations, such as $\rho(x, t) = \bar \rho + \delta \rho$ to get a more familiar Langeivn equation with additive noise, however the `point particle structure' of the time-dependent solution will be lost upon carrying out this approximation.
 
 
 
