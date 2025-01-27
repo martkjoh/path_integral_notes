@@ -61,3 +61,129 @@ This is essentially the Onsager-Machlup functional~\autoref{eq:om_func}.
 }
 
 
+\section{Supersymmetry}
+
+We may extend the response field formalism by introducing \emph{Grassmann} variables $\xi_i$, which obey a certain symmetry: super-symmetry.
+We briefly summarize the results here, the full details can be found in~\cite{hertzPathIntegralMethods2016}.
+
+\subsection{Grassmann numbers}
+
+We can define Grassmann numbers $\xi_i$ by the properties 
+%
+\begin{align}
+    \xi_i \xi_j &= - \xi_j \xi_i, \\
+    \xi_i (\xi_j \xi_k) &= ( \xi_j \xi_i) \xi_k,
+\end{align}
+%
+\emph{anti-commuation} and \emph{associativity}.
+As a consequence, $\xi^n = 0$, for $n > 1$.
+Any function of a single Grassmann number therefore takes the form
+%
+\begin{align}
+    f(\xi) = a + b \xi,
+\end{align}
+%
+for constants $a$ and $b$, and in particular
+%
+\begin{align}
+    e^\xi = 1 + \xi.
+\end{align}
+%
+For functions of two variables,
+%
+\begin{align}
+    f(\xi_1,\xi_2) = c_0 + c_1 \xi_1 + c_2 \xi_2 + c_{12} \xi_1 \xi_2,
+\end{align}
+%
+and so on.
+
+
+We may define the derivative by
+%
+\begin{align}
+    \odv{  }{ \xi_i } \xi_j = \delta_{ij}.
+\end{align}
+%
+This acts on the leftmost Grassmann number so
+%
+\begin{align}
+    \odv{  }{ \xi_1 } f(\xi_1, \xi_1)
+    &= c_1 + c_{12} \xi_2,&
+    \odv{  }{ \xi_2 } f(\xi_1, \xi_1)
+    &= c_2 - c_{12} \xi_1.
+\end{align}
+%
+The derivative operators anti-commute.
+Likewise, the integral is defined by
+%
+\begin{align}
+    \int \dd \xi 1 &= 0,&
+    \int \dd \xi \, \xi &= 1,
+\end{align}
+%
+and
+%
+\begin{align}
+    \int \dd \xi_1 \dd \xi_2 \xi_2 \xi_1
+    = - \int \dd \xi_1 \dd \xi_2 \xi_1 \xi_2
+    = 1.
+\end{align}
+%
+With this, we may write the determinant of a matrix $A_{ij}$ as
+%
+\begin{align}
+    \int \D \xi \D \bar \xi \exp \left\{ {\sum}_{ij} \bar \xi_i A_{ij} \xi_j \right\}
+    = \det A,
+\end{align}
+%
+where $\D\xi \D \bar \xi = \prod_{i} \dd \bar \xi_i \dd \xi$.
+Furthermore,
+%
+\begin{align}
+    \E{\xi_i \bar \xi_j}
+    =
+    \int \D \xi \D \bar \xi \exp \left\{ {\sum}_{ij} \bar \xi_i A_{ij} \xi_j \right\}
+    = 
+    A_{ij}^{-1}.
+\end{align}
+%
+
+With this, we can write the determinant from integrating out the noise, $\zeta$, as integral over Grassmann numbers:
+%
+\begin{align}
+    J[\phi]
+    =
+    \int \D \bar \xi \D \xi
+    \,
+    \exp \left\{ \sum_n
+    \left[
+        \bar\xi_n \left(1 - \alpha \Delta t f'_{n+1}\right)\xi_{n+1}
+        - \bar\xi_n \left(1 - (\alpha - 1) \Delta t f'_{n}\right)\xi_{n}
+    \right]
+     \right\}.
+\end{align}
+%
+This is then added to the action, and expectation values are now
+%
+\begin{align}
+    \E{\bullet}
+    = 
+    \int \D\tilde \phi \D \phi \D \bar \xi \D \xi \, \bullet e^{-A},
+\end{align}
+%
+where
+%
+\begin{align}
+    &A = \\\nonumber
+    &\sum_n
+    \left\{
+        T \Delta t \tilde \phi_n^2
+        - i \tilde \phi_n \left(
+            -\phi_{n+1} + \phi_n + \delta t\left[(1 - \alpha)f_n + f_{n+1}\right]
+            \right)
+            -
+            \bar\xi_n \left[1 - \alpha \Delta t f'_{n+1}\right]\xi_{n+1}
+            + \bar\xi_n \left[1 - (\alpha - 1) \Delta t f'_{n}\right]\xi_{n}
+    \right\}.
+\end{align}
+%

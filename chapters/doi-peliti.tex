@@ -605,7 +605,14 @@ We call
     \bra{\star}
 \end{align}
 %
-the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ from the right. In practice, it evaluates whatever appears to its right at $z=1$. Thus, it is always the case that $\bra{\star} e^{\mathcal{L}t}\ket{\Em(0)}=1$ by normalisation.
+the \emph{coherent state}, or \emph{abyss}. It is invariant under $a^\dagger$ from the right. In practice, it evaluates whatever appears to its right at $z=1$. Thus, it is always the case that $\bra{\star} e^{\mathcal{L}t}\ket{\Em(0)}=1$ by normalization.
+Thus, we write moments in the $2^\text{nd}$ quantized formalism as
+%
+\begin{align}
+    \label{eq: moments in 2nd q}
+    \E{N^k(t)} = \braket{\star | \left(a^\dagger a\right)^k | \Em(t)}
+\end{align}
+%
 
 
 \note{If you are interested in the link between stochastic processes and QM, this might be worth a look:\url{https://arxiv.org/pdf/2302.10778}}
@@ -791,6 +798,7 @@ Then, to evaluate the operators, we must normal order them.
 We have
 %
 \begin{align}
+    \label{eq: nomral ordering moments}
     \bra{\star} (a^\dagger a)^K  \ket{\phi(t_2)}
     = 
     \sum_{\ell=0}^K \left\{ K \atop \ell \right\} \phi(t_2)^{\ell} e^{\phi(t_2)}.
@@ -983,7 +991,7 @@ The results of this process will be the same as the coupon collector, with a rat
     Use classical probabilistic arguments to show that the completion time, $C_N$ is given by the distribution
     %
     \begin{align}
-        P(C_n \leq t) = [1 - e^{-St/N}]^N \underset{N\rightarrow \infty}{\sim} \exp \left\{ - \frac{ N }{ S } e^{-St/N} \right\}, 
+        P(C_n \leq t) = \left[1 - e^{-St/N}\right]^N \underset{N\rightarrow \infty}{\sim} \exp \left\{ - \frac{ N }{ S } e^{-St/N} \right\}, 
         \quad \text{or} \quad
         P\left(\frac{ S }{ N } \left[C_n - \frac{ N }{ S } \ln \frac{ N }{ S }\right] \leq t\right) = e^{-e^{-t}}.
     \end{align}
@@ -1027,7 +1035,7 @@ Then,
 %
 \begin{align}
     \E{\bullet}_0 &= \int \D \phi_A \D\phi_C \bullet e^{A_0} , &
-    \E{\bullet} = \E{\bullet e^{A_I}}_0 = \sum_n \E{ \frac{ A_I^n }{ n! } }_0.
+    \E{\bullet} = \E{\bullet \, e^{A_I}}_0 = \sum_n \E{\bullet\, \frac{ A_I^n }{ n! } }_0.
 \end{align}
 %
 The bare propagators are
@@ -1581,7 +1589,7 @@ The noise term, $D (\nabla \tilde \rho)^2 \rho$, is now a three-point vertex,
             \fmfright{o}
             \fmf{plain}{i1,c}
             \fmf{plain}{i2,c}
-            \fmf{plain,tension=1/2}{c,o}
+            \fmf{plain,tension=2}{c,o}
         \end{fmfgraph*}
     }
 \end{align}
@@ -1623,9 +1631,33 @@ We therefore define
     }.
 \end{align}
 %
+This can, when we expand the exponential, be considered a sum of diagrams with $n$ external $\rho$ diagrams:
+%
+\begin{align}
+    s = 
+    \sum_n
+    \frac{ (2\pi i )^n }{ n! }
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(15,10)
+            \setval
+            \fmfleft{i1,i2,i3,i4}
+            \fmfright{o}
+            \fmf{plain}{i1,c}
+            \fmf{plain}{i2,c}
+            \fmf{phantom}{i3,c}
+            \fmf{plain}{i4,c}
+            \fmf{phantom,tension=4}{c,o}
+            \fmfv{l=$\vdots$,l.d=.08w,l.a=22}{i3}
+            \fmfv{d.f=empty,d.shape=circle,d.size=5mm,l=$n$,l.d=0}{c}
+        \end{fmfgraph*}
+    }
+\end{align}
+%
+This is now an observable we can calculate for a given theoryI
 
 Let's consider this in a Doi-Peliti model.
-The particle-entity signature is then
+The particle-entity signature is then, using \autoref{eq: moments in 2nd q}, 
 %
 \begin{align}
     s = 
@@ -1638,13 +1670,174 @@ The particle-entity signature is then
     }\big|_{z = 2 \pi i}.
 \end{align}
 %
-Expanding the exponential, we get
+Expanding the exponential and using \autoref{eq: nomral ordering moments}, we get
 %
 \begin{align}
     \exp \left\{ z {\sum}_{k \in \Omega} a_k^\dagger a_k\right\}
     = 
     \sum_n \frac{ 1 }{ n! } z^n
     \sum_k \left\{ {n \atop k} \right\}
-    (a^\dagger_k a)^n.
+    (a^\dagger_k)^n a^n,
 \end{align}
 %
+so
+%
+\begin{align}
+    s = 
+    \E{
+        \sum_n \frac{ z^n }{ n! }
+        \sum_k \left\{ {n \atop k} \right\} \phi^k
+    }
+    =
+    \E{
+        \exp \left\{ \phi (e^{z} - 1) \right\}
+    }
+    \overset{z=2\pi i}{=}
+    1.
+\end{align}
+%
+\todo[inline]{I have no idea how the last eq. works, should be detailed more\dots}
+
+If we go back to Dean's equation, we then we can calculate $s$ diagrammatically.
+In fact, it is easier to calculate $\ln s$, as this contains only connected diagrams, as $\ln \E{e^{t X}}$ is the \emph{cumulant generatig function} of $X$, so
+%
+\begin{align}
+    \ln s = \ln 
+    \E{
+        \exp \left\{ 2 \pi i \int_\Omega \dd x \, \rho(x, t) \right\} 
+    }
+    = 2 \pi i \ell, \quad \ell \in \Z.
+\end{align}
+%
+We then have
+%
+\begin{align}
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(10,10)
+            \setval
+            \fmfleft{i1}
+            \fmfright{c}
+            \fmf{plain}{i1,c}
+            \fmfv{d.f=empty,d.shape=circle,d.size=5mm,l=$1$,l.d=0}{c}
+        \end{fmfgraph*}
+    }
+    & = 
+    \parbox{10mm}{
+        \centering
+        \begin{fmfgraph*}(10,10)
+            \setval
+            \fmfleft{i1}
+            \fmfright{c}
+            \fmf{plain}{i1,c}
+            \fmfdot{c}
+        \end{fmfgraph*}
+    }\\
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(10,6)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{c}
+            \fmf{plain}{i1,c}
+            \fmf{plain}{i2,c}
+            \fmfv{d.f=empty,d.shape=circle,d.size=5mm,l=$2$,l.d=0}{c}
+        \end{fmfgraph*}
+    }
+    & = 
+    \parbox{10mm}{
+        \centering
+        \begin{fmfgraph*}(10,6)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o}
+            \fmf{plain}{i1,c}
+            \fmf{plain}{i2,c}
+            \fmf{plain,tension=2}{c,o}
+            \fmfdot{o}
+        \end{fmfgraph*}
+    }\,,
+    \quad\text{but not}\quad
+    \parbox{10mm}{
+        \centering
+        \begin{fmfgraph*}(10,4)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o1,o2}
+            \fmf{plain}{i1,o1}
+            \fmf{plain}{i2,o2}
+            \fmfdot{o1}
+            \fmfdot{o2}
+        \end{fmfgraph*}
+    }\\[5mm]
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(10,10)
+            \setval
+            \fmfleft{i1,i2,i3}
+            \fmfright{c}
+            \fmf{plain}{i1,c}
+            \fmf{plain}{i2,c}
+            \fmf{plain}{i3,c}
+            \fmfv{d.f=empty,d.shape=circle,d.size=5mm,l=$3$,l.d=0}{c}
+        \end{fmfgraph*}
+    }
+    & = 
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(10,10)
+            \setval
+            \fmfleft{i1,i2,i3}
+            \fmfright{o}
+            \fmf{plain,tension=2}{i1,c1,c}
+            \fmf{plain,tension=1}{i3,c}
+            \fmf{plain,tension=2}{c,o}
+            \fmfdot{o}
+            \fmffreeze
+            \fmf{plain}{i2,c1}
+            \fmfv{l=$1$,l.a=180,l.d=.1w}{i1}
+            \fmfv{l=$2$,l.a=180,l.d=.04w}{i2}
+            \fmfv{l=$3$,l.a=180,l.d=.1w}{i3}
+        \end{fmfgraph*}
+    }
+    +
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(10,10)
+            \setval
+            \fmfleft{i1,i2,i3}
+            \fmfright{o}
+            \fmf{plain,tension=2}{i1,c1,c}
+            \fmf{plain,tension=1}{i3,c}
+            \fmf{plain,tension=2}{c,o}
+            \fmfdot{o}
+            \fmffreeze
+            \fmf{plain}{i2,c1}
+            \fmfv{l=$1$,l.a=180,l.d=.1w}{i1}
+            \fmfv{l=$3$,l.a=180,l.d=.04w}{i2}
+            \fmfv{l=$2$,l.a=180,l.d=.1w}{i3}
+        \end{fmfgraph*}
+    }
+    +
+    \parbox{15mm}{
+        \centering
+        \begin{fmfgraph*}(10,10)
+            \setval
+            \fmfleft{i1,i2,i3}
+            \fmfright{o}
+            \fmf{plain,tension=2}{i1,c1,c}
+            \fmf{plain,tension=1}{i3,c}
+            \fmf{plain,tension=2}{c,o}
+            \fmfdot{o}
+            \fmffreeze
+            \fmf{plain}{i2,c1}
+            \fmfv{l=$2$,l.a=180,l.d=.1w}{i1}
+            \fmfv{l=$3$,l.a=180,l.d=.04w}{i2}
+            \fmfv{l=$1$,l.a=180,l.d=.1w}{i3}
+        \end{fmfgraph*}
+    }
+\end{align}
+%
+and so on.
+We will not show this here, but with this calculation, we indeed find that $s=1$~\cite{botheParticleEntityDoi2023}.
+
