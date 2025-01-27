@@ -1558,5 +1558,93 @@ This equation is derived without any approximations, and is thus equivalent with
 This means that, if the density $\rho$ is initialized as a set of Dirac-deltas, it will remain so, even though there is a diffusion term.
 Of course, one may also apply approximations, such as $\rho(x, t) = \bar \rho + \delta \rho$ to get a more familiar Langeivn equation with additive noise, however the `point particle structure' of the time-dependent solution will be lost upon carrying out this approximation.
 
+We may now write down the response field action, 
+%
+\begin{align}
+    A = \int \dd t \dd x \,
+    \left\{
+        \tilde \rho(\partial_t\rho - D \nabla^2 \rho)
+        - D (\nabla \tilde \rho)^2 \rho
+    \right\}.
+\end{align}
+%
+The noise term, $D (\nabla \tilde \rho)^2 \rho$, is now a three-point vertex,
+%
+\begin{align}
+    D (\nabla \tilde \rho)^2 \rho
+    = 
+    \parbox{12mm}{
+        \centering
+        \begin{fmfgraph*}(12,5)
+            \setval
+            \fmfleft{i1,i2}
+            \fmfright{o}
+            \fmf{plain}{i1,c}
+            \fmf{plain}{i2,c}
+            \fmf{plain,tension=1/2}{c,o}
+        \end{fmfgraph*}
+    }
+\end{align}
+%
+Expectation values are then
+%
+\begin{align}
+    \E{\bullet } = \int \D \rho \D \tilde \rho \, \bullet e^{-A}.
+\end{align}
+%
+To incorporate initial conditions in the action, with $n_i$ particles at position $x_i$ and time $t_i$, we add a Dirac-delta term:
+%
+\begin{align}
+    A \rightarrow A + \tilde \rho \sum_i n_i \delta(t + t_i)\delta(x + x_i).
+\end{align}
+%
+Here, we must have $n_i \in \NN$, which again is a sign that the Dean's equation has a particle-nature
+To be more specific, we can define a \emph{particle entity signature} $s$.
+If the density has the form
+%
+\begin{align}
+    \rho(t, x) &= \sum_i n_i \delta(x - x_i(t)), &
+    n_i \in \NN
+\end{align}
+%
+Then, for all sub-domains $\Omega \in \R^d$,
+%
+\begin{align}
+    \int_\Omega \dd x \, \rho(x, t) \in \NN
+    \implies 
+    \exp \left\{ 2 \pi i \int_\Omega \dd x \, \rho(x, t) \right\} = 1.
+\end{align}
+%
+We therefore define
+%
+\begin{align}
+    s = \E{ 
+        \exp \left\{ 2 \pi i \int_\Omega \dd x \, \rho(x, t) \right\} 
+    }.
+\end{align}
+%
 
-
+Let's consider this in a Doi-Peliti model.
+The particle-entity signature is then
+%
+\begin{align}
+    s = 
+    \braket{
+        \star
+        |
+            \exp \left\{ z {\sum}_{k \in \Omega} a_k^\dagger a_k\right\}
+        |
+        \Em(t)
+    }\big|_{z = 2 \pi i}.
+\end{align}
+%
+Expanding the exponential, we get
+%
+\begin{align}
+    \exp \left\{ z {\sum}_{k \in \Omega} a_k^\dagger a_k\right\}
+    = 
+    \sum_n \frac{ 1 }{ n! } z^n
+    \sum_k \left\{ {n \atop k} \right\}
+    (a^\dagger_k a)^n.
+\end{align}
+%
