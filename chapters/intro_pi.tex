@@ -3,8 +3,8 @@
 %%%%%%%%%%%%%
 
 
-In this section, we introduce the concept of path integrals in the context of \emph{Markovian stochastic processes.}
-Stochastic processes, such as a pollen particle in water affected by the random thermal fluctuations of the liquid particles bumping into it, are described by probability distributions.
+In this section, we introduce the concept of path integrals in the context of \emph{Markovian stochastic processes}.
+Stochastic processes, such as a pollen particle in water affected by the random thermal fluctuations of the liquid molecules bumping into it, are described by probability distributions.
 \emph{Conditional} probabilities are statements of the form ``Given this initial state, what is the probability that the system ends up in that final state?'', and are therefore a function of all possible ways the system can evolve between these states.
 We can therefore describe conditional probabilities of a physical process as a weighted sum (actually, an integral) of all possible ``paths'' the system can take between its initial and final state.
 
@@ -90,7 +90,7 @@ By repeatedly applying this process, we can get conditional probability between 
     P(x_{n+1}|x_n) P(x_n| x_{n-1})\dots P(x_2|x_1).
 \end{align}
 %
-We see that this already begins to resemble something like a sum over all possible ``paths'' that the proces $x(t)$ can take to transition from $x_1$ at $t_1$ to $x_{n+1}$ at $x(t_{n+1})$.
+We see that this already begins to resemble something like a sum over all possible ``paths'' that the process $x(t)$ can take to transition from $x_1$ at $t_1$ to $x_{n+1}$ at $x(t_{n+1})$.
 This is illustrated in \autoref{fig: paths}.
 
 
@@ -252,7 +252,7 @@ In this case, the integration measure is
 %
 which corresponds to $C_n = \sqrt{\mu/4\pi D \Delta t}$.
 This measure is not strictly well-defined. 
-To performed calculations, we will have re-descritize the path integral, so this can be considered as a notational trick rather than a true limit. The functional $\Phi[x(t)]$ in Eq.~\eqref{eq:om_func} is often referred to as the Onsager-Machlup functional, thanks to its appearance in a 1953 paper by the two physicists. We'll come back to it later on in the course.
+To performed calculations, we had to re-discretize the path integral, so this can be considered as a notational trick rather than a true limit. The functional $\Phi[x(t)]$ in Eq.~\eqref{eq:om_func} is often referred to as the Onsager-Machlup functional, thanks to its appearance in a 1953 paper by the two physicists. We'll come back to it later on in the course.
 
 
 \section{Master equation}
@@ -709,4 +709,5 @@ Integrals are, as we all know, not easy to solve, so this is the main challenge 
     In fact, the second diagram has several names, for example ``sunset diagram'' or ``Jupiter diagram''.
     It is ubiquitous, as it appears in ``$\phi^4$'' theories, one of the true work-horses of theoretical physics.
 \end{framed}
+
 
