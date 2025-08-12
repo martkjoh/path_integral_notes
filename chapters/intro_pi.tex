@@ -193,6 +193,7 @@ If we have a vector valued process instead, $\bm x(t) = x_a(t) \hat {\bm x}_a$, 
 Here, $\Sigma$ is the covariance matrix of $x$.
 An example of this may be a particle moving in three dimensions, so $\bm x$ is a three-dimensional vector, or a set of $N$ particles with position and velocity in three dimensions, so $\bm x$ is a $6 N$ component vector.
 
+\subsection{The Onsager-Machlup functional}
 
 A specific example is the Ornstein-Uhlenbeck (OU) process, which in one dimension is
 %
@@ -232,13 +233,13 @@ Inserting the OU process into \autoref{eq: cond prob markov x0 given xn} and tak
     \sum_{x_2\cdots x_{n}}
     \Delta x \Pe \left( x_{n+1}| x_{n} \right) \cdots \Delta x \Pe \left( x_{2}| x_{1} \right)\\
     &
-    = \sum_{x_2\cdots x_{n}} \left( \frac{\Delta x}{C_n} \right)^n \exp \left\{ - \frac{\Delta t}{4 D} \sum_n \left[\dot x_{n + 1} - \mu x_n \right]^2 \right\}\\
+    = \sum_{x_2\cdots x_{n}} \left( \frac{\Delta x}{C_n} \right)^n \exp \left\{ - \frac{\Delta t}{4 D} \sum_n \left[\dot x_{n + 1} + \mu x_n \right]^2 \right\}\\
     & 
     \underset{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} }{ \sim }
     \int \D x(t) \,
     \exp \left\{ 
         - \frac{ 1 }{ 4D } 
-        \int\limits_{t_1}^{t_{n+1}} \dd t \left[\dot x(t) - \mu x(t)\right]^2
+        \int\limits_{t_1}^{t_{n+1}} \dd t \left[\dot x(t) + \mu x(t)\right]^2
         \right\}
     \equiv
     \int \D x(t) \, \Phi[x(t)].
@@ -250,8 +251,7 @@ In this case, the integration measure is
     \D x(t) \equiv \lim_{\substack{\Delta x \rightarrow 0\\ n \rightarrow \infty} } \prod_{n} \Delta x \sqrt{ \frac{\mu}{ 4 \pi D \Delta t }},
 \end{align}
 %
-which corresponds to $C_n = \sqrt{\mu/4\pi D \Delta t}$.
-This measure is not strictly well-defined. 
+which corresponds to $C_n = \sqrt{\mu/4\pi D \Delta t}$. This measure is not strictly well-defined. 
 To performed calculations, we had to re-discretize the path integral, so this can be considered as a notational trick rather than a true limit. The functional $\Phi[x(t)]$ in Eq.~\eqref{eq:om_func} is often referred to as the Onsager-Machlup functional, thanks to its appearance in a 1953 paper by the two physicists. We'll come back to it later on in the course.
 
 
